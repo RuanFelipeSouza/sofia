@@ -1,0 +1,23 @@
+div[role=menuitem] {
+  color: #FFF;
+}
+
+div#root > nav {
+  /* background: #282244; */
+  background: #2B2846;
+  max-width: 240px;
+}
+
+.logoSuperior {
+  width: 60%;
+  margin: 0px 20%;
+}
+
+.logoInferior {
+  width: 70%;
+  position: absolute;
+  bottom: 0px;
+  left: 15%;
+  right: 15%;
+  margin-bottom: 0px;
+}
