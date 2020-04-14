@@ -1,58 +1,84 @@
 import React from "react";
-import SideNav, { Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
-import { useHistory } from 'react-router-dom';
-import { FiMessageCircle, FiPieChart } from 'react-icons/fi';
+import { useHistory } from "react-router-dom";
+import Drawer from "@material-ui/core/Drawer";
+import { makeStyles } from '@material-ui/core/styles';
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
+import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
+import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+import List from "@material-ui/core/List";
 
-import Logo from './../../assets/logo1.png'
-import LogoIntelliway from './../../assets/logo-intelliway-nova.png'
+import Logo from "./../../assets/logo1.png";
+import LogoIntelliway from "./../../assets/logo-intelliway-nova.png";
 
-import '@trendmicro/react-sidenav/dist/react-sidenav.css';
-import './styles.css';
+import { UpperLogo, BottomLogo } from './styles.js';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles(() => ({
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+    backgroundColor: '#2B2846',
+    color: 'white',
+  },
+}));
+
+const _menuOptions = [
+  {
+    label: "IntelliLogs",
+    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/intellilogs',
+  },
+  {
+    label: "IntelliChat",
+    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    path: '/intellichat',
+  },
+  {
+    label: "Dashboard",
+    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/dashboard',
+  },
+];
 
 export default function Sidebar() {
   const history = useHistory();
-  const location = history.location.pathname.replace('/','');
+  const location = history.location.pathname;
+  const classes = useStyles();
+
+  const _redirect = (path) => path !== location ? history.push(path) : null;
+
   return (
-    <React.Fragment>
-      <SideNav
-        expanded={true}
-        onSelect={(selected) => {
-          const to = `/${selected}`;
-            if(location !== to)
-              history.push(to);
-        }}
-        onToggle={_ => {}}
-      >
-        {/* <Toggle /> */}
-        <img className={"logoSuperior"} src={Logo} alt={""} />
-        <Nav defaultSelected={location}>
-          <NavItem eventKey="intellilogs">
-            <NavIcon>
-                <FiMessageCircle size={18} color="#FFF" />
-            </NavIcon>
-            <NavText>
-              IntelliLogs
-            </NavText>
-          </NavItem>
-          <NavItem eventKey="intellichat">
-            <NavIcon>
-                <FiMessageCircle size={18} color="#FFF" />
-            </NavIcon>
-            <NavText>
-              IntelliChat
-            </NavText>
-          </NavItem>
-          <NavItem eventKey="dashboard">
-            <NavIcon>
-                <FiPieChart size={18} color="#FFF" />
-            </NavIcon>
-            <NavText>
-              Dashboard
-            </NavText>
-          </NavItem>
-        </Nav>
-        <img className={"logoInferior"} src={LogoIntelliway} alt={""} />
-      </SideNav>
-    </React.Fragment>
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+      anchor="left"
+    >
+      <UpperLogo src={Logo} alt={"logo da global touch"} />
+      <Divider />
+      <List>
+        {
+          _menuOptions.map(({ label, icon, path }) => (
+            <ListItem button key={label} onClick={() => _redirect(path)}>
+              <ListItemIcon>
+                {icon}
+              </ListItemIcon>
+              <ListItemText primary={label} />
+            </ListItem>
+          ))
+        }
+      </List>
+      <BottomLogo className={"logoInferior"} src={LogoIntelliway} />
+    </Drawer>
   );
 }
