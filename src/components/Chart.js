@@ -1,54 +1,52 @@
-import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
-// import Title from './Title';
-
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
-}
+import React, { PureComponent } from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
+  {
+    name: '16/04', Cancelamentos: 4000, Remarcacoes: 2400, Agendamentos: 2400,
+  },
+  {
+    name: '17/04', Cancelamentos: 3000, Remarcacoes: 1398, Agendamentos: 2210,
+  },
+  {
+    name: '18/04', Cancelamentos: 2000, Remarcacoes: 9800, Agendamentos: 2290,
+  },
+  {
+    name: '19/04', Cancelamentos: 2780, Remarcacoes: 3908, Agendamentos: 2000,
+  },
+  {
+    name: '20/04', Cancelamentos: 1890, Remarcacoes: 4800, Agendamentos: 2181,
+  },
+  {
+    name: '21/04', Cancelamentos: 2390, Remarcacoes: 3800, Agendamentos: 2500,
+  },
+  {
+    name: '22/04', Cancelamentos: 3490, Remarcacoes: 4300, Agendamentos: 2100,
+  },
 ];
 
-export default function Chart() {
-  const theme = useTheme();
+export default class Example extends PureComponent {
+  static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9hjfkp73/';
 
-  return (
-    <React.Fragment>
-      {/* <Title>Today</Title> */}
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-        >
-          <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
-          <YAxis stroke={theme.palette.text.secondary}>
-            <Label
-              angle={270}
-              position="left"
-              style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
-            >
-              Sales ($)
-            </Label>
-          </YAxis>
-          <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-    </React.Fragment>
-  );
+  render() {
+    return (
+      <BarChart
+        width={700}
+        height={300}
+        data={data}
+        margin={{
+          top: 20, right: 30, left: 20, bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="Remarcacoes" stackId="a" fill="#8884d8" />
+        <Bar dataKey="Agendamentos" stackId="a" fill="#82ca9d" />
+        <Bar dataKey="Cancelamentos" fill="#ffc658" />
+      </BarChart>
+    );
+  }
 }

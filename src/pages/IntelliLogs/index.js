@@ -1,98 +1,25 @@
-import React from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
 import DatePicker from './../../components/Datepicker';
 import Chart from './../../components/Chart';
 import Table from './../../components/Table';
 import Logo from './../../assets/logointellilogs.png';
+import Copyright from './../../components/Copyright';
+import Sidebar from './../../components/Sidebar';
 
-import Sidebar from './../../components/Sidebar'
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://intelliway.com.br/">
-        Intelliway
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const drawerWidth = 240;
+import api from './../../services/api'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -104,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'row',
   },
-  fixedHeight: {
-    height: 240,
-  },
   dataPickers: {
     display: 'flex',
     flexDirection: 'row',
@@ -114,43 +38,87 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 15%',
     justifyContent: 'space-between'
   },
+  form: {
+    display: 'flex',
+    padding: '0 15%',
+    justifyContent: 'space-between'
+  },
+  sendButton: {
+    marginBottom: '15px'
+  },
   logo: {
     display: 'table',
-    margin: '0 auto',
-    // width: '50%',
+    margin: '-10px auto',
+    height: '5%',
     padding: '0 10px'
-  }
+  },
+  chart: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
+  const [dataInicio, setDataInicio] = useState(new Date());
+  const [dataFim, setDataFim] = useState(new Date());
+  const [atendimentos, setAtendimentos] = useState([]);
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const result = await api.get('/teste', {
+      params: {
+        dataInicio, 
+        dataFim
+      }
+    });
+
+    setAtendimentos(result.data);
+  }
 
   return (
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
-      
       <main className={classes.content}>
         <img className={classes.logo} src={Logo} alt={""} />
-        {/* <div className={classes.appBarSpacer} /> */}
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} >
-              <Paper className={classes.dataPickers}>
-                <DatePicker label={"Data inicial"} />
-                <DatePicker label={"Data final"} />
+              <Paper className={classes.form}>
+                <form onSubmit={handleSubmit}>
+                  <FormControl component="fieldset" className={classes.formControl}>
+                    {/* <FormLabel component="legend">Assign responsibility</FormLabel> */}
+                    <FormGroup>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} className={classes.dataPickers}>
+                          <DatePicker value={dataInicio} onChange={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
+                          <DatePicker value={dataFim} onChange={setDataFim} id={"data_fim"} label={"Data final"} />
+                        </Grid>
+                        <Grid item xs={10} >
+                          {/* <Button variant="contained">Enviar</Button> */}
+                        </Grid>
+                        <Grid item xs={2} className={classes.sendButton}>
+                          <Button type="submit" variant="contained">Enviar</Button>
+                        </Grid>
+                      </Grid>
+
+                    </FormGroup>
+                  </FormControl>
+                </form>
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper className={fixedHeightPaper}>
+              <Paper className={classes.chart}>
                 <Chart />
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Table />
+                <Table atendimentos={atendimentos}/>
               </Paper>
             </Grid>
           </Grid>
