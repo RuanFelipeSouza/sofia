@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute'
+// import ProtectedRoute from './components/ProtectedRoute'
 import IntelliLogs from './pages/IntelliLogs'
 import IntelliChat from './pages/IntelliChat'
 import Login from './pages/Login';
