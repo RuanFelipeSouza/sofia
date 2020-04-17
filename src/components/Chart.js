@@ -28,7 +28,7 @@ const data = [
 export default class Example extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9hjfkp73/';
 
-  render() {
+  render(props) {
     return (
       <BarChart
         width={700}

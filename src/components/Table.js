@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   table: {
@@ -26,6 +28,7 @@ export default function SimpleTable(props) {
             <TableCell ><b>Nome do Professor</b></TableCell>
             <TableCell ><b>Detalhes</b></TableCell>
             <TableCell ><b>Data</b></TableCell>
+            <TableCell ><b></b></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -37,6 +40,11 @@ export default function SimpleTable(props) {
               <TableCell >{row.teacherName}</TableCell>
               <TableCell >{row._id}</TableCell>
               <TableCell >{row.createdAt}</TableCell>
+              <TableCell >
+                <Link className="linkToConversation" to={`/conversation/${row._id}`}>
+                  Visualizar conversa
+                  <ArrowForwardOutlined size={16} color="#E02041"/>
+                </Link></TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     display: 'table',
     margin: '-10px auto',
-    height: '5%',
+    width: '40%',
     padding: '0 10px'
   },
   chart: {
@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
     justifyContent: 'center',
   },
+  main: {
+    width: '100%'
+  }
 }));
 
 export default function Dashboard() {
@@ -66,10 +69,21 @@ export default function Dashboard() {
   const [dataFim, setDataFim] = useState(new Date());
   const [atendimentos, setAtendimentos] = useState([]);
 
+  useEffect(_ => {
+    api.get('/atendimentos', {
+      params: {
+        dataInicio, 
+        dataFim
+      }
+    }).then(response => {
+      setAtendimentos(response.data);
+    })
+}, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const result = await api.get('/teste', {
+    const result = await api.get('/atendimentos', {
       params: {
         dataInicio, 
         dataFim
@@ -83,7 +97,7 @@ export default function Dashboard() {
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
-      <main className={classes.content}>
+      <main className={classes.main}>
         <img className={classes.logo} src={Logo} alt={""} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
@@ -91,7 +105,6 @@ export default function Dashboard() {
               <Paper className={classes.form}>
                 <form onSubmit={handleSubmit}>
                   <FormControl component="fieldset" className={classes.formControl}>
-                    {/* <FormLabel component="legend">Assign responsibility</FormLabel> */}
                     <FormGroup>
                       <Grid container spacing={2}>
                         <Grid item xs={12} className={classes.dataPickers}>

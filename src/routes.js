@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // import ProtectedRoute from './components/ProtectedRoute'
 import IntelliLogs from './pages/IntelliLogs'
+import Conversation from './pages/IntelliLogs/Conversation'
 import IntelliChat from './pages/IntelliChat'
 import Login from './pages/Login';
 
@@ -11,6 +12,7 @@ export default function Routes() {
             <Switch>
                 <Route exact path="/" component={Login} />
                 <Route path="/intellilogs" component={IntelliLogs} />
+                <Route path="/conversation/:id" component={Conversation} />
                 <Route path="/intellichat" component={IntelliChat} />
                 <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
