@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import DatePicker from './../../components/Datepicker';
-import Chart from './../../components/Chart';
-import Table from './../../components/Table';
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange, deepPurple, green } from '@material-ui/core/colors';
 import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
 import api from './../../services/api'
 
@@ -32,20 +29,13 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'row',
   },
-  dataPickers: {
-    display: 'flex',
-    flexDirection: 'row',
-    overflow: 'auto',
-    padding: '0 15%',
-    justifyContent: 'space-between'
-  },
   form: {
     display: 'flex',
-    padding: '0 15%',
-    justifyContent: 'space-between'
   },
-  sendButton: {
-    
+  backLink: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'    
   },
   logo: {
     display: 'table',
@@ -53,30 +43,81 @@ const useStyles = makeStyles((theme) => ({
     width: '40%',
     padding: '0 10px'
   },
-  chart: {
+  conversation: {
     display: 'flex',
-    flexDirection: 'row',
-    alignSelf: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    padding: '0 5%'
   },
   main: {
     width: '100%'
+  },
+  assistantLine: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-end'
+  },
+  assistantMessage: {
+    marginTop: '3%',
+    backgroundColor: '#DBF6C6',
+    padding: '0 3%',
+    maxWidth: '60%',
+    minWidth: '25%'
+  },
+  teacherLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  teacherMessage: {
+    marginTop: '3%',
+    backgroundColor: '#FFFFFA',
+    padding: '0 3%',
+    maxWidth: '60%',
+    minWidth: '25%'
+  },
+  studentLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  studentMessage: {
+    marginTop: '3%',
+    backgroundColor: '#FFFFEF',
+    padding: '0 3%',
+    maxWidth: '60%',
+    minWidth: '25%'
+  },
+  orangeAvatar: {
+    margin: '0 2%',
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  purpleAvatar: {
+    margin: '0 2%',
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+  greenAvatar: {
+    margin: '0 2%',
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+  },
+  infos: {
+    margin: '0 2%'
   }
 }));
 
 export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [conversa, setConversa] = useState([]);
+  const [conversa, setConversa] = useState({});
 
-  useEffect(_ => {
-    const { id }= props.match.params;
+  useEffect(() => {
+    const { id } = props.match.params;
     api.get(`/conversation/${id}`).then(response => {
-        setConversa(response.data.history);
-        console.log(response.data.history);
-        console.log(conversa);
+        setConversa(response.data);
     })
-}, []);
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -88,23 +129,56 @@ export default function Conversation(props) {
             <Grid container spacing={2}>
                 <Grid item xs={12} >
                     <Paper className={classes.form}>
-                        <Grid item xs={5} className={classes.sendButton}>
-                            <Button onClick={() => { history.goBack()  }} variant="contained">Enviar</Button>
+                      {/* <Button onClick={() => { history.goBack()  }} variant="contained">Enviar</Button> */}
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} >
+                          <Link className="backLink" onClick={() => {history.goBack() }}>
+                            <ArrowLeftIcon size={16} color="#E02041"/>
+                            Voltar
+                          </Link>
                         </Grid>
-                        <Grid item xs={10} className={classes.sendButton}>
-
+                        <Grid item xs={12} >
+                          <div className={classes.infos}>
+                            <p><b>Aluno:</b> {conversa.studentName}</p>
+                            <p><b>Professor:</b> {conversa.teacherName}</p>
+                            <p><b>Data:</b> {conversa.createdAt}</p>
+                          </div>
                         </Grid>
+                      </Grid>
                     </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                    <Paper className={classes.chart}>
-                        <p>Conversa</p>
-                        {/* <Chart /> */}
+                    <Paper className={classes.conversation}>
+                      {conversa.history && conversa.history.map((row) => {
+                        if(row.from === conversa.teacherName) 
+                          return <div className={classes.teacherLine}>
+                            <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
+                            <Paper className={classes.teacherMessage}>
+                              <p><b>{row.from}</b><br/>
+                              {row.text}</p>
+                            </Paper>
+                          </div>
+                        if(row.from === conversa.studentName) 
+                          return <div className={classes.studentLine}>
+                            <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
+                            <Paper className={classes.studentMessage}>
+                              <p><b>{row.from}</b><br/>
+                              {row.text}</p>
+                            </Paper>
+                          </div>
+                        return <div className={classes.assistantLine}>
+                          <Avatar className={classes.purpleAvatar}>A</Avatar>
+                          <Paper className={classes.assistantMessage}>
+                            <p><b>{row.from}</b><br/>
+                            {row.text}</p>
+                          </Paper>
+                        </div>
+                      })} 
                     </Paper>
                 </Grid>
             </Grid>
             <Box pt={4}>
-                <Copyright />
+              <Copyright />
             </Box>
         </Container>
       </main>

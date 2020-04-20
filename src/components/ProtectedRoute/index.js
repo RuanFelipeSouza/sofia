@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
-  const logged = false;
+  const logged = true;
 
   return (
     <Route
