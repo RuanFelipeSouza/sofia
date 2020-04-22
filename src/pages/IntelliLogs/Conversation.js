@@ -12,6 +12,8 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import * as moment from 'moment';
+import * as parse from 'html-react-parser';
 
 import api from './../../services/api'
 
@@ -107,6 +109,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function formatMessage(msg) {
+  msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui * por <b>
+  msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
+  return parse(msg);
+}
+
 export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
@@ -114,10 +122,14 @@ export default function Conversation(props) {
 
   useEffect(() => {
     const { id } = props.match.params;
-    api.get(`/conversation/${id}`).then(response => {
+    api.get(`/conversation/${id}`,{
+      headers: {
+        Authorization: sessionStorage.getItem('Authorization')
+      }
+    }).then(response => {
         setConversa(response.data);
     })
-  }, []);
+  }, [props.match.params]);
 
   return (
     <div className={classes.root}>
@@ -132,8 +144,8 @@ export default function Conversation(props) {
                       {/* <Button onClick={() => { history.goBack()  }} variant="contained">Enviar</Button> */}
                       <Grid container spacing={2}>
                         <Grid item xs={12} >
-                          <Link className="backLink" onClick={() => {history.goBack() }}>
-                            <ArrowLeftIcon size={16} color="#E02041"/>
+                          <Link className="backLink" onClick={() => { history.goBack() }} >
+                            <ArrowLeftIcon size={16} />
                             Voltar
                           </Link>
                         </Grid>
@@ -141,7 +153,7 @@ export default function Conversation(props) {
                           <div className={classes.infos}>
                             <p><b>Aluno:</b> {conversa.studentName}</p>
                             <p><b>Professor:</b> {conversa.teacherName}</p>
-                            <p><b>Data:</b> {conversa.createdAt}</p>
+                            <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY")}</p>
                           </div>
                         </Grid>
                       </Grid>
@@ -151,26 +163,26 @@ export default function Conversation(props) {
                     <Paper className={classes.conversation}>
                       {conversa.history && conversa.history.map((row) => {
                         if(row.from === conversa.teacherName) 
-                          return <div className={classes.teacherLine}>
+                          return <div key={row._id} className={classes.teacherLine}>
                             <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
                             <Paper className={classes.teacherMessage}>
                               <p><b>{row.from}</b><br/>
-                              {row.text}</p>
+                              {formatMessage(row.text)}</p>
                             </Paper>
                           </div>
                         if(row.from === conversa.studentName) 
-                          return <div className={classes.studentLine}>
+                          return <div key={row._id} className={classes.studentLine}>
                             <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
                             <Paper className={classes.studentMessage}>
                               <p><b>{row.from}</b><br/>
-                              {row.text}</p>
+                              {formatMessage(row.text)}</p>
                             </Paper>
                           </div>
-                        return <div className={classes.assistantLine}>
+                        return <div key={row._id} className={classes.assistantLine}>
                           <Avatar className={classes.purpleAvatar}>A</Avatar>
                           <Paper className={classes.assistantMessage}>
                             <p><b>{row.from}</b><br/>
-                            {row.text}</p>
+                            {formatMessage(row.text)}</p>
                           </Paper>
                         </div>
                       })} 
