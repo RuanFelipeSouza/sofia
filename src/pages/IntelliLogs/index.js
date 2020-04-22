@@ -5,9 +5,6 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
 import DatePicker from './../../components/Datepicker';
 import Chart from './../../components/Chart';
 import Table from './../../components/Table';
@@ -60,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
   },
   main: {
     width: '100%'
+  },
+  table: {
+    width: '100%',
+    padding: '1%'
   }
 }));
 
@@ -74,24 +75,14 @@ export default function Dashboard() {
       params: {
         dataInicio, 
         dataFim
+      },
+      headers: {
+        Authorization: sessionStorage.getItem('Authorization')
       }
     }).then(response => {
       setAtendimentos(response.data);
     })
-}, []);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    const result = await api.get('/atendimentos', {
-      params: {
-        dataInicio, 
-        dataFim
-      }
-    });
-
-    setAtendimentos(result.data);
-  }
+}, [dataInicio, dataFim]);
 
   return (
     <div className={classes.root}>
@@ -102,26 +93,9 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} >
-              <Paper className={classes.form}>
-                <form onSubmit={handleSubmit}>
-                  <FormControl component="fieldset" className={classes.formControl}>
-                    <FormGroup>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} className={classes.dataPickers}>
-                          <DatePicker value={dataInicio} onChange={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
-                          <DatePicker value={dataFim} onChange={setDataFim} id={"data_fim"} label={"Data final"} />
-                        </Grid>
-                        <Grid item xs={10} >
-                          {/* <Button variant="contained">Enviar</Button> */}
-                        </Grid>
-                        <Grid item xs={2} className={classes.sendButton}>
-                          <Button type="submit" variant="contained">Enviar</Button>
-                        </Grid>
-                      </Grid>
-
-                    </FormGroup>
-                  </FormControl>
-                </form>
+              <Paper className={classes.dataPickers}>
+                <DatePicker value={dataInicio} dataInicio={null} dataFim={dataFim} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
+                <DatePicker value={dataFim} dataInicio={dataInicio} dataFim={null} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
@@ -130,8 +104,8 @@ export default function Dashboard() {
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Table atendimentos={atendimentos}/>
+              <Paper className={classes.table}>
+                <Table atendimentos={atendimentos} />
               </Paper>
             </Grid>
           </Grid>
