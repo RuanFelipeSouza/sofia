@@ -55,7 +55,7 @@ export default function SignInSide() {
         email: user,
         password
       });
-      sessionStorage.setItem('Authorization', result.headers.authorization);
+      await sessionStorage.setItem('Authorization', result.headers.authorization);
       
       history.push('/intellilogs');
     }catch(e) {

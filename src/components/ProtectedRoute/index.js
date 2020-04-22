@@ -1,9 +1,17 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { verify } from 'jsonwebtoken';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
-  const logged = true;
+  let logged = false;
+  try {
+    const jwt = sessionStorage.getItem('Authorization').split(' ')[1];
+    verify(jwt, 'intelli');
+    logged = true;
+  }catch(e) {
+    logged = false;
+  }
 
   return (
     <Route
