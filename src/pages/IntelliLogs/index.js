@@ -100,7 +100,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <Chart />
+                <Chart atendimentos={atendimentos}/>
               </Paper>
             </Grid>
             <Grid item xs={12}>

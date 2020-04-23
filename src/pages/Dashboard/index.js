@@ -25,7 +25,7 @@ export default function Dashboard() {
   return (
     <div className={classes.root}>
       <Sidebar />
-      {/* <CssBaseline /> */}
+      <CssBaseline />
       <main className={classes.main}>
         <iframe 
           src="https://app.powerbi.com/view?r=eyJrIjoiNTdjNDFiZGQtMTEwNC00MzQ1LWExM2ItZDQ2ZmE4YTNjODgzIiwidCI6IjIzOTc1NDdhLWQwODQtNGE2ZS1hYmNlLTJkYTJlNzQ1MjM3MiJ9" 
@@ -33,6 +33,7 @@ export default function Dashboard() {
           allowFullScreen="true" 
           width="100%"
           height="100%"
+          title={"Dashboard"}
         />
         <Box pt={4}>
           <Copyright />

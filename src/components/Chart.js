@@ -1,52 +1,49 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import * as moment from 'moment';
 
-const data = [
-  {
-    name: '16/04', Cancelamentos: 4000, Remarcacoes: 2400, Agendamentos: 2400,
-  },
-  {
-    name: '17/04', Cancelamentos: 3000, Remarcacoes: 1398, Agendamentos: 2210,
-  },
-  {
-    name: '18/04', Cancelamentos: 2000, Remarcacoes: 9800, Agendamentos: 2290,
-  },
-  {
-    name: '19/04', Cancelamentos: 2780, Remarcacoes: 3908, Agendamentos: 2000,
-  },
-  {
-    name: '20/04', Cancelamentos: 1890, Remarcacoes: 4800, Agendamentos: 2181,
-  },
-  {
-    name: '21/04', Cancelamentos: 2390, Remarcacoes: 3800, Agendamentos: 2500,
-  },
-  {
-    name: '22/04', Cancelamentos: 3490, Remarcacoes: 4300, Agendamentos: 2100,
-  },
-];
+const groupBy = (list, keyGetter)=> {
+  const map = new Map();
+  list.forEach((item) => {
+       const key = keyGetter(item);
+       const collection = map.get(key);
+       if (!collection) {
+           map.set(key, [item]);
+       } else {
+           collection.push(item);
+       }
+  });
+  return map;
+}
 
-export default class Example extends PureComponent {
-  static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9hjfkp73/';
+export default function Chart(props) {
+  let { atendimentos } = props;
+  atendimentos && atendimentos.forEach(function(element) {
+    element.createdAt = moment(element.createdAt).format("DD/MM/YYYY");
+  });
+  atendimentos = groupBy(atendimentos, e => e.createdAt);
 
-  render(props) {
-    return (
-      <BarChart
-        width={700}
-        height={300}
-        data={data}
-        margin={{
-          top: 20, right: 30, left: 20, bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="Remarcacoes" stackId="a" fill="#8884d8" />
-        <Bar dataKey="Agendamentos" stackId="a" fill="#82ca9d" />
-        <Bar dataKey="Cancelamentos" fill="#ffc658" />
-      </BarChart>
-    );
-  }
+  let atendimentosPorDia = []
+  atendimentos && atendimentos.forEach(function(element, key) { 
+    atendimentosPorDia.push({Data: key, Atendimentos: element.length})
+  });
+  return (
+    <BarChart
+      width={700}
+      height={350}
+      data={atendimentosPorDia}
+      margin={{
+        top: 15, right: 20, left: 20, bottom: 5,
+      }}
+      
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="Data" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="Atendimentos" fill="#8884d8" />
+      {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+    </BarChart>
+  );
 }
