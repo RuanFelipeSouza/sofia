@@ -53,6 +53,7 @@ export default function SignInSide() {
 
   useEffect(_ => {
     setError(false);
+    setHelperText('');
   }, [user, password])
 
   async function handleLogin(e) {
