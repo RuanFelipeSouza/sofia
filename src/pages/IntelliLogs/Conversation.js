@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -106,11 +106,16 @@ const useStyles = makeStyles((theme) => ({
   },
   infos: {
     margin: '0 2%'
+  },
+  messageDatetime: {
+    color: '#888',
+    margin: '0',
+    textAlign: 'right'
   }
 }));
 
 function formatMessage(msg) {
-  msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui * por <b>
+  msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui *texto* por <b>texto</b>
   msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
   return parse(msg);
 }
@@ -168,6 +173,7 @@ export default function Conversation(props) {
                             <Paper className={classes.teacherMessage}>
                               <p><b>{row.from}</b><br/>
                               {formatMessage(row.text)}</p>
+                              <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                             </Paper>
                           </div>
                         if(row.from === conversa.studentName) 
@@ -176,6 +182,7 @@ export default function Conversation(props) {
                             <Paper className={classes.studentMessage}>
                               <p><b>{row.from}</b><br/>
                               {formatMessage(row.text)}</p>
+                              <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                             </Paper>
                           </div>
                         return <div key={row._id} className={classes.assistantLine}>
@@ -183,6 +190,7 @@ export default function Conversation(props) {
                           <Paper className={classes.assistantMessage}>
                             <p><b>{row.from}</b><br/>
                             {formatMessage(row.text)}</p>
+                              <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                           </Paper>
                         </div>
                       })} 
