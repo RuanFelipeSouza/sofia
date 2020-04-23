@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Baner from './../../assets/Baner.png'
 import api from './../../services/api';
 
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formControl: {
+    width: '100%'
+  }
 }));
 
 export default function SignInSide() {
@@ -43,9 +48,16 @@ export default function SignInSide() {
   const classes = useStyles();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+  const [helperText, setHelperText] = useState('');
+  const [error, setError] = useState(false);
+
+  useEffect(_ => {
+    setError(false);
+  }, [user, password])
 
   async function handleLogin(e) {
     e.preventDefault();
+    setError(false);
     try {
       const result = await api.post('/login', {
         email: user,
@@ -55,7 +67,8 @@ export default function SignInSide() {
       
       history.push('/intellilogs');
     }catch(e) {
-      console.log(e);
+      setHelperText('Falha no login, por favor verifique as credenciais.');
+      setError(true);
     }
   }
 
@@ -74,42 +87,47 @@ export default function SignInSide() {
             Login
           </Typography>
           <form className={classes.form} noValidate >
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="user"
-              label="Nome de usuário"
-              name="user"
-              autoComplete="user"
-              autoFocus
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="senha"
-              label="Senha"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={handleLogin}
-            >
-              Entrar
-            </Button>            
+            <FormControl component="fieldset" error={error} className={classes.formControl}>
+              <TextField
+                error={error}
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="user"
+                label="Nome de usuário"
+                name="user"
+                autoComplete="user"
+                autoFocus
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+              />
+              <TextField
+                error={error}
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="senha"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <FormHelperText>{helperText}</FormHelperText>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={handleLogin}
+              >
+                Entrar
+              </Button>
+            </FormControl>
           </form>
         </div>
       </Grid>
