@@ -24,7 +24,7 @@ export default function Chart(props) {
   atendimentos = groupBy(atendimentos, e => e.createdAt);
 
   let atendimentosPorDia = []
-  atendimentos && atendimentos.forEach(function(element, key) { 
+  atendimentos.forEach(function(element, key) { 
     atendimentosPorDia.push({Data: key, Atendimentos: element.length})
   });
   return (
