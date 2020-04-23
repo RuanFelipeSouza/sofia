@@ -9,19 +9,21 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import api from './../../services/api'
+import Baner from './../../assets/Baner.png'
+import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
-  image: {
-    backgroundImage: 'url(https://ogimg.infoglobo.com.br/in/24029035-439-61f/FT1500A/690/lucas-ribamar.jpg)',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+  banner: {
+    height: '100%'
+    // backgroundImage: 'url(public/Baner.png)',
+    // backgroundRepeat: 'no-repeat',
+    // backgroundColor:
+    //   theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    // backgroundSize: 'cover',
+    // backgroundPosition: 'center',
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '60%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -66,8 +68,10 @@ export default function SignInSide() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid item xs={false} sm={2} md={4} className={classes.banner} >
+        <img className={classes.banner} src={Baner} alt={""} />
+      </Grid>
+      <Grid item xs={12} sm={10} md={8} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
