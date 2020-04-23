@@ -18,12 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   banner: {
     height: '100%'
-    // backgroundImage: 'url(public/Baner.png)',
-    // backgroundRepeat: 'no-repeat',
-    // backgroundColor:
-    //   theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    // backgroundSize: 'cover',
-    // backgroundPosition: 'center',
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -36,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '60%', // Fix IE 11 issue.
+    width: '60%',
     marginTop: theme.spacing(1),
   },
   submit: {
