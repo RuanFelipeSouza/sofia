@@ -75,9 +75,6 @@ export default function Intellilogs() {
       params: {
         dataInicio, 
         dataFim
-      },
-      headers: {
-        Authorization: sessionStorage.getItem('Authorization')
       }
     }).then(response => {
       setAtendimentos(response.data);

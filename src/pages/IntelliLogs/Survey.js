@@ -57,13 +57,8 @@ export default function Survey(props) {
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/survey/${id}`,{
-      headers: {
-        Authorization: sessionStorage.getItem('Authorization')
-      }
-    }).then(response => {
-        console.log(response.data);
-        setConversa(response.data);
+    api.get(`/survey/${id}`).then(response => {
+      setConversa(response.data);
     })
   }, [id]);
 

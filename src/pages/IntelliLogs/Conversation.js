@@ -58,12 +58,8 @@ export default function Conversation(props) {
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/conversation/${id}`,{
-      headers: {
-        Authorization: sessionStorage.getItem('Authorization')
-      }
-    }).then(response => {
-        setConversa(response.data);
+    api.get(`/conversation/${id}`).then(response => {
+      setConversa(response.data);
     })
   }, [id]);
 
