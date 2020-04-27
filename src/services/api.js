@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://globaltouch-01.intelliway.com.br:3005'
+    baseURL: 'http://localhost:3005'
 });
 
 let tokenStorage = sessionStorage.getItem('Authorization');
