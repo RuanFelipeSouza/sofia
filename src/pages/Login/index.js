@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Baner from './../../assets/Baner.png'
+import Baner from './../../assets/banner.jpeg'
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(6, 4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
