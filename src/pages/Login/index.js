@@ -66,7 +66,7 @@ export default function SignInSide() {
       });
       await sessionStorage.setItem('Authorization', result.headers.authorization);
       api.defaults.headers.common = {
-        Authorization: tokenStorage
+        Authorization: result.headers.authorization
       };
       
       history.push('/intellilogs');
