@@ -7,7 +7,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
-// import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
+import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
 import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
 import List from "@material-ui/core/List";
 
@@ -36,11 +36,11 @@ const _menuOptions = [
     icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
     path: '/intellilogs',
   },
-  // {
-  //   label: "IntelliChat",
-  //   icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-  //   path: '/intellichat',
-  // },
+  {
+    label: "Curadoria",
+    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    path: '/curadoria',
+  },
   {
     label: "Dashboard",
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
