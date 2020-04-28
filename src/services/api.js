@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://arcelorsup.intelliway.com.br:3001'
+    baseURL: 'https://arcelorsup.intelliway.com.br:3002'
 });
 
 let tokenStorage = sessionStorage.getItem('Authorization');
