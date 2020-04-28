@@ -79,17 +79,17 @@ function formatMessage(msg) {
 export default function Dialog(props) {
   const classes = useStyles();
   const { conversa } = props;
-  if(!conversa.history) conversa.history = conversa.conversa;
+  console.log(conversa);
 
     return (
         <Paper className={classes.conversation}>
-            {conversa.history && conversa.history.map((row) => {
-              if(row.from === 'Assistente') 
+            {conversa.messages && conversa.messages.map((row) => {
+              if(row.from === 'Robo') 
                   return <div key={row._id} className={classes.assistantLine}>
                   <Avatar className={classes.purpleAvatar}>A</Avatar>
                   <Paper className={classes.assistantMessage}>
                       <p><b>{row.from}</b><br/>
-                      {formatMessage(row.text)}</p>
+                      {formatMessage(row.message)}</p>
                       <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
                   </div>
@@ -98,7 +98,7 @@ export default function Dialog(props) {
                   <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
                   <Paper className={classes.teacherMessage}>
                       <p><b>{row.from}</b><br/>
-                      {formatMessage(row.text)}</p>
+                      {formatMessage(row.message)}</p>
                       <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
                   </div>
@@ -106,7 +106,7 @@ export default function Dialog(props) {
                   <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
                   <Paper className={classes.studentMessage}>
                   <p><b>{row.from}</b><br/>
-                  {formatMessage(row.text)}</p>
+                  {formatMessage(row.message)}</p>
                   <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
               </div>

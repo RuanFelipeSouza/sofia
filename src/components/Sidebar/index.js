@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#2B2846',
+    backgroundColor: '#F0703F',
     color: 'white',
   },
 }));
@@ -64,7 +64,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={"logo da global touch"} />
+      <UpperLogo src={Logo} alt={"logo da Arcelor"} />
       <Divider />
       <List>
         {

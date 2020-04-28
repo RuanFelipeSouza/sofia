@@ -63,7 +63,6 @@ export default function Conversation(props) {
     })
   }, [id]);
 
-  if(conversa.class)
     return (
       <div className={classes.root}>
         <Sidebar />
@@ -103,6 +102,4 @@ export default function Conversation(props) {
         </main>
       </div>
     );
-  else
-    return(<></>)
 }

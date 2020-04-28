@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DatePicker from './../../components/Datepicker';
+import Select from './../../components/Select';
 import Chart from './../../components/Chart';
 import Table from './../../components/Table';
 import Logo from './../../assets/logointellilogs.png';
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     overflow: 'auto',
-    padding: '0 15%',
+    padding: '0 10%',
     justifyContent: 'space-between'
   },
   form: {
@@ -69,17 +70,19 @@ export default function Intellilogs() {
   const [dataInicio, setDataInicio] = useState(new Date());
   const [dataFim, setDataFim] = useState(new Date());
   const [atendimentos, setAtendimentos] = useState([]);
+  const [project, setProject] = useState('Login');
 
   useEffect(_ => {
     api.get('/atendimentos', {
       params: {
         dataInicio, 
-        dataFim
+        dataFim,
+        projeto: project
       }
     }).then(response => {
       setAtendimentos(response.data);
     })
-}, [dataInicio, dataFim]);
+}, [dataInicio, dataFim, project]);
 
   return (
     <div className={classes.root}>
@@ -91,6 +94,7 @@ export default function Intellilogs() {
           <Grid container spacing={3}>
             <Grid item xs={12} >
               <Paper className={classes.dataPickers}>
+                <Select handleSelectChange={setProject} />
                 <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
                 <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
               </Paper>

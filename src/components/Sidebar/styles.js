@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const UpperLogo = styled.img`
-  width: 60%;
-  margin: 0px 20%;
+  width: 70%;
+  margin: 0px 15%;
 `;
 
 const BottomLogo = styled.img`
