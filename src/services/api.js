@@ -7,7 +7,7 @@ const api = axios.create({
 let tokenStorage = sessionStorage.getItem('Authorization');
 
 if (tokenStorage) {
-    instance.defaults.headers.common = {
+    api.defaults.headers.common = {
         Authorization: tokenStorage
     };
 }

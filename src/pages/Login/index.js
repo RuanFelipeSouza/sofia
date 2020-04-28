@@ -66,6 +66,10 @@ export default function SignInSide() {
       });
       await sessionStorage.setItem('Authorization', result.headers.authorization);
       
+      api.defaults.headers.common = {
+        Authorization: result.headers.authorization
+      };
+
       history.push('/intellilogs');
     }catch(e) {
       setHelperText('Falha no login, por favor verifique as credenciais.');
