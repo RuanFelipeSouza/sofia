@@ -20,6 +20,7 @@ export default function Table(props) {
       title="Atendimentos"
       columns={columns}
       data={props.atendimentos}
+      isLoading={props.isLoading}
       options={{
         exportButton: true,
         pageSizeOptions: [5, 20, 50],
