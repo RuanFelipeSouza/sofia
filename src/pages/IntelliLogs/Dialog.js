@@ -71,9 +71,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function formatMessage(msg) {
-  msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui *texto* por <b>texto</b>
-  msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
-  return parse(msg);
+  if(msg){
+    msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui *texto* por <b>texto</b>
+    msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
+    return parse(msg);
+  }
+  return '';
 }
 
 export default function Dialog(props) {
