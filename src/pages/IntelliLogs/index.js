@@ -69,14 +69,17 @@ export default function Intellilogs() {
   const [dataInicio, setDataInicio] = useState(new Date());
   const [dataFim, setDataFim] = useState(new Date());
   const [atendimentos, setAtendimentos] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(_ => {
+    setLoading(true);
     api.get('/atendimentos', {
       params: {
         dataInicio, 
         dataFim
       }
     }).then(response => {
+      setLoading(false);
       setAtendimentos(response.data);
     })
 }, [dataInicio, dataFim]);
@@ -102,7 +105,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.table}>
-                <Table atendimentos={atendimentos} />
+                <Table atendimentos={atendimentos} isLoading={isLoading} />
               </Paper>
             </Grid>
           </Grid>
