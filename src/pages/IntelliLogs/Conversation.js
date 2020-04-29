@@ -63,6 +63,8 @@ export default function Conversation(props) {
     })
   }, [id]);
 
+  console.log(conversa);
+
   if(conversa.class)
     return (
       <div className={classes.root}>
