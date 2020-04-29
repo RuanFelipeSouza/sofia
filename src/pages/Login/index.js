@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Baner from './../../assets/banner2.png'
 import api from './../../services/api';
 
@@ -50,6 +51,7 @@ export default function SignInSide() {
   const [password, setPassword] = useState('');
   const [helperText, setHelperText] = useState('');
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(_ => {
     setError(false);
@@ -57,6 +59,7 @@ export default function SignInSide() {
   }, [user, password])
 
   async function handleLogin(e) {
+    setLoading(true);
     e.preventDefault();
     setError(false);
     try {
@@ -70,7 +73,9 @@ export default function SignInSide() {
       };
       
       history.push('/intellilogs');
+      setLoading(false);
     }catch(e) {
+      setLoading(false);
       setHelperText('Falha no login, por favor verifique as credenciais.');
       setError(true);
     }
@@ -127,9 +132,11 @@ export default function SignInSide() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                disabled={loading}
                 onClick={handleLogin}
+                style={{ height: 46 }}
               >
-                Entrar
+                {loading ? (<CircularProgress size={25} />) : 'Entrar'}
               </Button>
             </FormControl>
           </form>
