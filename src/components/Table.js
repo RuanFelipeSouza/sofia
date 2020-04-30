@@ -10,7 +10,7 @@ export default function Table(props) {
   const columns = [
     { title: 'Aluno', field: 'studentName' },
     { title: 'Professor', field: 'teacherName' },
-    { title: 'Status', field: 'status' },
+    { title: 'Status', field: 'class.status' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
