@@ -9,7 +9,26 @@ export default function Table(props) {
     { title: 'ID', field: '_id', editable: 'never' },
     { title: 'Data', field: 'createdAt', editable: 'never' },
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
-    { title: 'Detalhes', field: '_id', editable: 'never', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
+    { 
+      title: 'Detalhes', 
+      field: '_id', 
+      editable: 'never', 
+      render: props2 => 
+        <Link 
+          id={props2._id} 
+          to={`/conversation/${props2._id}`}
+          onClick={(e) => {
+            const data = props.atendimentos;
+            const oldData = data.find(d => d._id === e.target.id);
+            data[data.indexOf(oldData)].viewed = true;
+            props.setAtendimentos(data);
+            api.put('/updateViewed', {_id: e.target.id, viewed: true});
+          }} 
+        > 
+          Visualizar conversa <ArrowForwardOutlined size={16} />
+        </Link>, 
+      export: false 
+    }
   ]
 
   return (
