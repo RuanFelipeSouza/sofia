@@ -54,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    padding: '0 5%'
   },
   main: {
     width: '100%'
@@ -62,6 +63,11 @@ const useStyles = makeStyles((theme) => ({
   table: {
     width: '100%',
     padding: '1%'
+  },
+  details: {
+    margin: '2% 0 5% 0',
+    padding: '1%',
+    width: '30%'
   }
 }));
 
@@ -105,6 +111,7 @@ export default function Intellilogs() {
             <Grid item xs={12}>
               <Paper className={classes.chart}>
                 <Chart atendimentos={atendimentos}/>
+                <Paper className={classes.details} ><b>Total de atendimentos no período: </b>{atendimentos.length}</Paper>
               </Paper>
             </Grid>
             <Grid item xs={12}>
