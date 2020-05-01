@@ -1,142 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import SwipeableViews from 'react-swipeable-views';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Sidebar from '../../components/Sidebar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import MaterialTable from 'material-table';
-import DatePicker from './../../components/Datepicker';
-import Select from './../../components/Select';
-import Chart from './../../components/Chart';
-import Table from './../../components/Table';
-import Logo from './../../assets/logointellilogs.png';
-import Copyright from './../../components/Copyright';
-import Sidebar from './../../components/Sidebar';
+import Copyright from '../../components/Copyright';
+import Table from './Table';
 
-import api from './../../services/api'
+import api from '../../services/api'
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    backgroundColor: theme.palette.background.paper,
     display: 'flex',
   },
   main: {
-    width: '100%'
-  },
+    minWidth: '100%'
+	}
 }));
 
-export default function Intellilogs() {
-    const classes = useStyles();
+export default function FullWidthTabs() {
+  const classes = useStyles();
+	const [curadorias, setCuradorias] = useState([]);
 
-    const columns = [
-        { title: 'Arquivo', field: 'arquivo' },
-        { title: 'Tema', field: 'tema', initialEditValue: '' },
-        { title: 'Possíveis perguntas', field: 'perguntas' },
-        { title: 'Possíveis respostas', field: 'respostas' },
-        { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean' },
-        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean' },
-        { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean' },
-        { title: 'Responsável', field: 'responsavel' },
-    ]
-    const data = [
-        { 
-            arquivo: 'Tela do fornecedor no SRM', 
-            tema: 'Manual completo', 
-            perguntas: `Como consigo baixar o manual
-            Quero fazer download do manual de fornecedor
-            Preciso acessar o manual no site
-            Quero o manual
-            Acesso ao manual`, 
-            respostas: `Na plataforma temos o manual nos idiomas português e inglês e você pode realizar o download diretamente na área logada por meio do caminho: 
+	useEffect(() => {
+		api.get('/curadoria').then(result => {
+			setCuradorias(result.data);
+		});
+	}, []);
+	
+  const theme = useTheme();
+  const [value, setValue] = React.useState(0);
 
-            Menu a esquerda ou Tela principal em seguida clique em Informações e manuais e selecione o arquivo no quadro de anexos.
-            
-            Além disso, no Quadro de avisos há alguns passos resumidos sobre orientações p/ cotar sua proposta.`,
-            validacaoConteudo: true,
-            possivelValidarBOT: false,
-            validacaoBOT: true,
-            responsavel: 'Ruan'
-        },
-        { 
-            arquivo: 'Tela do fornecedor no SRM', 
-            tema: 'Manual completo', 
-            perguntas: `Como consigo baixar o manual
-            Quero fazer download do manual de fornecedor
-            Preciso acessar o manual no site
-            Quero o manual
-            Acesso ao manual`, 
-            respostas: `Na plataforma temos o manual nos idiomas português e inglês e você pode realizar o download diretamente na área logada por meio do caminho: 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-            Menu a esquerda ou Tela principal em seguida clique em Informações e manuais e selecione o arquivo no quadro de anexos.
-            
-            Além disso, no Quadro de avisos há alguns passos resumidos sobre orientações p/ cotar sua proposta.`,
-            validacaoConteudo: true,
-            possivelValidarBOT: false,
-            validacaoBOT: true,
-            responsavel: 'Breno'
-        },
-    ]
-    
-
-//   useEffect(_ => {
-//     api.get('/atendimentos', {
-//       params: {
-//         dataInicio, 
-//         dataFim,
-//         projeto: project
-//       }
-//     }).then(response => {
-//       setAtendimentos(response.data);
-//     })
-// }, [dataInicio, dataFim, project]);
+  const handleChangeIndex = (index) => {
+    setValue(index);
+  };
 
   return (
     <div className={classes.root}>
-        <Sidebar />
-        <CssBaseline />
+    <Sidebar />
+    <CssBaseline />
         <main className={classes.main}>
-            <MaterialTable
-                title="Curadoria"
-                columns={columns}
-                data={data}
-                options={{
-                    paging: false
-                }}
-                editable={{
-                onRowAdd: newData =>
-                    new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        {
-                        data.push(newData);
-                        this.setState({ data }, () => resolve());
-                        }
-                        resolve()
-                    }, 1000)
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        {
-                        const index = data.indexOf(oldData);
-                        data[index] = newData;
-                        this.setState({ data }, () => resolve());
-                        }
-                        resolve()
-                    }, 1000)
-                    }),
-                onRowDelete: oldData =>
-                    new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        {
-                        const index = data.indexOf(oldData);
-                        data.splice(index, 1);
-                        this.setState({ data }, () => resolve());
-                        }
-                        resolve()
-                    }, 1000)
-                    }),
-                }}
-            />
+                <AppBar position="static" color="default">
+                    <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            variant="fullWidth"
+                            aria-label="full width tabs example"
+                        >
+                        <Tab label="BOT 1" {...a11yProps(0)} />
+                        <Tab label="BOT 2" {...a11yProps(1)} />
+                        <Tab label="BOT 3" {...a11yProps(2)} />
+                    </Tabs>
+                </AppBar>
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={value}
+                    onChangeIndex={handleChangeIndex}
+                >
+                    <TabPanel value={value} index={0} dir={theme.direction}>
+                        <Table botName={'BOT 1'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                    </TabPanel>
+                    <TabPanel value={value} index={1} dir={theme.direction}>
+                        <Table botName={'BOT 2'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                    </TabPanel>
+                    <TabPanel value={value} index={2} dir={theme.direction}>
+                        <Table botName={'BOT 3'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                    </TabPanel>
+                </SwipeableViews>
             <Box pt={4}>
                 <Copyright />
             </Box>
