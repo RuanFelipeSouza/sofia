@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
+    minWidth: '120%'
   },
   main: {
     minWidth: '100%'
@@ -80,8 +81,8 @@ export default function FullWidthTabs() {
 
   return (
     <div className={classes.root}>
-    <Sidebar />
-    <CssBaseline />
+      <Sidebar />
+      <CssBaseline />
         <main className={classes.main}>
                 <AppBar position="static" color="default">
                     <Tabs
