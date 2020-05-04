@@ -1,7 +1,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
-import { yellow } from '@material-ui/core/colors';
+import { green, red } from '@material-ui/core/colors';
 import { ArrowForwardOutlined, EmojiObjects } from '@material-ui/icons';
 import api from './../services/api'
 
@@ -9,7 +9,7 @@ export default function Table(props) {
   const columns = [
     { title: 'ID', field: '_id', editable: 'never' },
     { title: 'Data', field: 'createdAt', editable: 'never' },
-    { title: 'Erro', field: 'anythingElse', editable: 'never', render: props2 => props2.anythingElse ? <EmojiObjects style={{ color: yellow[600] }}/> : <></>},
+    { title: 'Indicador', field: 'anythingElse', editable: 'never', render: props2 => props2.anythingElse ? <EmojiObjects style={{ color: green[500] }}/> : <EmojiObjects style={{ color: red[500] }}/>},
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
     { 
       title: 'Detalhes', 
