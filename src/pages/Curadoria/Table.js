@@ -183,8 +183,38 @@ export default function Curadoria(props) {
                 toolbarButtonAlignment: 'left',
                 exportButton: true,
                 exportAllData: true,
+                addRowPosition: 'first',
                 rowStyle: {
                     verticalAlign: 'initial'
+                }
+            }}
+            localization={{
+                pagination: {
+                    labelDisplayedRows: '{from}-{to} de {count}'
+                },
+                header: {
+                    actions: 'Ações'
+                },
+                body: {
+                    emptyDataSourceMessage: 'Nenhum registro para ser exibido',
+                    addTooltip: 'Adicionar',
+                    deleteTooltip: 'Apagar',
+                    editTooltip: 'Editar',
+                    filterRow: {
+                        filterTooltip: 'Filtro'
+                    },
+                    editRow: {
+                        deleteText: 'Tem certeza que deseja apagar esse registro?',
+                        cancelText: 'Cancelar',
+                        saveText: 'Salvar',
+                    }
+                },
+                toolbar: {
+                    exportTitle: 'Exportar',
+                    exportAriaLabel: 'Exportar',
+                    exportName: 'Exportar como CSV',
+                    searchTooltip: 'Buscar',
+                    searchPlaceholder: 'Buscar'
                 }
             }}
             editable={{
