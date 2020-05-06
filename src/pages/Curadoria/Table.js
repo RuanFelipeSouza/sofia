@@ -8,6 +8,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import * as parse from 'html-react-parser';
+import * as moment from 'moment';
 
 import api from '../../services/api'
 
@@ -168,7 +169,7 @@ export default function Curadoria(props) {
         { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean' },
         { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean' },
         { title: 'Responsável', field: 'responsavel' },
-        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never' },
+        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', render: props => <React.Fragment>{moment(props.createdAt).format("DD/MM/YYYY")}</React.Fragment> },
     ]
 
     return (
@@ -178,7 +179,7 @@ export default function Curadoria(props) {
             columns={columns}
             data={props.curadorias.filter(e => e.bot === props.botName)}
             options={{
-                paging: false,
+                paging: true,
                 searchFieldAlignment: 'left',
                 toolbarButtonAlignment: 'left',
                 exportButton: true,
