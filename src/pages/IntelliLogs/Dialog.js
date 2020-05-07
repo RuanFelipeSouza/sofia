@@ -85,7 +85,7 @@ export default function Dialog(props) {
 
   return (
       <Paper className={classes.conversation}>
-          {conversa.history && conversa.history.map((row) => {
+          {conversa.history && conversa.history[0] && conversa.history[0].messages.map((row) => {
             if(row.from === 'Assistente') 
                 return <div key={row._id} className={classes.assistantLine}>
                 <Avatar className={classes.purpleAvatar}>A</Avatar>
@@ -97,7 +97,7 @@ export default function Dialog(props) {
                 </div>
             if(row.from === conversa.teacherName) 
                 return <div key={row._id} className={classes.teacherLine}>
-                <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
+                <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
                 <Paper className={classes.teacherMessage}>
                     <p><b>{row.from}</b><br/>
                     {formatMessage(row.text)}</p>
@@ -105,7 +105,7 @@ export default function Dialog(props) {
                 </Paper>
                 </div>
             return <div key={row._id} className={classes.studentLine}>
-                <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
+                <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
                 <Paper className={classes.studentMessage}>
                 <p><b>{row.from}</b><br/>
                 {formatMessage(row.text)}</p>

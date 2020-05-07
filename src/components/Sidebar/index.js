@@ -36,11 +36,11 @@ const _menuOptions = [
     icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
     path: '/intellilogs',
   },
-  // {
-  //   label: "IntelliChat",
-  //   icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-  //   path: '/intellichat',
-  // },
+  {
+    label: "Central de Clientes",
+    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/clientes',
+  },
   {
     label: "Dashboard",
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
