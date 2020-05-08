@@ -42,6 +42,16 @@ const _menuOptions = [
     path: '/clientes',
   },
   {
+    label: "Central de Advogados",
+    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/advogados',
+  },
+  {
+    label: "Central de Processos",
+    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/processos',
+  },
+  {
     label: "Dashboard",
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
     path: '/dashboard',

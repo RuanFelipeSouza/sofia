@@ -6,7 +6,9 @@ import Conversation from './pages/IntelliLogs/Conversation'
 import IntelliChat from './pages/IntelliChat'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
-import Cadastro from './pages/Cadastro';
+import Client from './pages/Client';
+import Lawyers from './pages/Lawyer';
+import Lawsuits from './pages/Lawsuits';
 
 export default function Routes() {
     return (
@@ -16,7 +18,9 @@ export default function Routes() {
                 <ProtectedRoute path="/intellilogs" component={IntelliLogs} />
                 <ProtectedRoute path="/conversation/:id" component={Conversation} />
                 <ProtectedRoute path="/intellichat" component={IntelliChat} />
-                <ProtectedRoute path="/clientes" component={Cadastro} />
+                <ProtectedRoute path="/clientes" component={Client} />
+                <ProtectedRoute path="/advogados" component={Lawyers} />
+                <ProtectedRoute path="/processos" component={Lawsuits} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
                 <ProtectedRoute path="*" component={() => "404 NOT FOUND"} />
             </Switch>
