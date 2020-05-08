@@ -61,10 +61,12 @@ const useStyles = makeStyles((theme) => ({
 export default function FullWidthTabs() {
   const classes = useStyles();
 	const [curadorias, setCuradorias] = useState([]);
+  const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		api.get('/curadoria').then(result => {
-			setCuradorias(result.data);
+      setCuradorias(result.data);
+      setLoading(false);
 		});
 	}, []);
 	
@@ -104,13 +106,13 @@ export default function FullWidthTabs() {
                     onChangeIndex={handleChangeIndex}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
-                        <Table botName={'BOT 1'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                        <Table botName={'BOT 1'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                        <Table botName={'BOT 2'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                        <Table botName={'BOT 2'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
-                        <Table botName={'BOT 3'} curadorias={curadorias} setCuradorias={setCuradorias} />
+                        <Table botName={'BOT 3'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
                     </TabPanel>
                 </SwipeableViews>
             <Box pt={4}>

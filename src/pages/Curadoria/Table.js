@@ -169,7 +169,7 @@ export default function Curadoria(props) {
         { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean' },
         { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean' },
         { title: 'Responsável', field: 'responsavel' },
-        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', render: props => <React.Fragment>{moment(props.createdAt).format("DD/MM/YYYY")}</React.Fragment> },
+        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', render: props => <React.Fragment>{moment(props?.createdAt).format("DD/MM/YYYY")}</React.Fragment> },
     ]
 
     return (
@@ -178,6 +178,7 @@ export default function Curadoria(props) {
             title="Curadoria"
             columns={columns}
             data={props.curadorias.filter(e => e.bot === props.botName)}
+            isLoading={props.loading}
             options={{
                 paging: true,
                 searchFieldAlignment: 'left',
