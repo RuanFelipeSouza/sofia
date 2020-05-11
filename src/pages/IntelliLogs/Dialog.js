@@ -67,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#888',
     margin: '0',
     textAlign: 'right'
+  },
+  innerImage: {
+    maxHeight: '500px',
+
   }
 }));
 
@@ -92,6 +96,7 @@ export default function Dialog(props) {
                   <Avatar className={classes.purpleAvatar}>A</Avatar>
                   <Paper className={classes.assistantMessage}>
                       <p><b>{row.from}</b><br/>
+                      {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
                       {formatMessage(row.text)}</p>
                       <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
@@ -101,6 +106,7 @@ export default function Dialog(props) {
                   <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
                   <Paper className={classes.teacherMessage}>
                       <p><b>{row.from}</b><br/>
+                      {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
                       {formatMessage(row.text)}</p>
                       <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
@@ -109,6 +115,7 @@ export default function Dialog(props) {
                   <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
                   <Paper className={classes.studentMessage}>
                   <p><b>{row.from}</b><br/>
+                  {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
                   {formatMessage(row.text)}</p>
                   <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                   </Paper>
