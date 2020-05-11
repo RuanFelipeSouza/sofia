@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Baner from './../../assets/Baner.png'
+import Baner from './../../assets/banner.jpg'
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#0891AF',
   },
   form: {
     width: '60%',

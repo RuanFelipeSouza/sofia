@@ -7,11 +7,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
-// import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+import AssignmentIndRoundedIcon from '@material-ui/icons/AssignmentIndRounded';
+import BusinessCenterRoundedIcon from '@material-ui/icons/BusinessCenterRounded';
+import GavelRoundedIcon from '@material-ui/icons/GavelRounded';
 import List from "@material-ui/core/List";
 
-import Logo from "./../../assets/logo1.png";
+import Logo from "./../../assets/logo1.jpg";
 import LogoIntelliway from "./../../assets/logo-intelliway-nova.png";
 
 import { UpperLogo, BottomLogo } from './styles.js';
@@ -25,7 +26,7 @@ const useStyles = makeStyles(() => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#2B2846',
+    backgroundColor: '#003868',
     color: 'white',
   },
 }));
@@ -38,24 +39,24 @@ const _menuOptions = [
   },
   {
     label: "Central de Clientes",
-    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    icon: <AssignmentIndRoundedIcon style={{ color: 'white' }} />,
     path: '/clientes',
   },
   {
     label: "Central de Advogados",
-    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    icon: <BusinessCenterRoundedIcon style={{ color: 'white' }} />,
     path: '/advogados',
   },
   {
     label: "Central de Processos",
-    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    icon: <GavelRoundedIcon style={{ color: 'white' }} />,
     path: '/processos',
   },
-  {
-    label: "Dashboard",
-    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/dashboard',
-  },
+  // {
+  //   label: "Dashboard",
+  //   icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+  //   path: '/dashboard',
+  // },
 ];
 
 export default function Sidebar() {
@@ -74,7 +75,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={"logo da global touch"} />
+      <UpperLogo src={Logo} alt={"logo da allemand"} />
       <Divider />
       <List>
         {
