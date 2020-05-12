@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Baner from './../../assets/banner2.png'
+import Baner from './../../assets/Baner.png'
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({

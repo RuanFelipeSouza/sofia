@@ -63,43 +63,43 @@ export default function Conversation(props) {
     })
   }, [id]);
 
-    return (
-      <div className={classes.root}>
-        <Sidebar />
-        <CssBaseline />
-        <main className={classes.main}>
-          <img className={classes.logo} src={Logo} alt={""} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} >
-                <Paper className={classes.form}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} >
-                      <Link className="backLink" onClick={() => { history.goBack() }} >
-                        <ArrowLeftIcon size={16} />
-                        Voltar
-                      </Link>
-                    </Grid>
-                    <Grid item xs={9} >
-                      <div className={classes.infos}>
-                        <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY HH:mm")}</p>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} >
-                      
-                    </Grid>
+  return (
+    <div className={classes.root}>
+      <Sidebar />
+      <CssBaseline />
+      <main className={classes.main}>
+        <img className={classes.logo} src={Logo} alt={""} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} >
+              <Paper className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} >
+                    <Link className="backLink" onClick={() => { history.goBack() }} >
+                      <ArrowLeftIcon size={16} />
+                      Voltar
+                    </Link>
                   </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={12} >
-                <Dialog conversa={conversa}/>
-              </Grid>
+                  <Grid item xs={9} >
+                    <div className={classes.infos}>
+                      <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY HH:mm")}</p>
+                    </div>
+                  </Grid>
+                  <Grid item xs={3} >
+                    
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
-            <Box pt={4}>
-              <Copyright />
-            </Box>
-          </Container>
-        </main>
-      </div>
-    );
+            <Grid item xs={12} >
+              <Dialog conversa={conversa}/>
+            </Grid>
+          </Grid>
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+      </main>
+    </div>
+  );
 }
