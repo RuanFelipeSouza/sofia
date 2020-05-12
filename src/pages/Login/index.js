@@ -68,7 +68,6 @@ export default function SignInSide() {
         password
       });
       await sessionStorage.setItem('Authorization', result.headers.authorization);
-      
       api.defaults.headers.common = {
         Authorization: result.headers.authorization
       };

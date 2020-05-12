@@ -16,8 +16,6 @@ export default function MaterialUIPickers(props) {
           value={props.value}
           onChange={props.handleChangeDate}
           disableFuture={true}
-          // minDate={props.dataInicio}
-          // maxDate={props.dataFim}
           autoOk={true}
           KeyboardButtonProps={{
             'aria-label': 'change date',

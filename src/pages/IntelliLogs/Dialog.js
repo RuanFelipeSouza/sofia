@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function formatMessage(msg) {
-  if(msg) {
+  if(msg){
     msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui *texto* por <b>texto</b>
     msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
     return parse(msg);
@@ -86,7 +86,6 @@ function formatMessage(msg) {
 export default function Dialog(props) {
   const classes = useStyles();
   const { conversa } = props;
-  if(!conversa.history) conversa.history = conversa.conversa;
 
     return (
         <Paper className={classes.conversation}>

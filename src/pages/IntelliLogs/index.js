@@ -94,8 +94,8 @@ export default function Intellilogs() {
           <Grid container spacing={3}>
             <Grid item xs={12} >
               <Paper className={classes.dataPickers}>
-                <DatePicker value={dataInicio} dataInicio={null} dataFim={dataFim} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
-                <DatePicker value={dataFim} dataInicio={dataInicio} dataFim={null} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
+                <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
+                <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
