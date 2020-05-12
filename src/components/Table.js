@@ -63,19 +63,6 @@ export default function Table(props) {
           searchPlaceholder: 'Buscar'
         }
       }}
-      editable={{
-        onRowUpdate: async (newData, oldData) =>   {        
-            if(oldData) {
-              props.setAtendimentos((prevState) => {
-                const data = prevState;
-                data[data.indexOf(oldData)].viewed = newData.viewed;
-                return data;
-              });
-              
-              await api.put('/updateViewed', newData);
-            }
-          }
-      }}
     />
   );
 }
