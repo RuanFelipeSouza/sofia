@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
   assistantLine: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
   teacherMessage: {
     marginTop: '3%',
@@ -43,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
   },
   studentMessage: {
     marginTop: '3%',
