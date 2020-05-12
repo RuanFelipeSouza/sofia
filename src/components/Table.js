@@ -1,15 +1,20 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
-import { green, red } from '@material-ui/core/colors';
-import { ArrowForwardOutlined, EmojiObjects } from '@material-ui/icons';
+import { ArrowForwardOutlined } from '@material-ui/icons';
 import api from './../services/api'
+import TableIndicador from './TableIndicador';
 
 export default function Table(props) {
   const columns = [
     { title: 'ID', field: '_id', editable: 'never' },
     { title: 'Data', field: 'createdAt', editable: 'never' },
-    { title: 'Indicador', field: 'anythingElse', editable: 'never', render: props2 => props2.anythingElse ? <EmojiObjects style={{ color: red[500] }}/> : <EmojiObjects style={{ color: green[500] }}/>},
+    {
+      title: 'Indicador',
+      field: 'anythingElse',
+      editable: 'never',
+      render: ({ _id, anythingElse }) => <TableIndicador id={_id} anythingElse={anythingElse} />
+    },
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
     { 
       title: 'Detalhes', 
