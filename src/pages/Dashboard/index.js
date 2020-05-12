@@ -28,7 +28,7 @@ export default function Dashboard() {
       <CssBaseline />
       <main className={classes.main}>
         <iframe 
-          src="" 
+          src="https://app.powerbi.com/view?r=eyJrIjoiNTdjNDFiZGQtMTEwNC00MzQ1LWExM2ItZDQ2ZmE4YTNjODgzIiwidCI6IjIzOTc1NDdhLWQwODQtNGE2ZS1hYmNlLTJkYTJlNzQ1MjM3MiJ9" 
           frameborder="0" 
           allowFullScreen="true" 
           width="100%"
