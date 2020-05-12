@@ -79,6 +79,7 @@ export default function Intellilogs() {
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
+  const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(_ => {
@@ -116,11 +117,20 @@ export default function Intellilogs() {
                 <Paper className={classes.details} ><b>Total de atendimentos no período: </b>{atendimentos.length}</Paper>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.table}>
-                <Table atendimentos={atendimentos} setAtendimentos={setAtendimentos} isLoading={isLoading} />
-              </Paper>
-            </Grid>
+            {
+              atendimentos.length > 0 &&
+              <Grid item xs={12}>
+                <Paper className={classes.table}>
+                  <Table
+                    atendimentos={atendimentos}
+                    setAtendimentos={setAtendimentos}
+                    isLoading={isLoading}
+                    initialPage={page}
+                    onChangePage={setPage}
+                  />
+                </Paper>
+              </Grid>
+            }
           </Grid>
           <Box pt={4}>
             <Copyright />

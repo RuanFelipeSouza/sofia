@@ -42,8 +42,10 @@ export default function Table(props) {
       options={{
         exportButton: true,
         pageSizeOptions: [5, 20, 50],
-        exportAllData: true
+        exportAllData: true,
+        initialPage: props.initialPage
       }}
+      onChangePage={page => props.onChangePage(page)}
       localization={{
         pagination: {
             labelDisplayedRows: '{from}-{to} de {count}'
