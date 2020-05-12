@@ -8,8 +8,8 @@ export default function Table(props) {
   console.log(props.atendimentos);
 
   const columns = [
-    { title: 'Cliente', field: 'studentName' },
-    { title: 'Advogado', field: 'teacherName' },
+    { title: 'Cliente', field: 'lawsuitObject.client.name' },
+    { title: 'Advogado', field: 'lawsuitObject.lawyer.name' },
     { title: 'Nº Processo', field: 'lawsuit' },
     { title: 'Data', field: 'createdAt' },
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
