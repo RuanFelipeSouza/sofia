@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: '0 5%',
-    padingBottom: '5%',
+    paddingBottom: '5%',
   },
   serverLine: {
     display: 'flex',
