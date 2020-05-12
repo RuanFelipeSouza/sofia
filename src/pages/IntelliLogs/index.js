@@ -13,7 +13,8 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
-import api from './../../services/api'
+import api from './../../services/api';
+import localStorageStateHook from './../../utils/useLocalStorageState';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,18 +73,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Intellilogs() {
+  const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
-  const [dataInicio, setDataInicio] = useState(new Date());
-  const [dataFim, setDataFim] = useState(new Date());
+  const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
+  const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
-  const [project, setProject] = useState('Login');
+  const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(_ => {
     setLoading(true);
     api.get('/atendimentos', {
       params: {
-        dataInicio, 
+        dataInicio,
         dataFim,
         projeto: project
       }
@@ -91,7 +93,7 @@ export default function Intellilogs() {
       setLoading(false);
       setAtendimentos(response.data);
     })
-}, [dataInicio, dataFim, project]);
+  }, [dataInicio, dataFim, project]);
 
   return (
     <div className={classes.root}>
@@ -103,14 +105,14 @@ export default function Intellilogs() {
           <Grid container spacing={3}>
             <Grid item xs={12} >
               <Paper className={classes.dataPickers}>
-                <Select handleSelectChange={setProject} />
+                <Select value={project} handleSelectChange={setProject} />
                 <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
                 <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <Chart atendimentos={atendimentos}/>
+                <Chart atendimentos={atendimentos} />
                 <Paper className={classes.details} ><b>Total de atendimentos no período: </b>{atendimentos.length}</Paper>
               </Paper>
             </Grid>
