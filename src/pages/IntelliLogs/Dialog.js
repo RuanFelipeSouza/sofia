@@ -87,7 +87,7 @@ const createMessage = (props, classes) =>
     <p>
       <b>{props.from}</b><br/>
       {props.media && (<> <img className={classes.innerImage} src={props.media} alt={""} /> <br/> </>)}
-      {formatMessage(props.text)}
+      {formatMessage(props.message)}
     </p>
     <h5 className={classes.messageDatetime}>{moment(props.date).format("DD/MM/YYYY HH:mm")}</h5>
   </>
@@ -98,8 +98,8 @@ export default function Dialog(props) {
 
   return (
     <Paper className={classes.conversation}>
-      {conversa.history && conversa.history?.map((row) => {
-        if(row.from === 'Assistente') 
+      {conversa.messages && conversa.messages?.map((row) => {
+        if(row.from === 'Robo') 
           return <div key={row._id} className={classes.assistantLine}>
           <Avatar className={classes.purpleAvatar}>A</Avatar>
           <Paper className={classes.assistantMessage}>
