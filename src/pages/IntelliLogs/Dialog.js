@@ -22,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#DBF6C6',
     padding: '0 3%',
     maxWidth: '60%',
-    minWidth: '25%'
+    minWidth: '25%',
+    marginRight: 'auto',
+    marginLeft: 'auto',
   },
   teacherLine: {
     display: 'flex',
@@ -86,16 +88,15 @@ export default function Dialog(props) {
   return (
       <Paper className={classes.conversation}>
           {conversa?.history?.map((row) => {
-            if(row.from === 'Assistente') 
+            if(row.from === '') 
                 return <div key={row._id} className={classes.assistantLine}>
-                <Avatar className={classes.purpleAvatar}>A</Avatar>
                 <Paper className={classes.assistantMessage}>
                     <p><b>{row.from}</b><br/>
                     {formatMessage(row.text)}</p>
                     <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
                 </Paper>
                 </div>
-            if(row.from === conversa.teacherName) 
+            if(!row?.from?.includes('assistente')) 
                 return <div key={row._id} className={classes.teacherLine}>
                 <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
                 <Paper className={classes.teacherMessage}>

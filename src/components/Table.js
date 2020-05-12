@@ -26,7 +26,6 @@ export default function Table(props) {
         pageSizeOptions: [5, 20, 50],
         exportAllData: true
       }}
-      
     />
   );
 }
