@@ -62,6 +62,11 @@ const useStyles = makeStyles((theme) => ({
   table: {
     width: '100%',
     padding: '1%'
+  },
+  details: {
+    margin: '2% 0 5% 0',
+    padding: '1%',
+    width: '30%'
   }
 }));
 
