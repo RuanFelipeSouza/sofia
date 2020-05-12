@@ -28,6 +28,7 @@ export default function NativeSelects(props) {
             name: 'project',
           }}
           onChange={handleChange}
+          value={props.value}
         >
           <option value={"Login"}>Login</option>
           <option value={"Fornecedor"}>Fornecedor</option>
