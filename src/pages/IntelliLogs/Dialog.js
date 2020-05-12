@@ -67,10 +67,6 @@ const useStyles = makeStyles((theme) => ({
     color: '#888',
     margin: '0',
     textAlign: 'right'
-  },
-  innerImage: {
-    maxHeight: '500px',
-
   }
 }));
 
@@ -87,39 +83,36 @@ export default function Dialog(props) {
   const classes = useStyles();
   const { conversa } = props;
 
-    return (
-        <Paper className={classes.conversation}>
-            {conversa.history && conversa.history.map((row) => {
-              if(row.from === 'Assistente') 
-                  return <div key={row._id} className={classes.assistantLine}>
-                  <Avatar className={classes.purpleAvatar}>A</Avatar>
-                  <Paper className={classes.assistantMessage}>
-                      <p><b>{row.from}</b><br/>
-                      {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
-                      {formatMessage(row.text)}</p>
-                      <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
-                  </Paper>
-                  </div>
-              if(row.from === conversa.teacherName) 
-                  return <div key={row._id} className={classes.teacherLine}>
-                  <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
-                  <Paper className={classes.teacherMessage}>
-                      <p><b>{row.from}</b><br/>
-                      {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
-                      {formatMessage(row.text)}</p>
-                      <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
-                  </Paper>
-                  </div>
-              return <div key={row._id} className={classes.studentLine}>
-                  <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
-                  <Paper className={classes.studentMessage}>
-                  <p><b>{row.from}</b><br/>
-                  {row.media && (<><img className={classes.innerImage} src={row.media} alt={""} /> <br/></>)}
-                  {formatMessage(row.text)}</p>
-                  <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
-                  </Paper>
-              </div>
-            })} 
-        </Paper>
-    )
+  return (
+      <Paper className={classes.conversation}>
+          {conversa.history && conversa.history.map((row) => {
+            if(row.from === 'Assistente') 
+                return <div key={row._id} className={classes.assistantLine}>
+                <Avatar className={classes.purpleAvatar}>A</Avatar>
+                <Paper className={classes.assistantMessage}>
+                    <p><b>{row.from}</b><br/>
+                    {formatMessage(row.text)}</p>
+                    <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
+                </Paper>
+                </div>
+            if(row.from === conversa.teacherName) 
+                return <div key={row._id} className={classes.teacherLine}>
+                <Avatar className={classes.greenAvatar}>{row.from.charAt()}</Avatar>
+                <Paper className={classes.teacherMessage}>
+                    <p><b>{row.from}</b><br/>
+                    {formatMessage(row.text)}</p>
+                    <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
+                </Paper>
+                </div>
+            return <div key={row._id} className={classes.studentLine}>
+                <Avatar className={classes.orangeAvatar}>{row.from.charAt()}</Avatar>
+                <Paper className={classes.studentMessage}>
+                <p><b>{row.from}</b><br/>
+                {formatMessage(row.text)}</p>
+                <h5 className={classes.messageDatetime}>{moment(row.date).format("DD/MM/YYYY HH:mm")}</h5>
+                </Paper>
+            </div>
+          })} 
+      </Paper>
+  )
 }
