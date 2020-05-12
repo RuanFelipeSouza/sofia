@@ -41,11 +41,16 @@ export default function Table(props) {
       isLoading={props.isLoading}
       options={{
         exportButton: true,
-        pageSizeOptions: [5, 20, 50],
+        pageSizeOptions: [5, 20, 50, 100],
         exportAllData: true,
+        pageSize: props.pageSize,
         initialPage: props.initialPage
       }}
       onChangePage={page => props.onChangePage(page)}
+      onChangeRowsPerPage={pageSize => {
+        props.onChangePage(0);
+        props.onChangeRowsPerPage(pageSize);
+      }}
       localization={{
         pagination: {
             labelDisplayedRows: '{from}-{to} de {count}'

@@ -80,6 +80,7 @@ export default function Intellilogs() {
   const [atendimentos, setAtendimentos] = useState([]);
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
+  const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(_ => {
@@ -127,6 +128,8 @@ export default function Intellilogs() {
                     isLoading={isLoading}
                     initialPage={page}
                     onChangePage={setPage}
+                    pageSize={pageSize}
+                    onChangeRowsPerPage={setPageSize}
                   />
                 </Paper>
               </Grid>
