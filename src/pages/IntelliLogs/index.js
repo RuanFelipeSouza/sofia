@@ -12,7 +12,8 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
-import api from './../../services/api'
+import api from './../../services/api';
+import localStorageStateHook from './../../utils/useLocalStorageState';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,24 +66,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Intellilogs() {
+  const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
-  const [dataInicio, setDataInicio] = useState(new Date());
-  const [dataFim, setDataFim] = useState(new Date());
+  const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
+  const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
+  const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
+  const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
+  const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(_ => {
     setLoading(true);
     api.get('/atendimentos', {
       params: {
-        dataInicio, 
-        dataFim
+        dataInicio,
+        dataFim,
+        projeto: project
       }
     }).then(response => {
       setLoading(false);
       setAtendimentos(response.data);
     })
-}, [dataInicio, dataFim]);
+  }, [dataInicio, dataFim, project]);
 
   return (
     <div className={classes.root}>
@@ -100,14 +106,26 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <Chart atendimentos={atendimentos}/>
+                <Chart atendimentos={atendimentos} />
+                <Paper className={classes.details} ><b>Total de atendimentos no período: </b>{atendimentos.length}</Paper>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.table}>
-                <Table atendimentos={atendimentos} isLoading={isLoading} />
-              </Paper>
-            </Grid>
+            {
+              atendimentos.length > 0 &&
+              <Grid item xs={12}>
+                <Paper className={classes.table}>
+                  <Table
+                    atendimentos={atendimentos}
+                    setAtendimentos={setAtendimentos}
+                    isLoading={isLoading}
+                    initialPage={page}
+                    onChangePage={setPage}
+                    pageSize={pageSize}
+                    onChangeRowsPerPage={setPageSize}
+                  />
+                </Paper>
+              </Grid>
+            }
           </Grid>
           <Box pt={4}>
             <Copyright />

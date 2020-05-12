@@ -23,10 +23,58 @@ export default function Table(props) {
       isLoading={props.isLoading}
       options={{
         exportButton: true,
-        pageSizeOptions: [5, 20, 50],
-        exportAllData: true
+        pageSizeOptions: [5, 20, 50, 100],
+        exportAllData: true,
+        pageSize: props.pageSize,
+        initialPage: props.initialPage
       }}
-      
+      onChangePage={page => props.onChangePage(page)}
+      onChangeRowsPerPage={pageSize => {
+        props.onChangePage(0);
+        props.onChangeRowsPerPage(pageSize);
+      }}
+      localization={{
+        pagination: {
+          labelDisplayedRows: '{from}-{to} de {count}'
+        },
+        header: {
+          actions: 'Ações'
+        },
+        body: {
+          emptyDataSourceMessage: 'Nenhum registro para ser exibido',
+          addTooltip: 'Adicionar',
+          deleteTooltip: 'Apagar',
+          editTooltip: 'Editar',
+          filterRow: {
+            filterTooltip: 'Filtro'
+          },
+          editRow: {
+            deleteText: 'Tem certeza que deseja apagar esse registro?',
+            cancelText: 'Cancelar',
+            saveText: 'Salvar',
+          }
+        },
+        toolbar: {
+          exportTitle: 'Exportar',
+          exportAriaLabel: 'Exportar',
+          exportName: 'Exportar como CSV',
+          searchTooltip: 'Buscar',
+          searchPlaceholder: 'Buscar'
+        }
+      }}
+      editable={{
+        onRowUpdate: async (newData, oldData) =>   {        
+            if(oldData) {
+              props.setAtendimentos((prevState) => {
+                const data = prevState;
+                data[data.indexOf(oldData)].viewed = newData.viewed;
+                return data;
+              });
+              
+              await api.put('/updateViewed', newData);
+            }
+          }
+      }}
     />
   );
 }
