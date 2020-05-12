@@ -71,7 +71,7 @@ export default function SignInSide() {
       api.defaults.headers.common = {
         Authorization: result.headers.authorization
       };
-
+      
       history.push('/intellilogs');
       setLoading(false);
     }catch(e) {

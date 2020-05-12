@@ -63,55 +63,43 @@ export default function Conversation(props) {
     })
   }, [id]);
 
-  if(conversa.class)
-    return (
-      <div className={classes.root}>
-        <Sidebar />
-        <CssBaseline />
-        <main className={classes.main}>
-          <img className={classes.logo} src={Logo} alt={""} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} >
-                <Paper className={classes.form}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} >
-                      <Link className="backLink" onClick={() => { history.goBack() }} >
-                        <ArrowLeftIcon size={16} />
-                        Voltar
-                      </Link>
-                    </Grid>
-                    <Grid item xs={9} >
-                      <div className={classes.infos}>
-                        <p><b>Aluno:</b> {conversa.studentName}</p>
-                        <p><b>Professor:</b> {conversa.teacherName}</p>
-                        <p><b>Status:</b> {conversa.class.status}</p>
-                        <p><b>Data marcada:</b> {moment(conversa.class.date).format("DD/MM/YYYY HH:mm")}</p>
-                      </div>
-                    </Grid>
-                    <Grid item xs={3} >
-                      {conversa.class.studentSurveyId && <Link className="backLink" to={`/survey/${conversa.class.studentSurveyId}`} >
-                        Visualizar pesquisa do Aluno
-                      </Link>}
-                      <br/>
-                      {conversa.class.teacherSurveyId && <Link className="backLink" to={`/survey/${conversa.class.teacherSurveyId}`} >
-                        Visualizar pesquisa do Professor
-                      </Link>}
-                    </Grid>
+  return (
+    <div className={classes.root}>
+      <Sidebar />
+      <CssBaseline />
+      <main className={classes.main}>
+        <img className={classes.logo} src={Logo} alt={""} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} >
+              <Paper className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} >
+                    <Link className="backLink" onClick={() => { history.goBack() }} >
+                      <ArrowLeftIcon size={16} />
+                      Voltar
+                    </Link>
                   </Grid>
-                </Paper>
-              </Grid>
-              <Grid item xs={12} >
-                <Dialog conversa={conversa}/>
-              </Grid>
+                  <Grid item xs={9} >
+                    <div className={classes.infos}>
+                      <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY HH:mm")}</p>
+                    </div>
+                  </Grid>
+                  <Grid item xs={3} >
+                    
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
-            <Box pt={4}>
-              <Copyright />
-            </Box>
-          </Container>
-        </main>
-      </div>
-    );
-  else
-    return(<></>)
+            <Grid item xs={12} >
+              <Dialog conversa={conversa}/>
+            </Grid>
+          </Grid>
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+      </main>
+    </div>
+  );
 }
