@@ -82,6 +82,7 @@ function formatMessage(msg) {
 export default function Dialog(props) {
   const classes = useStyles();
   const { conversa } = props;
+  if(!conversa.history) conversa.history = conversa.conversa;
 
   return (
       <Paper className={classes.conversation}>

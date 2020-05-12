@@ -7,12 +7,11 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Logo from './../../assets/logointellilogs.png';
-import Copyright from './../../components/Copyright';
-import Sidebar from './../../components/Sidebar';
+import Copyright from '../../components/Copyright';
+import Sidebar from '../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
-import * as moment from 'moment';
 
-import api from './../../services/api'
+import api from '../../services/api'
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,17 +50,19 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Conversation(props) {
+export default function Survey(props) {
   const classes = useStyles();
   const history = useHistory();
   const [conversa, setConversa] = useState({});
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/conversation/${id}`).then(response => {
+    api.get(`/survey/${id}`).then(response => {
       setConversa(response.data);
     })
   }, [id]);
+
+  console.log(conversa);
 
   return (
     <div className={classes.root}>
@@ -80,22 +81,12 @@ export default function Conversation(props) {
                       Voltar
                     </Link>
                   </Grid>
-                  <Grid item xs={9} >
+                  <Grid item xs={12} >
                     <div className={classes.infos}>
-                      <p><b>Aluno:</b> {conversa?.studentName}</p>
-                      <p><b>Professor:</b> {conversa?.teacherName}</p>
-                      <p><b>Status:</b> {conversa['class']?.status}</p>
-                      <p><b>Data marcada:</b> {moment(conversa['class']?.date).format("DD/MM/YYYY HH:mm")}</p>
+                      <p><b>Nome:</b> {conversa.name}</p>
+                      <p><b>Nota:</b> {conversa.nota}</p>
+                      <p><b>Sugestão:</b> {conversa.context && conversa.context.sugestao}</p>
                     </div>
-                  </Grid>
-                  <Grid item xs={3} >
-                    {conversa['class']?.studentSurveyId && <Link className="backLink" to={`/survey/${conversa['class']?.studentSurveyId}`} >
-                      Visualizar pesquisa do Aluno
-                    </Link>}
-                    <br/>
-                    {conversa['class']?.teacherSurveyId && <Link className="backLink" to={`/survey/${conversa['class']?.teacherSurveyId}`} >
-                      Visualizar pesquisa do Professor
-                    </Link>}
                   </Grid>
                 </Grid>
               </Paper>
