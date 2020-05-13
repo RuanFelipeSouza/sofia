@@ -235,15 +235,19 @@ export default function Curadoria(props) {
                 },
                 onRowUpdate: async (newData, oldData) => {
                     if(oldData) {
+                        const alteredFields = [];
                         props.setCuradorias((prevState) => {
                             const data = prevState;
-                            for(let key in newData) {
+                            for (let key in newData) {
+                                if (data[data.indexOf(oldData)][key] !== newData[key]) {
+                                    alteredFields.push(key);
+                                }
                                 data[data.indexOf(oldData)][key] = newData[key];
                             }
                             data[data.indexOf(oldData)].updatedAt = new Date();
                             return [...data];
                         });
-                        await api.put('/curadoria', newData);
+                        await api.put('/curadoria', { newData, alteredFields: alteredFields.filter(c => c !== "updatedAt") });
                     }
                 },
                 onRowDelete: async (oldData) => {
