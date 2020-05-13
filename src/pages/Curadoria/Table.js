@@ -36,6 +36,7 @@ export default function Curadoria(props) {
     const [itemSelecionado, setItemSelecionado] = useState({});
 
     const columns = [
+        { title: 'ID', field: '_id', filtering: false },
         { title: 'Arquivo', field: 'arquivo' },
         { title: 'Tema', field: 'tema', initialEditValue: '' },
         { 
@@ -253,7 +254,7 @@ export default function Curadoria(props) {
                     });
                     console.log(oldData);
 
-                    await api.delete('/curadoria', {params: {_id: oldData._id}});
+                    await api.delete('/curadoria', { params: { _id: oldData._id, bot: oldData.bot } });
                 }
             }}
         />
