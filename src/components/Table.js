@@ -13,7 +13,7 @@ export default function Table(props) {
       title: 'Indicador',
       field: 'anythingElse',
       editable: 'never',
-      render: ({ _id, anythingElse }) => <TableIndicador id={_id} anythingElse={anythingElse} />
+      render: ({ misunderstoodMessages }) => <TableIndicador messages={misunderstoodMessages} />
     },
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
     { 
