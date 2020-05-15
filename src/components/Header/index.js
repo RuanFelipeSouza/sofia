@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -25,11 +25,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const timeoutInMin = 30;
+
 export default function Header(props) {
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleLogout();
+    }, timeoutInMin * 60000);
+    return () => clearTimeout(timer);
+  });
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,6 +54,7 @@ export default function Header(props) {
       Authorization: null
     };
 
+    handleClose();
     history.push('/');
   };
 
