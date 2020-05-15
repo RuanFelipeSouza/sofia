@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Table from "./Table";
 import Copyright from "../../components/Copyright";
 import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Header";
 
 import api from "../../services/api";
 
@@ -90,6 +91,7 @@ export default function Lawyer() {
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
+        <Header title="Central de Processos" />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
