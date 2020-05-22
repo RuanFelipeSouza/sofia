@@ -70,7 +70,7 @@ export default function Curadoria(props) {
                                         const data = prevState;
                                         console.log(itemSelecionado);
                                         data[data.indexOf(itemSelecionado)].image = event.target.result;
-                                        api.put('/curadoria', data[data.indexOf(itemSelecionado)]);
+                                        api.put('/curadoria', {newData: data[data.indexOf(itemSelecionado)], alteredFields: ['imagem']});
                                         return [...data];
                                     });
                                 };
@@ -95,7 +95,7 @@ export default function Curadoria(props) {
                                     const data = prevState;
                                     console.log(props2);
                                     data[data.indexOf(props2)].image = null;
-                                    api.put('/curadoria', data[data.indexOf(props2)]);
+                                    api.put('/curadoria', {newData: data[data.indexOf(props2)], alteredFields: ['imagem']});
                                     return [...data];
                                 });
                             }}
