@@ -2,18 +2,19 @@ import React from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
+import { func, bool, array, number } from 'prop-types';
+import api from './../services/api';
 
 export default function Table(props) {
-
-  console.log(props.atendimentos);
 
   const columns = [
     { title: 'Aluno', field: 'studentName' },
     { title: 'Professor', field: 'teacherName' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
+    // eslint-disable-next-line react/prop-types, react/display-name
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
-  ]
+  ];
 
   return (
     <MaterialTable
@@ -63,18 +64,28 @@ export default function Table(props) {
         }
       }}
       editable={{
-        onRowUpdate: async (newData, oldData) =>   {        
-            if(oldData) {
-              props.setAtendimentos((prevState) => {
-                const data = prevState;
-                data[data.indexOf(oldData)].viewed = newData.viewed;
-                return data;
-              });
-              
-              await api.put('/updateViewed', newData);
-            }
+        onRowUpdate: async (newData, oldData) => {
+          if (oldData) {
+            props.setAtendimentos((prevState) => {
+              const data = prevState;
+              data[data.indexOf(oldData)].viewed = newData.viewed;
+              return data;
+            });
+
+            await api.put('/updateViewed', newData);
           }
+        }
       }}
     />
   );
 }
+
+Table.propTypes = {
+  atendimentos: array,
+  isLoading: bool.isRequired,
+  initialPage: number.isRequired,
+  pageSize: number.isRequired,
+  onChangePage: func.isRequired,
+  onChangeRowsPerPage: func.isRequired,
+  setAtendimentos: func.isRequired
+};

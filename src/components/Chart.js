@@ -1,31 +1,31 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { array } from 'prop-types';
 import * as moment from 'moment';
 
-const groupBy = (list, keyGetter)=> {
+const groupBy = (list, keyGetter) => {
   const map = new Map();
   list.forEach((item) => {
-       const key = keyGetter(item);
-       const collection = map.get(key);
-       if (!collection) {
-           map.set(key, [item]);
-       } else {
-           collection.push(item);
-       }
+    const key = keyGetter(item);
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
   });
   return map;
-}
+};
 
-export default function Chart(props) {
-  let { atendimentos } = props;
-  atendimentos && atendimentos.forEach(function(element) {
-    element.createdAt = moment(element.createdAt).format("DD/MM/YYYY");
+export default function Chart({ atendimentos }) {
+  atendimentos && atendimentos.forEach(function (element) {
+    element.createdAt = moment(element.createdAt).format('DD/MM/YYYY');
   });
   atendimentos = groupBy(atendimentos, e => e.createdAt);
 
-  let atendimentosPorDia = []
-  atendimentos.forEach(function(element, key) { 
-    atendimentosPorDia.push({Data: key, Atendimentos: element.length})
+  let atendimentosPorDia = [];
+  atendimentos.forEach(function (element, key) {
+    atendimentosPorDia.push({ Data: key, Atendimentos: element.length });
   });
   return (
     <BarChart
@@ -35,7 +35,7 @@ export default function Chart(props) {
       margin={{
         top: 15, right: 20, left: 20, bottom: 5,
       }}
-      
+
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="Data" />
@@ -47,3 +47,7 @@ export default function Chart(props) {
     </BarChart>
   );
 }
+
+Chart.propTypes = {
+  atendimentos: array
+};

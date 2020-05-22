@@ -1,6 +1,7 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
 import { verify } from 'jsonwebtoken';
+import { func } from 'prop-types';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
@@ -9,7 +10,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     const jwt = sessionStorage.getItem('Authorization').split(' ')[1];
     verify(jwt, 'intelli');
     logged = true;
-  }catch(e) {
+  } catch (e) {
     logged = false;
   }
 
@@ -24,3 +25,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 };
 
 export default ProtectedRoute;
+
+ProtectedRoute.propTypes = {
+  component: func
+};

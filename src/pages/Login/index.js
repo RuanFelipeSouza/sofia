@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Baner from './../../assets/Baner.png'
+import Baner from './../../assets/Baner.png';
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -53,10 +53,10 @@ export default function SignInSide() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(_ => {
+  useEffect(() => {
     setError(false);
     setHelperText('');
-  }, [user, password])
+  }, [user, password]);
 
   async function handleLogin(e) {
     setLoading(true);
@@ -71,10 +71,10 @@ export default function SignInSide() {
       api.defaults.headers.common = {
         Authorization: result.headers.authorization
       };
-      
+
       history.push('/intellilogs');
       setLoading(false);
-    }catch(e) {
+    } catch (e) {
       setLoading(false);
       setHelperText('Falha no login, por favor verifique as credenciais.');
       setError(true);
@@ -85,7 +85,7 @@ export default function SignInSide() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={2} md={4} className={classes.banner} >
-        <img className={classes.banner} src={Baner} alt={""} />
+        <img className={classes.banner} src={Baner} alt={''} />
       </Grid>
       <Grid item xs={12} sm={10} md={8} component={Paper} elevation={6} square>
         <div className={classes.paper}>
