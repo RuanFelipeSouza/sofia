@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Baner from './../../assets/banner2.png'
+import Baner from './../../assets/logoIntelliwayLogin.png'
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   banner: {
-    height: '100%'
+    width: '100%'
   },
   paper: {
     margin: theme.spacing(6, 4),
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: '#F7812A',
+    backgroundColor: '#aa53d6',
   },
   form: {
     width: '60%',
@@ -130,11 +130,10 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
                 className={classes.submit}
                 disabled={loading}
                 onClick={handleLogin}
-                style={{ height: 46 }}
+                style={{ height: 46, backgroundColor: '#aa53d6', color: 'white' }}
               >
                 {loading ? (<CircularProgress size={25} />) : 'Entrar'}
               </Button>

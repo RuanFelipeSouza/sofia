@@ -7,6 +7,7 @@ import IntelliChat from './pages/IntelliChat'
 import Curadoria from './pages/Curadoria'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login';
+import Jira from './pages/Jira';
 
 export default function Routes() {
     return (
@@ -18,6 +19,7 @@ export default function Routes() {
                 <ProtectedRoute path="/intellichat" component={IntelliChat} />
                 <ProtectedRoute path="/curadoria" component={Curadoria} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/jira" component={Jira} />
                 <ProtectedRoute path="*" component={() => "404 NOT FOUND"} />
             </Switch>
         </BrowserRouter>

@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#F0703F',
+    backgroundColor: '#6b3fa0',
     color: 'white',
   },
 }));
@@ -46,6 +46,11 @@ const _menuOptions = [
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
     path: '/dashboard',
   },
+  {
+    label: "Jiraya",
+    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+    path: '/jira',
+  },
 ];
 
 export default function Sidebar() {
@@ -64,7 +69,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={"logo da Arcelor"} />
+      <UpperLogo src={LogoIntelliway} alt={"logo da Intelliway"} />
       <Divider />
       <List>
         {

@@ -30,6 +30,7 @@
     "react-scripts": "3.4.1",
     "react-swipeable-views": "^0.13.9",
     "react-tooltip": "^4.2.6",
+    "rechart": "0.0.1",
     "recharts": "^1.8.5",
     "styled-components": "^5.1.0"
   },

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const UpperLogo = styled.img`
   width: 70%;
-  margin: 0px 15%;
+  margin: 10% 15%;
 `;
 
 const BottomLogo = styled.img`
