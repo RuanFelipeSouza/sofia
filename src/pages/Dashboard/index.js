@@ -5,7 +5,7 @@ import Box from '@material-ui/core/Box';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     width: '100%',
@@ -29,11 +29,11 @@ export default function Dashboard() {
       <main className={classes.main}>
         <iframe 
           src="" 
-          frameborder="0" 
+          frameBorder="0" 
           allowFullScreen="true" 
           width="100%"
           height="100%"
-          title={"Dashboard"}
+          title={'Dashboard'}
         />
         <Box pt={4}>
           <Copyright />

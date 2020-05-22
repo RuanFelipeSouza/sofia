@@ -21,6 +21,7 @@
     "material-ui": "^0.20.2",
     "mdbreact": "^4.25.5",
     "moment": "^2.24.0",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.9.0",
@@ -30,11 +31,16 @@
     "recharts": "^1.8.5",
     "styled-components": "^5.1.0"
   },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.6"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint": "eslint --fix ."
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,6 +55,16 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix"
     ]
   }
 }

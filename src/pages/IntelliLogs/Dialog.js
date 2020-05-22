@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { object, string, oneOfType } from 'prop-types';
+
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple, green } from '@material-ui/core/colors';
@@ -74,23 +76,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function formatMessage(msg) {
-  if(msg){
+  if (msg) {
     msg = msg.replace(/(\*)([^*]*)(\*)/g, '<b>$2</b>'); //coloca negrito na mensagem, substitui *texto* por <b>texto</b>
-    msg = msg.replace('\n','<br/>'); //coloca quebra de linha na mensagem
+    msg = msg.replace('\n', '<br/>'); //coloca quebra de linha na mensagem
     return parse(msg);
   }
   return '';
 }
 
-const createMessage = (props, classes) => 
+const createMessage = (props, classes) =>
   <>
     <p>
-      <b>{props.from}</b><br/>
-      {props.media && (<> <img className={classes.innerImage} src={props.media} alt={""} /> <br/> </>)}
+      <b>{props.from}</b><br />
+      {props.media && (<> <img className={classes.innerImage} src={props.media} alt={''} /> <br /> </>)}
       {formatMessage(props.text)}
     </p>
-    <h5 className={classes.messageDatetime}>{moment(props.date).format("DD/MM/YYYY HH:mm")}</h5>
-  </>
+    <h5 className={classes.messageDatetime}>{moment(props.date).format('DD/MM/YYYY HH:mm')}</h5>
+  </>;
+
+createMessage.propTypes = {
+  from: string,
+  media: string,
+  text: string,
+  date: string,
+};
 
 export default function Dialog(props) {
   const classes = useStyles();
@@ -99,27 +108,31 @@ export default function Dialog(props) {
   return (
     <Paper className={classes.conversation}>
       {conversa.history && conversa.history?.map((row) => {
-        if(row.from === 'Assistente') 
+        if (row.from === 'Assistente')
           return <div key={row._id} className={classes.assistantLine}>
-          <Avatar className={classes.purpleAvatar}>A</Avatar>
-          <Paper className={classes.assistantMessage}>
-            {createMessage(row, classes)}
-          </Paper>
-          </div>
-        if(row.from === conversa.teacherName) 
+            <Avatar className={classes.purpleAvatar}>A</Avatar>
+            <Paper className={classes.assistantMessage}>
+              {createMessage(row, classes)}
+            </Paper>
+          </div>;
+        if (row.from === conversa.teacherName)
           return <div key={row._id} className={classes.teacherLine}>
-          <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
-          <Paper className={classes.teacherMessage}>
-            {createMessage(row, classes)}
-          </Paper>
-          </div>
+            <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
+            <Paper className={classes.teacherMessage}>
+              {createMessage(row, classes)}
+            </Paper>
+          </div>;
         return <div key={row._id} className={classes.studentLine}>
           <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
           <Paper className={classes.studentMessage}>
             {createMessage(row, classes)}
           </Paper>
-        </div>
-      })} 
+        </div>;
+      })}
     </Paper>
-  )
+  );
 }
+
+Dialog.propTypes = {
+  conversa: oneOfType([object, string]),
+};

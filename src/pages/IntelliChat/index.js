@@ -1,11 +1,11 @@
 import React from 'react';
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/Sidebar';
 
 function IntelliChat() {
   return (
     <>
       <Sidebar />
-      <div className={"intellichat"}>
+      <div className={'intellichat'}>
         <h1>IntelliChat</h1>
       </div>
     </>

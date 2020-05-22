@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import { object } from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -12,7 +13,7 @@ import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import * as moment from 'moment';
 
-import api from './../../services/api'
+import api from './../../services/api';
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   backLink: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'    
+    alignItems: 'center'
   },
   logo: {
     display: 'table',
@@ -60,7 +61,7 @@ export default function Conversation(props) {
   useEffect(() => {
     api.get(`/conversation/${id}`).then(response => {
       setConversa(response.data);
-    })
+    });
   }, [id]);
 
   return (
@@ -68,31 +69,31 @@ export default function Conversation(props) {
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <img className={classes.logo} src={Logo} alt={""} />
+        <img className={classes.logo} src={Logo} alt={''} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={2}>
             <Grid item xs={12} >
               <Paper className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} >
-                    <Link className="backLink" onClick={() => { history.goBack() }} >
+                    <Link to='' className="backLink" onClick={() => { history.goBack(); }} >
                       <ArrowLeftIcon size={16} />
                       Voltar
                     </Link>
                   </Grid>
                   <Grid item xs={9} >
                     <div className={classes.infos}>
-                      <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY HH:mm")}</p>
+                      <p><b>Data:</b> {moment(conversa.createdAt).format('DD/MM/YYYY HH:mm')}</p>
                     </div>
                   </Grid>
                   <Grid item xs={3} >
-                    
+
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
             <Grid item xs={12} >
-              <Dialog conversa={conversa}/>
+              <Dialog conversa={conversa} />
             </Grid>
           </Grid>
           <Box pt={4}>
@@ -103,3 +104,7 @@ export default function Conversation(props) {
     </div>
   );
 }
+
+Conversation.propTypes = {
+  match: object
+};
