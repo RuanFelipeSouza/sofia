@@ -6,7 +6,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
   let logged = false;
   try {
-    const jwt = sessionStorage.getItem('Authorization').split(' ')[1];
+    const jwt = localStorage.getItem('Authorization').split(' ')[1];
     verify(jwt, 'intelli');
     logged = true;
   }catch(e) {

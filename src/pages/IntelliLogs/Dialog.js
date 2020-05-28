@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end'
   },
   assistantMessage: {
-    marginTop: '3%',
+    marginTop: '1.5%',
+    marginBottom: '1.5%',
     backgroundColor: '#DBF6C6',
     padding: '0 3%',
     maxWidth: '60%',
@@ -30,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end'
   },
   teacherMessage: {
-    marginTop: '3%',
+    marginTop: '1.5%',
+    marginBottom: '1.5%',
     backgroundColor: '#FFFFFA',
     padding: '0 3%',
     maxWidth: '60%',
@@ -42,24 +44,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end'
   },
   studentMessage: {
-    marginTop: '3%',
+    marginTop: '1.5%',
+    marginBottom: '1.5%',
     backgroundColor: '#FFFFEF',
     padding: '0 3%',
     maxWidth: '60%',
     minWidth: '25%'
   },
   orangeAvatar: {
-    margin: '0 2%',
+    margin: '1.5% 2%',
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
   },
   purpleAvatar: {
-    margin: '0 2%',
+    margin: '1.5% 2%',
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
   },
   greenAvatar: {
-    margin: '0 2%',
+    margin: '1.5% 2%',
     color: theme.palette.getContrastText(green[500]),
     backgroundColor: green[500],
   },

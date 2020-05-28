@@ -4,7 +4,7 @@ const api = axios.create({
     baseURL: 'https://globaltouch-01.intelliway.com.br:3004'
 });
 
-let tokenStorage = sessionStorage.getItem('Authorization');
+let tokenStorage = localStorage.getItem('Authorization');
 
 if (tokenStorage) {
     api.defaults.headers.common = {
