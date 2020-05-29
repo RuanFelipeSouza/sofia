@@ -10,6 +10,12 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import * as moment from 'moment';
 
 import api from './../../services/api'
@@ -48,6 +54,20 @@ const useStyles = makeStyles((theme) => ({
   },
   infos: {
     margin: '0 2%'
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editForm: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  editButton: {
+    margin: '1% 2%'
   }
 }));
 
@@ -55,6 +75,9 @@ export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
   const [conversa, setConversa] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [newDate, setNewDate] = useState();
   const { id } = props.match.params;
 
   useEffect(() => {
@@ -62,6 +85,26 @@ export default function Conversation(props) {
       setConversa(response.data);
     })
   }, [id]);
+
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleUpdateConnection = () => {
+    setLoadingUpdate(true);
+    api.put('/updateConnection', {
+      id,
+      data: newDate
+    }).then(response => {
+      setConversa(response.data);
+      setLoadingUpdate(false);
+      setOpenModal(false);
+    });
+  }
 
   return (
     <div className={classes.root}>
@@ -86,6 +129,46 @@ export default function Conversation(props) {
                       <p><b>Professor:</b> {conversa?.teacherName}</p>
                       <p><b>Status:</b> {conversa['class']?.status}</p>
                       <p><b>Data marcada:</b> {conversa['class']?.date && moment(conversa['class']?.date).format("DD/MM/YYYY HH:mm")}</p>
+                    </div>
+                    <div>
+                    <Button variant="contained" onClick={handleOpen} className={classes.editButton} >
+                      Editar
+                    </Button>
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={openModal}
+                      onClose={handleClose}
+                      disabled={loadingUpdate}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openModal}>
+                        <div className={classes.editForm}>
+                          <TextField
+                            id="datetime-local"
+                            label="Data"
+                            type="datetime-local"
+                            ampm={false}
+                            value={newDate}
+                            disabled={loadingUpdate}
+                            onChange={(e)=> setNewDate(e.target.value) }
+                            className={classes.textField}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                          />
+                          <br /><br />
+                          <Button variant="contained" onClick={handleUpdateConnection}>
+                            {loadingUpdate ? (<CircularProgress size={25} />) : 'Salvar'}
+                          </Button>
+                        </div>
+                      </Fade>
+                    </Modal>
                     </div>
                   </Grid>
                   <Grid item xs={3} >
