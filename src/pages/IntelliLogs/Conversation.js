@@ -14,8 +14,9 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import * as moment from 'moment';
 
 import api from './../../services/api'
@@ -77,7 +78,7 @@ export default function Conversation(props) {
   const [conversa, setConversa] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
-  const [newDate, setNewDate] = useState();
+  const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
 
   useEffect(() => {
@@ -98,7 +99,7 @@ export default function Conversation(props) {
     setLoadingUpdate(true);
     api.put('/updateConnection', {
       id,
-      data: newDate
+      data: selectedDate
     }).then(response => {
       setConversa(response.data);
       setLoadingUpdate(false);
@@ -149,19 +150,18 @@ export default function Conversation(props) {
                     >
                       <Fade in={openModal}>
                         <div className={classes.editForm}>
-                          <TextField
-                            id="datetime-local"
-                            label="Data"
-                            type="datetime-local"
-                            ampm={false}
-                            value={newDate}
-                            disabled={loadingUpdate}
-                            onChange={(e)=> setNewDate(e.target.value) }
-                            className={classes.textField}
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                          />
+                          <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                            <KeyboardDateTimePicker
+                              variant="inline"
+                              ampm={false}
+                              label="Data"
+                              value={selectedDate}
+                              onChange={handleDateChange}
+                              onError={console.log}
+                              disablePast
+                              format="dd/MM/yyyy HH:mm"
+                            />
+                          </MuiPickersUtilsProvider>
                           <br /><br />
                           <Button variant="contained" onClick={handleUpdateConnection}>
                             {loadingUpdate ? (<CircularProgress size={25} />) : 'Salvar'}
