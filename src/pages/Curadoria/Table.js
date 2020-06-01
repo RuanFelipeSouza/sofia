@@ -189,6 +189,8 @@ export default function Curadoria(props) {
             isLoading={props.loading}
             options={{
                 paging: true,
+                pageSizeOptions: [5, 20, 50, 100],
+                pageSize: props.pageSize,
                 searchFieldAlignment: 'left',
                 toolbarButtonAlignment: 'left',
                 exportButton: true,
@@ -198,6 +200,11 @@ export default function Curadoria(props) {
                     verticalAlign: 'initial'
                 },
                 filtering: true
+            }}
+            onChangePage={page => props.onChangePage(page)}
+            onChangeRowsPerPage={pageSize => {
+                props.onChangePage(0);
+                props.onChangeRowsPerPage(pageSize);
             }}
             localization={{
                 pagination: {

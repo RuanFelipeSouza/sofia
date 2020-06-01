@@ -13,6 +13,7 @@ import Copyright from '../../components/Copyright';
 import Table from './Table';
 
 import api from '../../services/api'
+import localStorageStateHook from './../../utils/useLocalStorageState';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -59,8 +60,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FullWidthTabs() {
+  const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
-	const [curadorias, setCuradorias] = useState([]);
+  const [curadorias, setCuradorias] = useState([]);
+  const [page, setPage] = useLocalStorageState(keys.CURADORIA_PAGINA_ATUAL, 0, useState);
+  const [pageSize, setPageSize] = useLocalStorageState(keys.CURADORIA_TAMANHO_PAGINA, 5, useState);
   const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -105,15 +109,42 @@ export default function FullWidthTabs() {
                     index={value}
                     onChangeIndex={handleChangeIndex}
                 >
-                    <TabPanel value={value} index={0} dir={theme.direction}>
-                        <Table botName={'BOT 1'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
-                    </TabPanel>
-                    <TabPanel value={value} index={1} dir={theme.direction}>
-                        <Table botName={'BOT 2'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
-                    </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
-                        <Table botName={'BOT 3'} curadorias={curadorias} setCuradorias={setCuradorias} loading={loading} />
-                    </TabPanel>
+          <TabPanel value={value} index={0} dir={theme.direction}>
+            <Table
+              botName={'BOT 1'}
+              curadorias={curadorias}
+              setCuradorias={setCuradorias}
+              loading={loading}
+              initialPage={page}
+              onChangePage={setPage}
+              pageSize={pageSize}
+              onChangeRowsPerPage={setPageSize}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={1} dir={theme.direction}>
+            <Table
+              botName={'BOT 2'}
+              curadorias={curadorias}
+              setCuradorias={setCuradorias}
+              loading={loading}
+              initialPage={page}
+              onChangePage={setPage}
+              pageSize={pageSize}
+              onChangeRowsPerPage={setPageSize}
+            />
+          </TabPanel>
+          <TabPanel value={value} index={2} dir={theme.direction}>
+            <Table
+              botName={'BOT 3'}
+              curadorias={curadorias}
+              setCuradorias={setCuradorias}
+              loading={loading}
+              initialPage={page}
+              onChangePage={setPage}
+              pageSize={pageSize}
+              onChangeRowsPerPage={setPageSize}
+            />
+          </TabPanel>
                 </SwipeableViews>
             <Box pt={4}>
                 <Copyright />
