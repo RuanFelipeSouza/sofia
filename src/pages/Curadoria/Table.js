@@ -36,7 +36,6 @@ export default function Curadoria(props) {
     const [itemSelecionado, setItemSelecionado] = useState({});
 
     const columns = [
-        { title: 'ID', field: '_id', defaultFilter: props.filter._id },
         { title: 'Arquivo', field: 'arquivo', defaultFilter: props.filter.arquivo },
         { title: 'Tema', field: 'tema', initialEditValue: '', defaultFilter: props.filter.tema },
         { 
