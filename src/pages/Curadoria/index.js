@@ -66,6 +66,9 @@ export default function FullWidthTabs() {
   const [page, setPage] = useLocalStorageState(keys.CURADORIA_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.CURADORIA_TAMANHO_PAGINA, 5, useState);
   const [loading, setLoading] = useState(true);
+  const [filterBot1, setFilterBot1] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_1, {}, useState);
+  const [filterBot2, setFilterBot2] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_2, {}, useState);
+  const [filterBot3, setFilterBot3] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_3, {}, useState);
 
 	useEffect(() => {
 		api.get('/curadoria').then(result => {
@@ -119,6 +122,8 @@ export default function FullWidthTabs() {
               onChangePage={setPage}
               pageSize={pageSize}
               onChangeRowsPerPage={setPageSize}
+              filter={filterBot1}
+              onFilterChange={setFilterBot1}
             />
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
@@ -131,6 +136,8 @@ export default function FullWidthTabs() {
               onChangePage={setPage}
               pageSize={pageSize}
               onChangeRowsPerPage={setPageSize}
+              filter={filterBot2}
+              onFilterChange={setFilterBot2}
             />
           </TabPanel>
           <TabPanel value={value} index={2} dir={theme.direction}>
@@ -143,6 +150,8 @@ export default function FullWidthTabs() {
               onChangePage={setPage}
               pageSize={pageSize}
               onChangeRowsPerPage={setPageSize}
+              filter={filterBot3}
+              onFilterChange={setFilterBot3}
             />
           </TabPanel>
                 </SwipeableViews>
