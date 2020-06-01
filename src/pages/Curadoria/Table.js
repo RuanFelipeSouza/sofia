@@ -36,7 +36,7 @@ export default function Curadoria(props) {
     const [itemSelecionado, setItemSelecionado] = useState({});
 
     const columns = [
-        { title: 'ID', field: '_id', filtering: false },
+        { title: 'ID', field: '_id' },
         { title: 'Arquivo', field: 'arquivo' },
         { title: 'Tema', field: 'tema', initialEditValue: '' },
         { 
@@ -44,7 +44,6 @@ export default function Curadoria(props) {
             field: 'videoLink', 
             cellStyle: { width: '10%' },
             sorting: false,
-            filtering: false,
             render: props2 => <a href={props2.videoLink} target={"_black"}>{props2.videoLink}</a> 
         },
         { 
@@ -52,7 +51,6 @@ export default function Curadoria(props) {
             field: 'image', 
             editable: 'never',
             sorting: false,
-            filtering: false,
             render: props2 => {
                 if(!props2) return <></>
                 if(!props2.image) {
@@ -131,7 +129,6 @@ export default function Curadoria(props) {
             title: 'Possíveis perguntas', 
             field: 'perguntas', 
             cellStyle: { width: '20%' },
-            filtering: false,
             editComponent: props => {
                 return <TextareaAutosize 
                     className={classes.textField} 
@@ -152,7 +149,6 @@ export default function Curadoria(props) {
             title: 'Possíveis respostas', 
             field: 'respostas', 
             cellStyle: { width: '20%' },
-            filtering: false,
             editComponent: props => {
                 return <TextareaAutosize 
                     className={classes.textField} 
@@ -169,12 +165,20 @@ export default function Curadoria(props) {
             },
             render: props => <React.Fragment>{props.respostas && parse(props?.respostas?.replace(/\n/g, '<br/>'))}</React.Fragment>,
         },
-        { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean', filtering: false, },
-        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean', filtering: false, },
-        { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean', filtering: false, },
+        { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean' },
+        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean' },
+        { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean' },
         { title: 'Responsável', field: 'responsavel' },
-        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', filtering: false, render: props => <React.Fragment>{moment(props?.createdAt).format("DD/MM/YYYY")}</React.Fragment> },
-    ]
+        {
+            title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never',
+            customFilterAndSearch: (term, rowData) => {
+                const filterDate = moment(term);
+                const rowDate = moment(rowData.updatedAt);
+                return filterDate.isSame(rowDate, 'day');
+            },
+            render: props => <React.Fragment>{moment(props?.updatedAt).format("DD/MM/YYYY")}</React.Fragment>
+        },
+    ];
 
     return (
         <MaterialTable
