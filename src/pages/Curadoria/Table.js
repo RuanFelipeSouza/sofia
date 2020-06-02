@@ -43,7 +43,7 @@ export default function Curadoria(props) {
             field: 'videoLink', 
             cellStyle: { width: '10%' },
             sorting: false,
-            render: props2 => <a href={props2.videoLink} target={"_black"}>{props2.videoLink}</a> ,
+            render: props2 => <a href={props2.videoLink} rel='noopener noreferrer' target={"_blank"}>{props2.videoLink}</a> ,
             defaultFilter: props.filter.videoLink
         },
         { 
