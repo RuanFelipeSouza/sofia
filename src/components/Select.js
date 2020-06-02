@@ -23,7 +23,6 @@ export default function NativeSelects(props) {
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor="uncontrolled-native">Projeto</InputLabel>
         <NativeSelect
-          defaultValue={30}
           inputProps={{
             name: 'project',
           }}
