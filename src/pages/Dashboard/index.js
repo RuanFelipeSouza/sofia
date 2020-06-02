@@ -9,6 +9,7 @@ import DatePicker from './../../components/Datepicker';
 import Select from './../../components/Select';
 import Chart from './../../components/Chart';
 import PieChart from './../../components/PieChart';
+import StackedBarChart from './../../components/StackedBarChart';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
@@ -78,6 +79,7 @@ export default function Intellilogs() {
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
+  const [pendencies, setPendencies] = useState([]);
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
 
   useEffect(_ => {
@@ -97,6 +99,18 @@ export default function Intellilogs() {
         { name: 'Não Entendido', value: amountMisunderstoodMessages, fill: '#BAB8D7' }
       ]
       setMisunderstoodMessages(misunderstoodMessages);
+    })
+  }, [dataInicio, dataFim, project]);
+
+  useEffect(() => {
+    api.get('/pendenciaPorResponsavel', {
+      params: {
+        dataInicio,
+        dataFim,
+        projeto: project
+      }
+    }).then(response => {
+      setPendencies(response.data);
     })
   }, [dataInicio, dataFim, project]);
 
@@ -121,6 +135,14 @@ export default function Intellilogs() {
               <Paper className={classes.chart}>
                 <Chart atendimentos={atendimentos} />
                 <PieChart data={misunderstoodMessages} />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Validação de Curadoria por Responsável </b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <StackedBarChart data={pendencies} />
               </Paper>
             </Grid>
           </Grid>
