@@ -16,7 +16,7 @@ export default function TableIndicador(props) {
 
   return (
     <div>
-      {messages.length > 0 && <ReactTooltip place="top" type="error" effect="float" multiline="true" />}
+      {messages.length > 0 && <ReactTooltip place="top" type="error" effect="float" multiline={true} />}
       <EmojiObjects data-tip={tooltip} style={{ color: messages.length > 0 ? red[500] : green[500] }} />
     </div>
   );

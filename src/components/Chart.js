@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import * as moment from 'moment';
 
@@ -17,21 +17,28 @@ const groupBy = (list, keyGetter)=> {
 }
 
 export default function Chart(props) {
-  let { atendimentos } = props;
-  atendimentos && atendimentos.forEach(function(element) {
-    element.createdAt = moment(element.createdAt).format("DD/MM/YYYY");
-  });
-  atendimentos = groupBy(atendimentos, e => e.createdAt);
+  const [data, setData] = useState([]);
+  const { atendimentos } = props;
 
-  let atendimentosPorDia = []
-  atendimentos.forEach(function(element, key) { 
-    atendimentosPorDia.push({Data: key, Atendimentos: element.length})
-  });
+  useEffect(() => {
+    atendimentos && atendimentos.forEach(function (element) {
+      element.createdAt = moment(element.createdAt).format("DD/MM/YYYY");
+    });
+    const groupedData = groupBy(atendimentos, e => e.createdAt);
+
+    let atendimentosPorDia = []
+    groupedData.forEach(function (element, key) {
+      atendimentosPorDia.push({ Data: key, Atendimentos: element.length })
+    });
+
+    setData(atendimentosPorDia);
+  }, [atendimentos]);
+  
   return (
     <BarChart
       width={700}
       height={350}
-      data={atendimentosPorDia}
+      data={data}
       margin={{
         top: 15, right: 20, left: 20, bottom: 5,
       }}

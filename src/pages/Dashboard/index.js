@@ -91,7 +91,7 @@ export default function Intellilogs() {
       const { data: atendimentos } = response;
       setAtendimentos(atendimentos);
 
-      const amountMisunderstoodMessages = atendimentos.filter(({ anythingElse }) => anythingElse).length;
+      const amountMisunderstoodMessages = atendimentos.filter(({ misunderstoodMessages }) => misunderstoodMessages.length > 0).length;
       const misunderstoodMessages = [
         { name: 'Entendido', value: atendimentos.length - amountMisunderstoodMessages, fill: '#8884d8' },
         { name: 'Não Entendido', value: amountMisunderstoodMessages, fill: '#BAB8D7' }

@@ -36,23 +36,22 @@ export default function Curadoria(props) {
     const [itemSelecionado, setItemSelecionado] = useState({});
 
     const columns = [
-        { title: 'ID', field: '_id', filtering: false },
-        { title: 'Arquivo', field: 'arquivo' },
-        { title: 'Tema', field: 'tema', initialEditValue: '' },
+        { title: 'Arquivo', field: 'arquivo', defaultFilter: props.filter.arquivo },
+        { title: 'Tema', field: 'tema', initialEditValue: '', defaultFilter: props.filter.tema },
         { 
             title: 'Vídeo', 
             field: 'videoLink', 
             cellStyle: { width: '10%' },
             sorting: false,
-            filtering: false,
-            render: props2 => <a href={props2.videoLink} target={"_black"}>{props2.videoLink}</a> 
+            render: props2 => <a href={props2.videoLink} rel='noopener noreferrer' target={"_blank"}>{props2.videoLink}</a> ,
+            defaultFilter: props.filter.videoLink
         },
         { 
             title: 'Imagem', 
             field: 'image', 
             editable: 'never',
             sorting: false,
-            filtering: false,
+            defaultFilter: props.filter.image,
             render: props2 => {
                 if(!props2) return <></>
                 if(!props2.image) {
@@ -131,7 +130,7 @@ export default function Curadoria(props) {
             title: 'Possíveis perguntas', 
             field: 'perguntas', 
             cellStyle: { width: '20%' },
-            filtering: false,
+            defaultFilter: props.filter.perguntas,
             editComponent: props => {
                 return <TextareaAutosize 
                     className={classes.textField} 
@@ -152,7 +151,7 @@ export default function Curadoria(props) {
             title: 'Possíveis respostas', 
             field: 'respostas', 
             cellStyle: { width: '20%' },
-            filtering: false,
+            defaultFilter: props.filter.respostas,
             editComponent: props => {
                 return <TextareaAutosize 
                     className={classes.textField} 
@@ -169,12 +168,20 @@ export default function Curadoria(props) {
             },
             render: props => <React.Fragment>{props.respostas && parse(props?.respostas?.replace(/\n/g, '<br/>'))}</React.Fragment>,
         },
-        { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean', filtering: false, },
-        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean', filtering: false, },
-        { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean', filtering: false, },
-        { title: 'Responsável', field: 'responsavel' },
-        { title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', filtering: false, render: props => <React.Fragment>{moment(props?.createdAt).format("DD/MM/YYYY")}</React.Fragment> },
-    ]
+        { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean', defaultFilter: props.filter.validacaoConteudo },
+        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean', defaultFilter: props.filter.possivelValidarBOT },
+        { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean', defaultFilter: props.filter.validacaoBOT },
+        { title: 'Responsável', field: 'responsavel', defaultFilter: props.filter.responsavel },
+        {
+            title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', defaultFilter: props.filter.updatedAt,
+            customFilterAndSearch: (term, rowData) => {
+                const filterDate = moment(term);
+                const rowDate = moment(rowData.updatedAt);
+                return filterDate.isSame(rowDate, 'day');
+            },
+            render: props => <React.Fragment>{moment(props?.updatedAt).format("DD/MM/YYYY")}</React.Fragment>
+        },
+    ];
 
     return (
         <MaterialTable
@@ -185,6 +192,8 @@ export default function Curadoria(props) {
             isLoading={props.loading}
             options={{
                 paging: true,
+                pageSizeOptions: [5, 20, 50, 100],
+                pageSize: props.pageSize,
                 searchFieldAlignment: 'left',
                 toolbarButtonAlignment: 'left',
                 exportButton: true,
@@ -194,6 +203,18 @@ export default function Curadoria(props) {
                     verticalAlign: 'initial'
                 },
                 filtering: true
+            }}
+            onFilterChange={
+                columns => {
+                    const newFilter = columns.reduce((acc, current) => { return { ...acc, [current.column.field]: current.value } }, {});
+                    props.onFilterChange(newFilter);
+                    return columns;
+                }
+            }
+            onChangePage={page => props.onChangePage(page)}
+            onChangeRowsPerPage={pageSize => {
+                props.onChangePage(0);
+                props.onChangeRowsPerPage(pageSize);
             }}
             localization={{
                 pagination: {
