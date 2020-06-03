@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,6 +6,9 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
 import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
 import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
@@ -18,7 +21,7 @@ import { UpperLogo, BottomLogo } from './styles.js';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -28,32 +31,52 @@ const useStyles = makeStyles(() => ({
     backgroundColor: '#F0703F',
     color: 'white',
   },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
 
 const _menuOptions = [
   {
     label: "IntelliLogs",
     icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/intellilogs',
+    path: '/intellilogs'
   },
   {
     label: "Curadoria",
     icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-    path: '/curadoria',
+    path: '/curadoria'
   },
   {
     label: "Dashboard",
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/dashboard',
-  },
+    path: '/dashboard'
+  }
 ];
 
 export default function Sidebar() {
   const history = useHistory();
   const location = history.location.pathname;
   const classes = useStyles();
+  const [currentOpen, setCurrentOpen] = useState('');
 
   const _redirect = (path) => path !== location ? history.push(path) : null;
+
+  const renderExpand = (children, label) => {
+    if (!children) {
+      return null;
+    }
+
+    return currentOpen === label ? <ExpandLess /> : <ExpandMore />
+  };
+
+  const handleClick = (label) => {
+    if (label === currentOpen) {
+      setCurrentOpen('');
+    } else {
+      setCurrentOpen(label);
+    }
+  };
 
   return (
     <Drawer
@@ -68,13 +91,29 @@ export default function Sidebar() {
       <Divider />
       <List>
         {
-          _menuOptions.map(({ label, icon, path }) => (
-            <ListItem button key={label} onClick={() => _redirect(path)}>
-              <ListItemIcon>
-                {icon}
-              </ListItemIcon>
-              <ListItemText primary={label} />
-            </ListItem>
+          _menuOptions.map(({ label, icon, path, children }) => (
+            <div key={label}>
+              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)}>
+                <ListItemIcon>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText primary={label} />
+                {renderExpand(children, label)}
+              </ListItem>
+              {children &&
+                <Collapse in={currentOpen === label} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {children.map(c => (
+                      <ListItem button key={c.label} className={classes.nested} onClick={() => _redirect(c.path)}>
+                        <ListItemIcon>
+                          {c.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={c.label} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Collapse>}
+            </div>
           ))
         }
       </List>
