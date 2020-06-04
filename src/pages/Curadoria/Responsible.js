@@ -5,17 +5,17 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import DatePicker from './../../components/Datepicker';
+import DatePicker from '../../components/Datepicker';
 import TextField from '@material-ui/core/TextField';
-import Select from './../../components/Select';
+import Select from '../../components/Select';
 import Button from '@material-ui/core/Button';
 import Logo from './../../assets/logointellilogs.png';
-import Copyright from './../../components/Copyright';
-import Sidebar from './../../components/Sidebar';
+import Copyright from '../../components/Copyright';
+import Sidebar from '../../components/Sidebar';
 import Table from './Table';
 
-import api from './../../services/api';
-import localStorageStateHook from './../../utils/useLocalStorageState';
+import api from '../../services/api';
+import localStorageStateHook from '../../utils/useLocalStorageState';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Intellilogs() {
+export default function Responsible() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
   const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
