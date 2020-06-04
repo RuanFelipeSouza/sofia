@@ -45,7 +45,18 @@ const _menuOptions = [
   {
     label: "Curadoria",
     icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-    path: '/curadoria'
+    children: [
+      {
+        label: "Planilhas",
+        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+        path: '/curadoria/planilhas'
+      },
+      {
+        label: "Responsáveis",
+        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+        path: '/curadoria/responsaveis'
+      },
+    ]
   },
   {
     label: "Dashboard",
