@@ -76,7 +76,6 @@ export default function Intellilogs() {
   const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
-  const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
@@ -86,14 +85,13 @@ export default function Intellilogs() {
     api.get('/atendimentos', {
       params: {
         dataInicio,
-        dataFim,
-        projeto: project
+        dataFim
       }
     }).then(response => {
       setLoading(false);
       setAtendimentos(response.data);
     })
-  }, [dataInicio, dataFim, project]);
+  }, [dataInicio, dataFim]);
 
   return (
     <div className={classes.root}>
