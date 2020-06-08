@@ -72,7 +72,11 @@ const useStyles = makeStyles((theme) => ({
 const columns = [
   { title: 'Arquivo', field: 'arquivo' },
   { title: 'Tema', field: 'tema' },
-  { title: 'Responsável', field: 'responsavel' }
+  {
+    title: 'Responsável',
+    field: 'responsavel',
+    customFilterAndSearch: (term, { responsavel }) => term === '!' ? !responsavel : responsavel && responsavel.toLowerCase().includes(term.toLowerCase())
+  }
 ];
 
 const options = {

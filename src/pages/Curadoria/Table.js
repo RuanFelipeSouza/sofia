@@ -171,7 +171,7 @@ export default function Curadoria(props) {
         { title: 'Validação do conteúdo', field: 'validacaoConteudo', type: 'boolean', defaultFilter: props.filter.validacaoConteudo },
         { title: 'Possível validar no BOT', field: 'possivelValidarBOT', type: 'boolean', defaultFilter: props.filter.possivelValidarBOT },
         { title: 'Validação BOT', field: 'validacaoBOT', type: 'boolean', defaultFilter: props.filter.validacaoBOT },
-        { title: 'Responsável', field: 'responsavel', defaultFilter: props.filter.responsavel },
+        { title: 'Responsável', field: 'responsavel', defaultFilter: props.filter.responsavel, customFilterAndSearch: (term, { responsavel }) => term === '!' ? !responsavel : responsavel && responsavel.toLowerCase().includes(term.toLowerCase()) },
         {
             title: 'Última atualização', field: 'updatedAt', type: 'date', editable: 'never', defaultFilter: props.filter.updatedAt,
             customFilterAndSearch: (term, rowData) => {
