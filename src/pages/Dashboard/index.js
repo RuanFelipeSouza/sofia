@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { FavoriteBorder } from '@material-ui/icons';
 import api from './../../services/api';
 import NPS from './nps';
+import Sugestoes from './sugestoes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +66,6 @@ export default function Dashboard() {
   const theme = useTheme();
   const [tabIndex, setTabValue] = useState(0);
   const [surveys, setSurveys] = useState([]);
-  console.log(surveys);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -107,7 +107,7 @@ export default function Dashboard() {
           style={{width: '100%'}}
         >
           <NPS surveys={surveys}/>
-          <React.Fragment>Central de sugestões</React.Fragment>
+          <Sugestoes surveys={surveys}/>
           <React.Fragment>Central de desempenho</React.Fragment>
         </SwipeableViews>
       </main>

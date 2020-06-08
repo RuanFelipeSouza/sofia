@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { PieChart, Pie, Legend, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import groupBy from './../../utils/ groupBy';
+import groupBy from '../../utils/groupBy';
 import * as moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
