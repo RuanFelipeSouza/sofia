@@ -50,8 +50,8 @@ const defaultLocalization = {
 
 export default function GenericTable(props) {
   const {
-    title, columns, data, options, isLoading, onFilterChange
-    , onChangePage, onChangeRowsPerPage, onSelectionChange
+    title, columns, data, options, isLoading, onFilterChange,
+    onChangePage, onChangeRowsPerPage, onSelectionChange
   } = props;
   const mergedOptions = {
     ...defaultOptions,

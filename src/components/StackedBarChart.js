@@ -12,10 +12,10 @@ export default function StackedBarChart({ data }) {
       margin={{ top: 15, right: 20, left: 20, bottom: 5, }}
     >
       <CartesianGrid strokeDasharray='3 3' />
-      <XAxis dataKey='data' />
+      <XAxis dataKey='data' interval={0} angle={-45} textAnchor='end' height={100} />
       <YAxis />
       <Tooltip />
-      <Legend />
+      <Legend layout="horizontal" verticalAlign="top" align="center" />
       {
         data.length > 0 && Object.keys(data[0]).map((key, index) => {
           return key !== 'data' ? <Bar key={key} dataKey={key} stackId='a' fill={colors[index - 1]} /> : null;
