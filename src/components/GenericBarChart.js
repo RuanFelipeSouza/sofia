@@ -3,7 +3,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 
 const colors = ['#8884d8', '#82ca9d'];
 
-export default function StackedBarChart({ data }) {
+export default function GenericBarChart({ data, isStacked }) {
+  console.log(data);
   return (
     <BarChart
       width={700}
@@ -18,7 +19,7 @@ export default function StackedBarChart({ data }) {
       <Legend layout="horizontal" verticalAlign="top" align="center" />
       {
         data.length > 0 && Object.keys(data[0]).map((key, index) => {
-          return key !== 'data' ? <Bar key={key} dataKey={key} stackId='a' fill={colors[index - 1]} /> : null;
+          return key !== 'data' ? <Bar key={key} dataKey={key} stackId={isStacked ? 'a' : index} fill={colors[index - 1]} /> : null;
         })
       }
     </BarChart>
