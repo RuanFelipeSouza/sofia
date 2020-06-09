@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import MaterialTable from 'material-table';
 
 import ReactWordcloud from 'react-wordcloud';
 import { select } from 'd3-selection';
@@ -46,11 +47,51 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+function Table(props) {
+    const columns = [
+        { title: 'Nome', field: 'from' },
+        { title: 'Sugestão', field: 'text' },
+    ]
+  
+    return (
+      <MaterialTable
+        title={props.selectedWord}
+        columns={columns}
+        data={props.messages}
+        isLoading={props.isLoading}
+        options={{
+            pageSizeOptions: [5, 20],
+        }}
+        localization={{
+            pagination: {
+                labelDisplayedRows: '{from}-{to} de {count}'
+            },
+            header: {
+                actions: 'Ações'
+            },
+            body: {
+                emptyDataSourceMessage: 'Nenhum registro a ser exibido',
+                filterRow: {
+                    filterTooltip: 'Filtro'
+                },
+            },
+            toolbar: {
+                exportTitle: 'Exportar',
+                exportAriaLabel: 'Exportar',
+                exportName: 'Exportar como CSV',
+                searchTooltip: 'Buscar',
+                searchPlaceholder: 'Buscar'
+            }
+        }}
+      />
+    );
+}
+
 export default function Sugestoes({ surveys }) {
     const classes = useStyles();
     const [filteredMessages, setFilteredMessages] = useState([]);
     const [words, setWords] = useState([]);
-    const [selectedWord, setSelectedWord] = useState('undefinedd');
+    const [selectedWord, setSelectedWord] = useState('');
     const [messagesMathSelectedWord, setMessagesMathSelectedWord] = useState([]);
 
     useEffect(() => {
@@ -86,7 +127,6 @@ export default function Sugestoes({ surveys }) {
 
     useEffect(() => {
         const messages = filteredMessages.filter(message => message.text.includes(selectedWord));
-        console.log(messages);
         setMessagesMathSelectedWord(messages);
     }, [selectedWord, filteredMessages]);
 
@@ -119,15 +159,13 @@ export default function Sugestoes({ surveys }) {
         <Container maxWidth="lg" className={classes.container}>
             <Paper className={classes.form}>
                 <Grid container spacing={1}>
-                    <Grid item xs={8} >
+                    <Grid item xs={7} >
                         <Paper className={classes.wordCloud}>
                             <ReactWordcloud callbacks={callbacks} options={options} words={words} />
                         </Paper>
                     </Grid>
-                    <Grid item xs={4} >
-                        <Paper className={classes.piechart}>
-                            {messagesMathSelectedWord[0]?.text}
-                        </Paper>
+                    <Grid item xs={5} >
+                        <Table messages={messagesMathSelectedWord} selectedWord={selectedWord} />
                     </Grid>
                 </Grid>
             </Paper>

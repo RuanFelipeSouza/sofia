@@ -13,6 +13,7 @@ import { FavoriteBorder } from '@material-ui/icons';
 import api from './../../services/api';
 import NPS from './nps';
 import Sugestoes from './sugestoes';
+import Desempenho from './desempenho';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100%'
   },
   main: {
-    width: '100%',
+    width: '87%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -66,6 +67,8 @@ export default function Dashboard() {
   const theme = useTheme();
   const [tabIndex, setTabValue] = useState(0);
   const [surveys, setSurveys] = useState([]);
+  const [connections, setConnections] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -76,8 +79,10 @@ export default function Dashboard() {
   };
 
   useEffect(_ => {
-    api.get('/surveys').then(response => {
-      setSurveys(response.data.filter(e => e.nota));
+    api.get('/dashboard').then(response => {
+      setSurveys(response.data.surveys);
+      setConnections(response.data.connections);
+      setUsers(response.data.users);
     })
   }, []);
 
@@ -93,7 +98,7 @@ export default function Dashboard() {
             indicatorColor="primary"
             textColor="primary"
             variant="fullWidth"
-            aria-label="full width tabs example"
+            // aria-label="full width tabs example"
           >
             <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(0)} />
             <Tab label="Central de sugestões" {...a11yProps(1)} />
@@ -106,9 +111,9 @@ export default function Dashboard() {
           onChangeIndex={handleChangeIndex}
           style={{width: '100%'}}
         >
-          <NPS surveys={surveys}/>
-          <Sugestoes surveys={surveys}/>
-          <React.Fragment>Central de desempenho</React.Fragment>
+          <NPS surveys={surveys.filter(e => e.nota)}/>
+          <Sugestoes surveys={surveys.filter(e => e.nota)}/>
+          <Desempenho surveys={surveys} connections={connections} users={users} />
         </SwipeableViews>
       </main>
     </div>

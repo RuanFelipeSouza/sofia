@@ -195,7 +195,7 @@ export default function NPS({ surveys }) {
                             <Grid item xs={4} >
                                 <Paper className={classes.piechart}>
                                     <ResponsiveContainer width='100%' aspect={1}>
-                                        <PieChart width={'100%'} height={"100%"}>
+                                        <PieChart>
                                             <Pie
                                                 label={renderPieLabel}
                                                 data={NPS}
