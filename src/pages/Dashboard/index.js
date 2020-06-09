@@ -9,7 +9,7 @@ import DatePicker from './../../components/Datepicker';
 import Select from './../../components/Select';
 import Chart from './../../components/Chart';
 import PieChart from './../../components/PieChart';
-import StackedBarChart from './../../components/StackedBarChart';
+import GenericBarChart from '../../components/GenericBarChart';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
@@ -77,10 +77,11 @@ export default function Intellilogs() {
   const classes = useStyles();
   const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
+  const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
   const [pendencies, setPendencies] = useState([]);
-  const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
+  const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
     api.get('/atendimentos', {
@@ -114,6 +115,18 @@ export default function Intellilogs() {
     })
   }, [dataInicio, dataFim, project]);
 
+  useEffect(() => {
+    api.get('/utilizazaoIntencao', {
+      params: {
+        dataInicio,
+        dataFim,
+        projeto: project
+      }
+    }).then(response => {
+      setIntents(response.data);
+    })
+  }, [dataInicio, dataFim, project]);
+
   return (
     <div className={classes.root}>
       <Sidebar />
@@ -142,7 +155,15 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <StackedBarChart data={pendencies} />
+                <GenericBarChart data={pendencies} isStacked />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Intenções Perguntadas</b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <GenericBarChart data={intents} />
               </Paper>
             </Grid>
           </Grid>
