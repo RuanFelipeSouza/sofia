@@ -9,7 +9,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import { FavoriteBorder } from '@material-ui/icons';
+import { FavoriteBorder, Assignment, BarChart } from '@material-ui/icons';
 import api from './../../services/api';
 import NPS from './nps';
 import Sugestoes from './sugestoes';
@@ -101,8 +101,8 @@ export default function Dashboard() {
             // aria-label="full width tabs example"
           >
             <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(0)} />
-            <Tab label="Central de sugestões" {...a11yProps(1)} />
-            <Tab label="Central de desempenho" {...a11yProps(2)} />
+            <Tab label="Central de sugestões" icon={<Assignment />} {...a11yProps(1)} />
+            <Tab label="Central de desempenho" icon={<BarChart />} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <SwipeableViews
