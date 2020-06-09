@@ -4,7 +4,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 const colors = ['#8884d8', '#82ca9d'];
 
 export default function GenericBarChart({ data, isStacked }) {
-  console.log(data);
   return (
     <BarChart
       width={700}
