@@ -125,7 +125,7 @@ export default function Sugestoes({ surveys, connections, users }) {
                                 Nota média da pesquisa
                             </Paper>
                             <Paper className={classes.description} >
-                                {surveys.length && surveys.filter(s => s.nota).reduce((a, b) => a + b.nota, 0)/surveys.filter(s => s.nota).length}
+                                {surveys.length && (surveys.filter(s => s.nota).reduce((a, b) => a + (b.nota > 10 ? 10 : b.nota), 0)/surveys.filter(s => s.nota).length).toFixed(2)}
                             </Paper>
                         </Paper>
                     </Grid>
