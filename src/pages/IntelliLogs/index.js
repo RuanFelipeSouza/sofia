@@ -8,9 +8,9 @@ import Paper from '@material-ui/core/Paper';
 import DatePicker from './../../components/Datepicker';
 import Chart from './../../components/Chart';
 import Table from './../../components/Table';
-import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import Header from "../../components/Header";
 
 import api from './../../services/api'
 
@@ -89,7 +89,7 @@ export default function Intellilogs() {
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <img className={classes.logo} src={Logo} alt={""} />
+        <Header title="Intellilogs" />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} >
