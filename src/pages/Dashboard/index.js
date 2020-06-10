@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -12,6 +12,7 @@ import PieChart from './../../components/PieChart';
 import GenericBarChart from '../../components/GenericBarChart';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import Table from './../../components/GenericTable';
 
 import api from './../../services/api';
 import localStorageStateHook from './../../utils/useLocalStorageState';
@@ -74,6 +75,11 @@ const useStyles = makeStyles((theme) => ({
 
 const rightWrongColors = ['#004000', '#660000']
 
+const columns = [
+  { title: 'Intenção', field: 'intent' },
+  { title: 'Descrição', field: 'description' }
+];
+
 export default function Intellilogs() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
@@ -86,6 +92,7 @@ export default function Intellilogs() {
   const [intelliwayPendencies, setIntelliwayPendencies] = useState({ pendencies: [], total: [] });
   const [botPendencies, setBotPendencies] = useState({ pendencies: [], total: [] });
   const [intents, setIntents] = useState([]);
+  const [unusedIntents, setUnusedIntents] = useState([]);
 
   useEffect(_ => {
     api.get('/atendimentos', {
@@ -146,6 +153,16 @@ export default function Intellilogs() {
     })
   }, [dataInicio, dataFim, project]);
 
+  useEffect(() => {
+    api.get('/intencoesNaoUtilizadas', {
+      params: {
+        projeto: project
+      }
+    }).then(response => {
+      setUnusedIntents(response.data);
+    })
+  }, [project]);
+
   return (
     <div className={classes.root}>
       <Sidebar />
@@ -197,13 +214,28 @@ export default function Intellilogs() {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <b>Intenções Perguntadas</b>
+              <b>Intenções Utilizadas</b>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
                 <GenericBarChart data={intents} width={1000} />
               </Paper>
             </Grid>
+            {unusedIntents.length &&
+              <Fragment>
+                <Grid item xs={6}>
+                  <b>Intenções Nunca Utilizadas</b>
+                </Grid>
+                <Grid item xs={12}>
+                  <Table
+                    title='Intenções'
+                    columns={columns}
+                    data={unusedIntents}
+                  />
+                </Grid>
+              </Fragment>
+            }
+
           </Grid>
           <Box pt={4}>
             <Copyright />
