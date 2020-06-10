@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Copyright from '../../components/Copyright';
 import Sidebar from '../../components/Sidebar';
 import Table from './../../components/GenericTable';
+import Alert from '@material-ui/lab/Alert';
 
 import api from '../../services/api';
 import localStorageStateHook from './../../utils/useLocalStorageState';
@@ -94,11 +95,13 @@ export default function Responsible() {
   const [responsibles, setResponsibles] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [responsability, setResponsability] = useState('');
+  const [alertVisible, setAlertVisibility] = useState(false);
 
   useEffect(_ => {
     setLoading(true);
     setResponsability('');
     setSelectedRows([]);
+    setAlertVisibility(false);
     api.get('/responsaveis', {
       params: {
         dataInicio: startDate,
@@ -122,6 +125,11 @@ export default function Responsible() {
     } catch (e) {
       setLoading(false);
     }
+  };
+
+  const handleRowSelection = (rows) => {
+    setSelectedRows(rows);
+    setAlertVisibility(false);
   };
 
   return (
@@ -149,7 +157,7 @@ export default function Responsible() {
                     label="Responsável"
                     id="responsavel"
                     value={responsability}
-                    onChange={(e) => setResponsability(e.target.value)}
+                    onChange={(e) => { setResponsability(e.target.value); setAlertVisibility(false); }}
                   />
                   <Button
                     type="submit"
@@ -157,12 +165,24 @@ export default function Responsible() {
                     color="primary"
                     className={classes.submit}
                     disabled={isLoading || !responsability}
-                    onClick={assignResponsability}
+                    onClick={() => setAlertVisibility(true)}
                     style={{ height: 46 }}
                   >
                     {isLoading ? (<CircularProgress size={25} />) : 'Atribuir Responsabilidade'}
                   </Button>
                 </Grid>
+                {alertVisible &&
+                  <Alert
+                    severity="warning"
+                    action={
+                      <Button color="inherit" size="small" onClick={assignResponsability}>
+                        Prosseguir
+                    </Button>
+                    }
+                  >
+                    Atenção, você irá atribuir <strong>{selectedRows.length} registro(s)</strong> para o(a) responsável <strong>{responsability}</strong>. Deseja prosseguir?
+                </Alert>
+                }
               </Paper>
             }
 
@@ -174,7 +194,7 @@ export default function Responsible() {
                   data={responsibles}
                   options={options}
                   isLoading={isLoading}
-                  onSelectionChange={setSelectedRows}
+                  onSelectionChange={handleRowSelection}
                 />
               </Paper>
             </Grid>
