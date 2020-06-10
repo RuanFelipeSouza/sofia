@@ -82,8 +82,7 @@ export default function Intellilogs() {
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
-  const [pendencies, setPendencies] = useState([]);
-  const [totalPendencies, setTotalPendencies] = useState([]);
+  const [contentPendencies, setContentPendencies] = useState({ pendencies: [], total: [] });
   const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
@@ -115,17 +114,16 @@ export default function Intellilogs() {
           projeto: project,
           tipoValidacao
         }
-      }).then(response => {
-        setPendencies(response.data);
-        const pendencies = [
+      }).then(({ data }) => {
+        const totalDependencies = [
           { name: 'Validado', value: 0, fill: rightWrongColors[0] },
           { name: 'Não Validado', value: 0, fill: rightWrongColors[1] }
         ];
-        response.data.forEach((r) => {
-          pendencies[0].value = pendencies[0].value + r['Validado'];
-          pendencies[1].value = pendencies[1].value + r['Não Validado'];
+        data.forEach((element) => {
+          totalDependencies[0].value = totalDependencies[0].value + element['Validado'];
+          totalDependencies[1].value = totalDependencies[1].value + element['Não Validado'];
         });
-        setTotalPendencies(pendencies);
+        setContentPendencies({ pendencies: data, total: totalDependencies });
       })
     };
 
@@ -172,8 +170,8 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={pendencies} isStacked interval={0} colors={rightWrongColors} />
-                <PieChart data={totalPendencies} />
+                <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={contentPendencies.total} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
