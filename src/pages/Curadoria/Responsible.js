@@ -95,7 +95,7 @@ export default function Responsible() {
   const [responsibles, setResponsibles] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [responsability, setResponsability] = useState('');
-  const [alertVisibible, setAlertVisibility] = useState(false);
+  const [alertVisible, setAlertVisibility] = useState(false);
 
   useEffect(_ => {
     setLoading(true);
@@ -171,7 +171,7 @@ export default function Responsible() {
                     {isLoading ? (<CircularProgress size={25} />) : 'Atribuir Responsabilidade'}
                   </Button>
                 </Grid>
-                {alertVisibible &&
+                {alertVisible &&
                   <Alert
                     severity="warning"
                     action={
