@@ -19,7 +19,8 @@ const defaultOptions = {
 
 const defaultLocalization = {
   pagination: {
-    labelDisplayedRows: '{from}-{to} de {count}'
+    labelDisplayedRows: '{from}-{to} de {count}',
+    labelRowsSelect: 'Linhas'
   },
   header: {
     actions: 'Ações'
