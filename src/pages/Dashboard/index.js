@@ -159,7 +159,6 @@ export default function Intellilogs() {
         projeto: project
       }
     }).then(response => {
-      console.log(response.data);
       setUnusedIntents(response.data);
     })
   }, [project]);
