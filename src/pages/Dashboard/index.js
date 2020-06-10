@@ -155,7 +155,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={pendencies} isStacked />
+                <GenericBarChart data={pendencies} isStacked interval={0} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
