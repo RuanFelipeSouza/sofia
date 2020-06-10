@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const rightWrongColors = ['#004000', '#660000']
+
 export default function Intellilogs() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
@@ -81,6 +83,7 @@ export default function Intellilogs() {
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
   const [pendencies, setPendencies] = useState([]);
+  const [totalPendencies, setTotalPendencies] = useState([]);
   const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
@@ -104,15 +107,29 @@ export default function Intellilogs() {
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
-    api.get('/pendenciaPorResponsavel', {
-      params: {
-        dataInicio,
-        dataFim,
-        projeto: project
-      }
-    }).then(response => {
-      setPendencies(response.data);
-    })
+    const fetchPendencies = (tipoValidacao) => {
+      api.get('/pendenciaPorResponsavel', {
+        params: {
+          dataInicio,
+          dataFim,
+          projeto: project,
+          tipoValidacao
+        }
+      }).then(response => {
+        setPendencies(response.data);
+        const pendencies = [
+          { name: 'Validado', value: 0, fill: rightWrongColors[0] },
+          { name: 'Não Validado', value: 0, fill: rightWrongColors[1] }
+        ];
+        response.data.forEach((r) => {
+          pendencies[0].value = pendencies[0].value + r['Validado'];
+          pendencies[1].value = pendencies[1].value + r['Não Validado'];
+        });
+        setTotalPendencies(pendencies);
+      })
+    };
+
+    fetchPendencies('validacaoConteudo');
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
@@ -151,11 +168,12 @@ export default function Intellilogs() {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <b>Validação de Curadoria por Responsável </b>
+              <b>Validação de Curadoria por Responsável (Conteúdo) </b>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={pendencies} isStacked interval={0} />
+                <GenericBarChart data={pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={totalPendencies} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
