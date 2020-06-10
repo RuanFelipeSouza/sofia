@@ -4,9 +4,6 @@ import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 
 export default function Table(props) {
-
-  console.log(props.atendimentos);
-
   const columns = [
     { title: 'Aluno', field: 'studentName' },
     { title: 'Professor', field: 'teacherName' },

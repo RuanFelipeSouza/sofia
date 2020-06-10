@@ -1,6 +1,5 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import * as moment from 'moment';
 
 const groupBy = (list, keyGetter)=> {
   const map = new Map();
@@ -18,9 +17,7 @@ const groupBy = (list, keyGetter)=> {
 
 export default function Chart(props) {
   let { atendimentos } = props;
-  atendimentos && atendimentos.forEach(function(element) {
-    element.createdAt = moment(element.createdAt).format("DD/MM/YYYY");
-  });
+  
   atendimentos = groupBy(atendimentos, e => e.createdAt);
 
   let atendimentosPorDia = []

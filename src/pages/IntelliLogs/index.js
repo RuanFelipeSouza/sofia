@@ -11,6 +11,7 @@ import Table from './../../components/Table';
 import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import * as moment from 'moment';
 
 import api from './../../services/api';
 import localStorageStateHook from './../../utils/useLocalStorageState';
@@ -79,6 +80,7 @@ export default function Intellilogs() {
   const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
+  console.log(atendimentos);
 
   useEffect(_ => {
     setLoading(true);
@@ -89,6 +91,9 @@ export default function Intellilogs() {
       }
     }).then(response => {
       setLoading(false);
+      response.data.map(atendimento => {
+        return atendimento.createdAt = moment(atendimento.createdAt).format("DD/MM/YYYY");
+      })
       setAtendimentos(response.data);
     })
   }, [dataInicio, dataFim]);
@@ -119,7 +124,6 @@ export default function Intellilogs() {
                 <Paper className={classes.table}>
                   <Table
                     atendimentos={atendimentos}
-                    setAtendimentos={setAtendimentos}
                     isLoading={isLoading}
                     initialPage={page}
                     onChangePage={setPage}
