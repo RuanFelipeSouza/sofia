@@ -3,10 +3,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 
 const defaultColors = ['#8884d8', '#82ca9d'];
 
-export default function GenericBarChart({ data, isStacked, interval, colors }) {
+export default function GenericBarChart({ data, isStacked, interval, colors, width }) {
   return (
     <BarChart
-      width={700}
+      width={width || 700}
       height={350}
       data={data}
       margin={{ top: 15, right: 20, left: 20, bottom: 5, }}
