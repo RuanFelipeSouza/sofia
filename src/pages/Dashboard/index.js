@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const rightWrongColors = ['#004000', '#660000']
+
 export default function Intellilogs() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
@@ -80,7 +82,9 @@ export default function Intellilogs() {
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
-  const [pendencies, setPendencies] = useState([]);
+  const [contentPendencies, setContentPendencies] = useState({ pendencies: [], total: [] });
+  const [intelliwayPendencies, setIntelliwayPendencies] = useState({ pendencies: [], total: [] });
+  const [botPendencies, setBotPendencies] = useState({ pendencies: [], total: [] });
   const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
@@ -104,15 +108,30 @@ export default function Intellilogs() {
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
-    api.get('/pendenciaPorResponsavel', {
-      params: {
-        dataInicio,
-        dataFim,
-        projeto: project
-      }
-    }).then(response => {
-      setPendencies(response.data);
-    })
+    const fetchPendencies = (tipoValidacao, setState) => {
+      api.get('/pendenciaPorResponsavel', {
+        params: {
+          dataInicio,
+          dataFim,
+          projeto: project,
+          tipoValidacao
+        }
+      }).then(({ data }) => {
+        const totalDependencies = [
+          { name: 'Validado', value: 0, fill: rightWrongColors[0] },
+          { name: 'Não Validado', value: 0, fill: rightWrongColors[1] }
+        ];
+        data.forEach((element) => {
+          totalDependencies[0].value = totalDependencies[0].value + element['Validado'];
+          totalDependencies[1].value = totalDependencies[1].value + element['Não Validado'];
+        });
+        setState({ pendencies: data, total: totalDependencies });
+      })
+    };
+
+    fetchPendencies('validacaoConteudo', setContentPendencies);
+    fetchPendencies('possivelValidarBOT', setIntelliwayPendencies);
+    fetchPendencies('validacaoBOT', setBotPendencies);
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
@@ -151,11 +170,30 @@ export default function Intellilogs() {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <b>Validação de Curadoria por Responsável </b>
+              <b>Validação de Curadoria por Responsável (Conteúdo) </b>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={pendencies} isStacked interval={0} />
+                <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={contentPendencies.total} />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Validação de Curadoria por Responsável (Possível Validar no Bot) </b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={intelliwayPendencies.total} />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Validação de Curadoria por Responsável (Bot) </b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <GenericBarChart data={botPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={botPendencies.total} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
@@ -163,7 +201,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={intents} />
+                <GenericBarChart data={intents} width={1000} />
               </Paper>
             </Grid>
           </Grid>
