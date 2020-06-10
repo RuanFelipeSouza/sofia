@@ -83,6 +83,7 @@ export default function Intellilogs() {
   const [atendimentos, setAtendimentos] = useState([]);
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
   const [contentPendencies, setContentPendencies] = useState({ pendencies: [], total: [] });
+  const [intelliwayPendencies, setIntelliwayPendencies] = useState({ pendencies: [], total: [] });
   const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
@@ -106,7 +107,7 @@ export default function Intellilogs() {
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
-    const fetchPendencies = (tipoValidacao) => {
+    const fetchPendencies = (tipoValidacao, setState) => {
       api.get('/pendenciaPorResponsavel', {
         params: {
           dataInicio,
@@ -123,11 +124,12 @@ export default function Intellilogs() {
           totalDependencies[0].value = totalDependencies[0].value + element['Validado'];
           totalDependencies[1].value = totalDependencies[1].value + element['Não Validado'];
         });
-        setContentPendencies({ pendencies: data, total: totalDependencies });
+        setState({ pendencies: data, total: totalDependencies });
       })
     };
 
-    fetchPendencies('validacaoConteudo');
+    fetchPendencies('validacaoConteudo', setContentPendencies);
+    fetchPendencies('possivelValidarBOT', setIntelliwayPendencies);
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
@@ -172,6 +174,15 @@ export default function Intellilogs() {
               <Paper className={classes.chart}>
                 <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
                 <PieChart data={contentPendencies.total} />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Validação de Curadoria por Responsável (Possível Validar no Bot) </b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={intelliwayPendencies.total} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
