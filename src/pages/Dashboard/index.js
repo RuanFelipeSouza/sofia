@@ -84,6 +84,7 @@ export default function Intellilogs() {
   const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
   const [contentPendencies, setContentPendencies] = useState({ pendencies: [], total: [] });
   const [intelliwayPendencies, setIntelliwayPendencies] = useState({ pendencies: [], total: [] });
+  const [botPendencies, setBotPendencies] = useState({ pendencies: [], total: [] });
   const [intents, setIntents] = useState([]);
 
   useEffect(_ => {
@@ -130,6 +131,7 @@ export default function Intellilogs() {
 
     fetchPendencies('validacaoConteudo', setContentPendencies);
     fetchPendencies('possivelValidarBOT', setIntelliwayPendencies);
+    fetchPendencies('validacaoBOT', setBotPendencies);
   }, [dataInicio, dataFim, project]);
 
   useEffect(() => {
@@ -183,6 +185,15 @@ export default function Intellilogs() {
               <Paper className={classes.chart}>
                 <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
                 <PieChart data={intelliwayPendencies.total} />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <b>Validação de Curadoria por Responsável (Bot) </b>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.chart}>
+                <GenericBarChart data={botPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
+                <PieChart data={botPendencies.total} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
