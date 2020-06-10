@@ -181,7 +181,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={intents} />
+                <GenericBarChart data={intents} width={1000} />
               </Paper>
             </Grid>
           </Grid>
