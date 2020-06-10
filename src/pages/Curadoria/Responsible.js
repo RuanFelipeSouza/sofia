@@ -180,7 +180,7 @@ export default function Responsible() {
                     </Button>
                     }
                   >
-                    Atenção, vou irá atribuir <strong>{selectedRows.length} registro(s)</strong> para o(a) responsável <strong>{responsability}</strong>. Deseja prosseguir?
+                    Atenção, você irá atribuir <strong>{selectedRows.length} registro(s)</strong> para o(a) responsável <strong>{responsability}</strong>. Deseja prosseguir?
                 </Alert>
                 }
               </Paper>
