@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Baner from './../../assets/banner.jpg'
+import Baner from './../../assets/logo-intelliway-nova.png'
 import api from './../../services/api';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +20,12 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   banner: {
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#30409F'
   },
+  banner2: {
+	height: '25%'
+},
   paper: {
     margin: theme.spacing(8, 4),
     display: 'flex',
@@ -85,7 +89,7 @@ export default function SignInSide() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={2} md={4} className={classes.banner} >
-        <img className={classes.banner} src={Baner} alt={""} />
+        <img className={classes.banner2} src={Baner} alt={""} />
       </Grid>
       <Grid item xs={12} sm={10} md={8} component={Paper} elevation={6} square>
         <div className={classes.paper}>

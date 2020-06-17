@@ -75,7 +75,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={"logo da allemand"} />
+      <UpperLogo src={LogoIntelliway} alt={"logo da Intelliway"} />
       <Divider />
       <List>
         {
@@ -89,7 +89,7 @@ export default function Sidebar() {
           ))
         }
       </List>
-      <BottomLogo className={"logoInferior"} src={LogoIntelliway} />
+      {/* <BottomLogo className={"logoInferior"} src={LogoIntelliway} /> */}
     </Drawer>
   );
 }
