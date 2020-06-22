@@ -10,7 +10,7 @@ const api = axios.create({
   baseURL: 'http://localhost:3005'
 });
 
-let tokenStorage = sessionStorage.getItem('Authorization');
+let tokenStorage = localStorage.getItem('Authorization');
 
 if (tokenStorage) {
   api.defaults.headers.common = {
