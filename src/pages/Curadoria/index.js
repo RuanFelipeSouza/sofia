@@ -28,7 +28,8 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          {/* <Typography>{children}</Typography> */}
+          {children}
         </Box>
       )}
     </div>
@@ -52,10 +53,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    minWidth: '120%'
+    // minWidth: '100%'
   },
   main: {
-    minWidth: '100%'
+    // minWidth: '100%'
 	}
 }));
 
@@ -99,7 +100,7 @@ export default function FullWidthTabs() {
                             onChange={handleChange}
                             indicatorColor="primary"
                             textColor="primary"
-                            variant="fullWidth"
+                            // variant="fullWidth"
                             aria-label="full width tabs example"
                         >
                         <Tab label="BOT 1" {...a11yProps(0)} />
