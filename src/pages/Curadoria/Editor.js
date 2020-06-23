@@ -13,16 +13,20 @@ import Grid from '@material-ui/core/Grid';
 import RichText from '../../components/RichText';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
-import api from '../../services/api'
+import api from '../../services/api';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
-    textField: {
-        width: '100%'
-    },
-    table: {
-        // minWidth: '100%'
-    },
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -63,9 +67,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Editor(props) {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
+    const [imageOpen, setImageOpen] = useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [editorState, setEditorState] = useState({});
+    const [alteredFields, setAlteredFields] = useState([]);
     
     useEffect(() => {
+        if(!props.id) return;
+
         setLoading(true);
         api.get(`/curadoria/${props.id}`).then(response => {
             setEditorState(response.data);
@@ -74,20 +83,46 @@ export default function Editor(props) {
     }, [props]);
 
     const handleChange = (event) => {
+        const { name, value, checked } = event.target;
         setEditorState(oldState => {
-            console.log(oldState);
-            console.log(event.target);
             return {
                 ...oldState,
-                [event.target.name]: event.target.value
+                [name]: checked || value
             }
         });
+        setAlteredFields(oldValue => new Set(...oldValue, name));
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
-        console.log('submit');
+
+        await api.put('/curadoria', { newData: editorState, alteredFields });
+        props.setCuradorias((prevState) => {
+            const data = prevState;
+            for (let key in editorState) {
+                if(key === 'respostas') {
+                    data.find(e => e._id === editorState._id)[key] = editorState[key].replace(/<img.*>/g, '');  // remove base64 das imagens
+                }else{
+                    data.find(e => e._id === editorState._id)[key] = editorState[key];
+                }
+            }
+            data.find(e => e._id === editorState._id).updatedAt = new Date();
+            return [...data];
+        });
+        props.setOpen(false);
     };
+
+    const handleDelete = async e => {
+        props.setCuradorias((prevState) => {
+            const data = prevState;
+            data.splice(data.indexOf(data.find(e => e._id === editorState._id)), 1);
+            return [...data];
+        });
+
+        await api.delete('/curadoria', { params: { _id: editorState._id, bot: editorState.bot } });
+        props.setOpen(false);
+        setOpenDeleteDialog(false);
+    }
         
     return (
         <Modal
@@ -95,9 +130,6 @@ export default function Editor(props) {
             aria-describedby="transition-modal-description"
             className={classes.modal}
             open={props.open}
-            // onClose={() => {
-            //     setEditModalOpen(false);
-            // }}
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{
@@ -109,14 +141,36 @@ export default function Editor(props) {
                     (<CircularProgress size={25} />) 
                     : 
                     <Paper className={classes.editor} >
-                        {/* {console.log(rowToEdit)} */}
                         <form onSubmit={handleSubmit} component="fieldset" className={classes.formControl}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12} className={classes.editorHeader} >
                                     <Button className={classes.editBackButton} onClick={() => { props.setOpen(false); }} ><ArrowBackIcon /></Button>
-                                    <Button variant="contained" color="secondary">
+                                    <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)} >
                                         Excluir
                                     </Button>
+                                    <Dialog
+                                        open={openDeleteDialog}
+                                        TransitionComponent={Transition}
+                                        keepMounted
+                                        onClose={() => setOpenDeleteDialog(false)}
+                                        aria-labelledby="alert-dialog-slide-title"
+                                        aria-describedby="alert-dialog-slide-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-slide-title">{"Você confirma a exclusão?"}</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-slide-description">
+                                                Essa ação não pode ser desfeita.
+                                            </DialogContentText>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                                                Cancelar
+                                            </Button>
+                                            <Button onClick={handleDelete} color="primary">
+                                                Confirmar
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
                                 </Grid>
                                 <Grid item xs={12} className={classes.formTop} >
                                     <TextField id="arquivo" label="Arquivo" variant="outlined" defaultValue={editorState.arquivo} className={classes.arquivoTema} name="arquivo" onChange={handleChange} />
@@ -124,7 +178,7 @@ export default function Editor(props) {
                                 </Grid>
                                 <Grid item xs={12} className={classes.perguntas} >
                                     Perguntas
-                                    <TextareaAutosize id="perguntas" label="Perguntas" variant="outlined" defaultValue={editorState.perguntas} className={classes.perguntas} name="perguntas" />
+                                    <TextareaAutosize id="perguntas" label="Perguntas" variant="outlined" defaultValue={editorState.perguntas} className={classes.perguntas} name="perguntas" onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} className={classes.respostas} >
                                     Respostas
@@ -138,28 +192,78 @@ export default function Editor(props) {
                                         })} 
                                     />
                                 </Grid>
-                                <Grid item xs={12} >
+                                <Grid item xs={5} >
                                     <FormControlLabel
-                                        name="validacaoConteudo"
-                                        control={<Checkbox color="primary" />}
+                                        control={
+                                            <Checkbox 
+                                                color="primary" 
+                                                checked={Boolean(editorState.validacaoConteudo)}
+                                                name="validacaoConteudo"
+                                                onChange={handleChange}
+                                            />
+                                        }
                                         label="Validação do Conteúdo"
-                                        checked={editorState.validacaoConteudo}
-                                        labelPlacement="end"
                                     />  <br />
                                     <FormControlLabel
-                                        name="possivelValidarBOT"
-                                        control={<Checkbox color="primary" />}
+                                        control={
+                                            <Checkbox 
+                                                color="primary" 
+                                                checked={Boolean(editorState.possivelValidarBOT)}
+                                                name="possivelValidarBOT"
+                                                onChange={handleChange}
+                                            />
+                                        }
                                         label="Possível Validar no BOT"
-                                        checked={editorState.possivelValidarBOT}
-                                        labelPlacement="end"
                                     />  <br />
                                     <FormControlLabel
-                                        name="validacaoBOT"
-                                        control={<Checkbox color="primary" />}
+                                        control={
+                                            <Checkbox 
+                                                color="primary" 
+                                                checked={Boolean(editorState.validacaoBOT)}
+                                                name="validacaoBOT"
+                                                onChange={handleChange}
+                                            />
+                                        }
                                         label="Validação BOT"
-                                        checked={editorState.validacaoBOT}
-                                        labelPlacement="end"
                                     />
+                                </Grid>
+                                <Grid item xs={7} >
+                                    {editorState.image && <React.Fragment>
+                                        <img alt={editorState.arquivo} style={{width: '50%', cursor: 'pointer'}} src={editorState.image} onClick={() => { setImageOpen(true); }} />
+                                        <br />
+                                        <Button 
+                                            onClick={() => {
+                                                props.setCuradorias((prevState) => {
+                                                    const data = prevState;
+                                                    data.find(e => e._id === editorState._id).image = null;
+                                                    api.put('/curadoria', {newData: data.find(e => e._id === editorState._id), alteredFields: ['imagem']});
+                                                    return [...data];
+                                                });
+                                            }}
+                                        >
+                                            remover imagem
+                                        </Button>
+                                        <Modal
+                                            aria-labelledby="transition-modal-title"
+                                            aria-describedby="transition-modal-description"
+                                            className={classes.modal}
+                                            open={imageOpen}
+                                            onClose={() => {
+                                                setImageOpen(false)
+                                            }}
+                                            closeAfterTransition
+                                            BackdropComponent={Backdrop}
+                                            BackdropProps={{
+                                            timeout: 500,
+                                            }}
+                                        >
+                                            <Fade in={imageOpen}>
+                                            <div className={classes.paper}>
+                                                <img alt={editorState?.arquivo} src={editorState?.image} />
+                                            </div>
+                                            </Fade>
+                                        </Modal>
+                                    </React.Fragment>}
                                 </Grid>
                                 <Grid item xs={12} className={classes.editorSubmitButton} >
                                     <Button variant="contained" type="submit" >Salvar</Button>

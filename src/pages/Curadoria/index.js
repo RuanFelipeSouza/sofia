@@ -5,7 +5,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Sidebar from '../../components/Sidebar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -28,7 +27,6 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          {/* <Typography>{children}</Typography> */}
           {children}
         </Box>
       )}
@@ -52,12 +50,8 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    // minWidth: '100%'
-  },
-  main: {
-    // minWidth: '100%'
-	}
+    display: 'flex'
+  }
 }));
 
 export default function FullWidthTabs() {
@@ -93,26 +87,25 @@ export default function FullWidthTabs() {
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
-        <main className={classes.main}>
-                <AppBar position="static" color="default">
-                    <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            // variant="fullWidth"
-                            aria-label="full width tabs example"
-                        >
-                        <Tab label="BOT 1" {...a11yProps(0)} />
-                        <Tab label="BOT 2" {...a11yProps(1)} />
-                        <Tab label="BOT 3" {...a11yProps(2)} />
-                    </Tabs>
-                </AppBar>
-                <SwipeableViews
-                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                    index={value}
-                    onChangeIndex={handleChangeIndex}
+      <main >
+        <AppBar position="static" color="default">
+            <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    aria-label="full width tabs example"
                 >
+                <Tab label="BOT 1" {...a11yProps(0)} />
+                <Tab label="BOT 2" {...a11yProps(1)} />
+                <Tab label="BOT 3" {...a11yProps(2)} />
+            </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <Table
               botName={'BOT 1'}
@@ -155,11 +148,11 @@ export default function FullWidthTabs() {
               onFilterChange={setFilterBot3}
             />
           </TabPanel>
-                </SwipeableViews>
-            <Box pt={4}>
-                <Copyright />
-            </Box>
-        </main>
+        </SwipeableViews>
+        <Box pt={4}>
+            <Copyright />
+        </Box>
+      </main>
     </div>
   );
 }

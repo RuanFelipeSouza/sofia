@@ -17,11 +17,10 @@ class Editor extends React.Component {
     render () {
         return (
             <div>
-                {/* <ReactQuill theme="snow" value={'value'} onChange={(e) => console.log(e)}/> */}
                 <ReactQuill 
                     theme='snow'
                     onChange={this.handleChange}
-                    value={this.state.value}
+                    defaultValue={this.state.value}
                     modules={Editor.modules}
                     formats={Editor.formats}
                     bounds={'.app'}
