@@ -99,16 +99,18 @@ export default function Editor(props) {
         await api.put('/curadoria', { newData: editorState, alteredFields });
         props.setCuradorias((prevState) => {
             const data = prevState;
+            const index = data.findIndex(e => e._id === editorState._id);
             for (let key in editorState) {
                 if(key === 'respostas') {
-                    data.find(e => e._id === editorState._id)[key] = editorState[key].replace(/<img.*>/g, '');  // remove base64 das imagens
-                }else{
-                    data.find(e => e._id === editorState._id)[key] = editorState[key];
+                    data[index][key] = editorState[key].replace(/<img.*>/g, '');  // remove base64 das imagens
+                } else {
+                    data[index][key] = editorState[key];
                 }
             }
-            data.find(e => e._id === editorState._id).updatedAt = new Date();
+            data[index].updatedAt = new Date();
             return [...data];
         });
+        setEditorState({});
         props.setOpen(false);
     };
 
