@@ -112,30 +112,30 @@ export default function Sidebar() {
     }
   };
   
-  return isOpen ? (
+  return (
     <Drawer
-      className={classes.drawer}
+      className={isOpen ? classes.drawer : classes.closedDrawer}
       variant="permanent"
       classes={{
-        paper: classes.drawerPaper,
+        paper: isOpen ? classes.drawerPaper : classes.closedDrawerPaper,
       }}
       anchor="left"
     >
       <Button className={classes.toggleButton} onClick={() => setOpen(value => !value)} ><ReorderIcon /></Button>
-      <UpperLogo src={Logo} alt={"logo da Arcelor"} />
+      {isOpen && <UpperLogo src={Logo} alt={"logo da Arcelor"} />}
       <Divider />
       <List>
         {
           _menuOptions.map(({ label, icon, path, children }) => (
             <div key={label}>
-              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)}>
+              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)} className={!isOpen ? classes.closedItem : {}} >
                 <ListItemIcon>
                   {icon}
                 </ListItemIcon>
                 <ListItemText primary={label} />
                 {renderExpand(children, label)}
               </ListItem>
-              {children &&
+              {isOpen && children &&
                 <Collapse in={currentOpen === label} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {children.map(c => (
@@ -152,33 +152,7 @@ export default function Sidebar() {
           ))
         }
       </List>
-      <BottomLogo className={"logoInferior"} src={LogoIntelliway} />
+      {isOpen && <BottomLogo className={"logoInferior"} src={LogoIntelliway} />}
     </Drawer>
-  ) : (
-    <Drawer
-      className={classes.closedDrawer}
-      variant="permanent"
-      classes={{
-        paper: classes.closedDrawerPaper,
-      }}
-      anchor="left"
-    >
-      <Button className={classes.toggleButton} onClick={() => setOpen(value => !value)} ><ReorderIcon /></Button>
-      <Divider />
-      <List>
-        {
-          _menuOptions.map(({ label, icon, path, children }) => (
-            <div key={label}>
-              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)} className={classes.closedItem}>
-                <ListItemIcon>
-                  {icon}
-                </ListItemIcon>
-                {renderExpand(children, label)}
-              </ListItem>
-            </div>
-          ))
-        }
-      </List>
-    </Drawer>
-  );
+  )
 }
