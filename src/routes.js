@@ -7,6 +7,7 @@ import Survey from './pages/IntelliLogs/Survey'
 import IntelliChat from './pages/IntelliChat'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login';
+import Boards from './pages/Boards';
 
 export default function Routes() {
     return (
@@ -18,6 +19,7 @@ export default function Routes() {
                 <ProtectedRoute path="/survey/:id" component={Survey} />
                 <ProtectedRoute path="/intellichat" component={IntelliChat} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/boards" component={Boards} />
                 <ProtectedRoute path="*" component={() => "404 NOT FOUND"} />
             </Switch>
         </BrowserRouter>
