@@ -12,7 +12,9 @@ import Collapse from '@material-ui/core/Collapse';
 import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
 import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
 import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+import ReorderIcon from '@material-ui/icons/Reorder';
 import List from "@material-ui/core/List";
+import Button from '@material-ui/core/Button';
 
 import Logo from "./../../assets/logo1.png";
 import LogoIntelliway from "./../../assets/logo-intelliway-nova.png";
@@ -20,6 +22,7 @@ import LogoIntelliway from "./../../assets/logo-intelliway-nova.png";
 import { UpperLogo, BottomLogo } from './styles.js';
 
 const drawerWidth = 240;
+const closedDrawerWidth = 40;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -34,6 +37,25 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  toggleButton: {
+    color: 'white',
+    width: '30px',
+    margin: '0 0 0 auto',
+    minWidth: '40px',
+  },
+  closedDrawer: {
+    width: closedDrawerWidth,
+    flexShrink: 0,
+  },
+  closedDrawerPaper: {
+    width: closedDrawerWidth,
+    backgroundColor: '#F0703F',
+    color: 'white',
+    overflow: 'hidden'
+  },
+  closedItem: {
+    paddingLeft: '7px'
+  }
 }));
 
 const _menuOptions = [
@@ -70,6 +92,7 @@ export default function Sidebar() {
   const location = history.location.pathname;
   const classes = useStyles();
   const [currentOpen, setCurrentOpen] = useState('');
+  const [isOpen, setOpen] = useState(true);
 
   const _redirect = (path) => path !== location ? history.push(path) : null;
 
@@ -88,30 +111,31 @@ export default function Sidebar() {
       setCurrentOpen(label);
     }
   };
-
+  
   return (
     <Drawer
-      className={classes.drawer}
+      className={isOpen ? classes.drawer : classes.closedDrawer}
       variant="permanent"
       classes={{
-        paper: classes.drawerPaper,
+        paper: isOpen ? classes.drawerPaper : classes.closedDrawerPaper,
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={"logo da Arcelor"} />
+      <Button className={classes.toggleButton} onClick={() => setOpen(value => !value)} ><ReorderIcon /></Button>
+      {isOpen && <UpperLogo src={Logo} alt={"logo da Arcelor"} />}
       <Divider />
       <List>
         {
           _menuOptions.map(({ label, icon, path, children }) => (
             <div key={label}>
-              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)}>
+              <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)} className={!isOpen ? classes.closedItem : {}} >
                 <ListItemIcon>
                   {icon}
                 </ListItemIcon>
                 <ListItemText primary={label} />
                 {renderExpand(children, label)}
               </ListItem>
-              {children &&
+              {isOpen && children &&
                 <Collapse in={currentOpen === label} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {children.map(c => (
@@ -128,7 +152,7 @@ export default function Sidebar() {
           ))
         }
       </List>
-      <BottomLogo className={"logoInferior"} src={LogoIntelliway} />
+      {isOpen && <BottomLogo className={"logoInferior"} src={LogoIntelliway} />}
     </Drawer>
-  );
+  )
 }
