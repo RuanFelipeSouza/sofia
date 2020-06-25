@@ -7,8 +7,19 @@ import { arrayOf, shape, string, func, bool } from 'prop-types';
 import 'react-chat-elements/dist/main.css';
 import EmptyChat from './components/EmptyChat';
 import emptyImg from './../../assets/attendance.jpg';
-import { ChatQueueWrapper, ChatQueueItemWrapper, EmptyChatQueueWrapper } from './components/elements';
+import {
+  ChatQueueWrapper,
+  ChatQueueItemWrapper,
+  EmptyChatQueueWrapper,
+  ChatHeader,
+  ChatHeaderTextContainer,
+  ChatHeaderSearch
+} from './components/elements';
 import { selectChat, closeChat, changeBotState } from './../../store/actions/chat';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
+import TextField from '@material-ui/core/TextField';
 
 const defaultAvatar = 'https://cdn0.iconfinder.com/data/icons/user-pictures/100/malecostume-512.png';
 const whatsappAvatar = 'https://www.sharethis.com/wp-content/uploads/2017/05/WhatsApp.png';
@@ -85,7 +96,28 @@ class ChatQueue extends Component {
     }
     return (
       <ChatQueueWrapper>
-        {this.renderQueue()}
+        <ChatHeader>
+          <Avatar />
+          <ChatHeaderTextContainer>
+            <Typography variant="subtitle2" style={{ fontSize: 16 }}>
+              Global Touch
+            </Typography>
+            <Typography variant="subtitle1" style={{ fontSize: 12 }}>
+              Consumo Mensal: R$ 200,00
+            </Typography>
+          </ChatHeaderTextContainer>
+        </ChatHeader>
+        <ChatHeaderSearch>
+          <SearchRoundedIcon fontSize="small" style={{ color: '#919191', marginRight: 10 }} />
+          <TextField placeholder="Procurar conversa" fullWidth inputProps={{
+            style: {
+              fontSize: 14
+            } 
+          }} />
+        </ChatHeaderSearch>
+        <div style={{ overflow: 'auto' }}>
+          {this.renderQueue()}
+        </div>
         {/* <ConnectedMenu /> */}
       </ChatQueueWrapper>
     );

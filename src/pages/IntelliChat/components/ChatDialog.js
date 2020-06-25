@@ -55,6 +55,7 @@ class ChatDialog extends Component {
 
   renderMessage(userName, { origin, status, text, date }, k) {
     const fixedStatus = status === 'delivered' ? 'received' : status;
+    
     return (
       <div key={k}>
         <MessageBox

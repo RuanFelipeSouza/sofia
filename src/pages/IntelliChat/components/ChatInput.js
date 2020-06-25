@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { func, number, bool } from 'prop-types';
 
 import { InputWrapper, RoundTextField } from './elements';
+import SendRoundedIcon from '@material-ui/icons/SendRounded';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 class ChatInput extends Component {
   constructor(props) {
@@ -43,18 +46,27 @@ class ChatInput extends Component {
   render() {
     return (
       <InputWrapper>
-        <hr />
         <RoundTextField
           variant='outlined'
           fullWidth
           id='message'
           name='message'
           label='Digite sua mensagem'
+          margin='dense'
           innerRef={ref => { this.inputRef = ref; }}
           value={this.state.inputValue}
           onKeyDown={(e) => this.handleKeyDown(e)}
           onChange={(e) => this.handleOnChange(e)}
           disabled={this.props.isDisabled}
+          InputProps={{
+            endAdornment:(
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => this.sendMessage()}>
+                  <SendRoundedIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
 
       </InputWrapper>
