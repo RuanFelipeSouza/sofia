@@ -96,17 +96,19 @@ export default function Editor(props) {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        await api.put('/curadoria', { newData: editorState, alteredFields });
         props.setCuradorias((prevState) => {
             const data = prevState;
             const index = data.findIndex(e => e._id === editorState._id);
             for (let key in editorState) {
                 if(key === 'respostas') {
                     data[index][key] = editorState[key].replace(/<img.*>/g, '');  // remove base64 das imagens
+                }else if(key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
+                    data[index][key] = !!editorState[key];
                 } else {
                     data[index][key] = editorState[key];
                 }
             }
+            api.put('/curadoria', { newData: data[index], alteredFields });
             data[index].updatedAt = new Date();
             return [...data];
         });
