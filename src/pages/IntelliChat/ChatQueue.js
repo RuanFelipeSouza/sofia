@@ -10,7 +10,7 @@ import emptyImg from './../../assets/attendance.jpg';
 import {
   ChatQueueWrapper,
   ChatQueueItemWrapper,
-  EmptyChatQueueWrapper,
+  Column,
   ChatHeader,
   ChatHeaderTextContainer,
   ChatHeaderSearch
@@ -81,19 +81,8 @@ class ChatQueue extends Component {
 
   render() {
     const { conversations } = this.props;
+    const hasConversations = conversations.length > 0;
 
-    if (conversations.length === 0) {
-      return (
-        <EmptyChatQueueWrapper>
-          <EmptyChat
-            image={emptyImg}
-            width={250}
-            height={200}
-            text='Nenhum atendimento pendente'
-          />
-        </EmptyChatQueueWrapper>
-      );
-    }
     return (
       <ChatQueueWrapper>
         <ChatHeader>
@@ -109,15 +98,28 @@ class ChatQueue extends Component {
         </ChatHeader>
         <ChatHeaderSearch>
           <SearchRoundedIcon fontSize="small" style={{ color: '#919191', marginRight: 10 }} />
-          <TextField placeholder="Procurar conversa" fullWidth inputProps={{
-            style: {
-              fontSize: 14
-            } 
-          }} />
+          <TextField
+            placeholder="Procurar conversa"
+            disabled={!hasConversations}
+            fullWidth
+            inputProps={{
+              style: {
+                fontSize: 14
+              } 
+            }}
+          />
         </ChatHeaderSearch>
-        <div style={{ overflow: 'auto' }}>
-          {this.renderQueue()}
-        </div>
+        
+        {hasConversations ? (
+          <div style={{ overflow: 'auto' }}>{this.renderQueue()}</div>
+        ) : (
+          <EmptyChat
+            image={emptyImg}
+            width={250}
+            height={200}
+            text="Nenhum atendimento pendente"
+          />
+        )}
         {/* <ConnectedMenu /> */}
       </ChatQueueWrapper>
     );
