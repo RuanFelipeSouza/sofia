@@ -11,7 +11,7 @@ export default function Table(props) {
     { title: 'Data', field: 'createdAt', editable: 'never' },
     {
       title: 'Indicador',
-      field: 'anythingElse',
+      field: 'misunderstoodMessages.length',
       editable: 'never',
       render: ({ misunderstoodMessages }) => <TableIndicador messages={misunderstoodMessages} />
     },
