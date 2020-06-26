@@ -35,8 +35,13 @@ class ChatQueue extends Component {
 
   renderQueue() {
     const { conversations, currentRoom, selectChat, closeChat, changeBotState } = this.props;
+    const searchTerm = this.state.inputValue?.toUpperCase() || '';
 
-    return conversations.map(({ name, number, lastMessageText, lastMessageDate, room, unread, userDisconnected, isWhatsapp, isBotOn }) => {
+    const filteredConversations = conversations.filter(e => {
+      return e.name?.toUpperCase()?.includes(searchTerm) || e.number?.includes(searchTerm) || e.cpf?.includes(searchTerm);
+    }) || [];
+
+    return filteredConversations.map(({ name, number, lastMessageText, lastMessageDate, room, unread, userDisconnected, isWhatsapp, isBotOn }) => {
       // return (
       //   <TooltipWrapper key={room}
       //     tooltip='Clique com o botão direito para opções'
