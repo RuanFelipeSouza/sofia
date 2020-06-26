@@ -45,7 +45,7 @@ export const userJoined = (room, user, socketId, recipientId, messages = [], isW
   return (dispatch, getState) => {
     console.log(room, user, socketId, recipientId);
     const { chat } = getState();
-    const token = sessionStorage.getItem('Authorization');
+    const token = localStorage.getItem('Authorization');
     console.log(jwtDecode(token.replace('Bearer ', '')));
 
     if (jwtDecode(token.replace('Bearer ', '')).email === recipientId) {

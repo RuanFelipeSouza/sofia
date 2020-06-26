@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import moment from 'moment';
+import removeAcento from './../../utils/removeAcento';
 
 const INITIAL_STATE = {
   conversations: [],
@@ -169,11 +170,11 @@ const userJoined = (state, action) => {
       lastMessageDate: moment().format('HH:mm'),
       unread: messages.length,
       userDisconnected: false,
-      messages: messages.map(({ origem, mensagem, data }) => {
+      messages: messages.map(({ from, text, date }) => {
         return {
-          origin: origem === 'usuario' ? 'user' : 'agent',
-          text: mensagem.split(':')[1],
-          date: moment(data).format('HH:mm')
+          origin: removeAcento(from.toLowerCase()) === 'usuario' ? 'user' : 'agent',
+          text,
+          date: moment(date).format('HH:mm')
         };
       }),
       isWhatsapp,
