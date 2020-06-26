@@ -307,7 +307,7 @@ const changeMessageStatus = (state, action) => {
 };
 
 const fetchOngoingConversations = (state, action) => {
-  const conversations = [];
+  const conversations = INITIAL_STATE.conversations;
   const { botStates, conversations: fetchedConversations } = action.payload;
 
   fetchedConversations.forEach(({ id, nome, telefone, mensagem, data, origem, idMensagem, status }, index) => {

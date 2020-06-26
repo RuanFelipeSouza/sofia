@@ -3,10 +3,9 @@ import { number, string } from 'prop-types';
 
 import { EmptyChatWrapper, EmptyTitle, EmptyText } from './elements';
 
-const EmptyChat = ({ image, width, height, title, text }) => {
+const EmptyChat = ({ title, text }) => {
   return (
     <EmptyChatWrapper>
-      <img src={image} width={width} height={height} alt="chatImage" />
       <EmptyTitle>{title}</EmptyTitle>
       <EmptyText>{text}</EmptyText>
     </EmptyChatWrapper>

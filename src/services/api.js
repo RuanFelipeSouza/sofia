@@ -7,7 +7,7 @@ const endpoints = {
 };
 
 const api = axios.create({
-  baseURL: 'http://localhost:3005'
+  baseURL: 'http://localhost:3001'
 });
 
 let tokenStorage = localStorage.getItem('Authorization');

@@ -8,7 +8,7 @@ export const ChatQueueWrapper = styled.div`
   flex-direction: column;
   border-right: 1px solid lightgray;
   width: 35%;
-  overflow: auto;
+  z-index: 5;
 `;
 
 export const EmptyChatQueueWrapper = styled(ChatQueueWrapper)`
@@ -19,7 +19,6 @@ export const EmptyChatQueueWrapper = styled(ChatQueueWrapper)`
 
 export const ChatQueueItemWrapper = styled.div`
   border-left: ${props => props.isCurrent ? `4px solid ${BASE_COLOR}` : null};
-  box-shadow: ${props => props.isCurrent ? '0px 1px 5px 0px rgba(70, 20, 140, 0.2), 0px 2px 2px 0px rgba(70, 20, 140, 0.14), 0px 3px 1px -2px rgba(70, 20, 140, 0.12)' : null};
   z-index: ${props => props.isCurrent ? 1 : null};
   color: ${props => props.isCurrent ? BASE_COLOR : ''};
   font-weight: ${props => props.isCurrent ? 'bold' : ''};
@@ -32,13 +31,17 @@ export const ChatWrapper = styled.div`
 `;
 
 export const InputWrapper = styled.div`
-  padding: 0px 10px;
+  padding: 10px 20px;
+  z-index: 2;
+  box-shadow: 5px 0px 8px #CCC;
+  background-color: #F7F7F7;
 `;
 
 export const ConversationWrapper = styled.div`
   overflow: auto;
-  padding: 10px 10px 0px 10px;
+  padding: 10px;
   flex-grow: 1;
+  background-color: rgba(240, 239, 245, 0.95);
 `;
 
 export const DisconnectionWrapper = styled.div`
@@ -66,11 +69,12 @@ export const EmptyText = styled.p`
 
 export const ChatHeaderWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   background: rgba(170,141,205,1);
-  justify-content: flex-start;
   padding: 10px 10px;
   cursor: pointer;
+  height: 70px;
+  min-height: 70px;
+  box-sizing: border-box;
 `;
 
 export const ChatHeaderTitle = styled.p`
@@ -87,6 +91,51 @@ export const ChatHeaderSubtitle = styled(ChatHeaderTitle)`
 
 export const RoundTextField = styled(TextField)`
   fieldset {
-    border-radius: 50px;
+    border-radius: 15px;
   }
+  margin: 0 !important;
+  border-radius: 15px;
+  background-color: white;
+`;
+
+export const ChatHeader = styled.div`
+  height: 70px;
+  min-height: 70px;
+  background-color: #EDEDED;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+`;
+
+export const ChatHeaderTextContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+export const ChatHeaderSearch = styled.div`
+  height: 45px;
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  box-shadow: 0px 0px 3px #DDD;
+  z-index: 1;
+`;
+
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
 `;
