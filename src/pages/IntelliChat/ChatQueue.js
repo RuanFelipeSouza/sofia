@@ -25,6 +25,14 @@ const defaultAvatar = 'https://cdn0.iconfinder.com/data/icons/user-pictures/100/
 const whatsappAvatar = 'https://www.sharethis.com/wp-content/uploads/2017/05/WhatsApp.png';
 
 class ChatQueue extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      inputValue: ''
+    };
+  }
+
   renderQueue() {
     const { conversations, currentRoom, selectChat, closeChat, changeBotState } = this.props;
 
@@ -79,6 +87,10 @@ class ChatQueue extends Component {
     });
   }
 
+  handleOnChange(event) {
+    this.setState({ inputValue: event.target.value });
+  }
+
   render() {
     const { conversations } = this.props;
     const hasConversations = conversations.length > 0;
@@ -101,6 +113,8 @@ class ChatQueue extends Component {
           <TextField
             placeholder="Procurar conversa"
             disabled={!hasConversations}
+            value={this.state.inputValue}
+            onChange={(e) => this.handleOnChange(e)}
             fullWidth
             inputProps={{
               style: {
