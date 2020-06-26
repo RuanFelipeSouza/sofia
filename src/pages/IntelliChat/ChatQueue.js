@@ -66,7 +66,7 @@ class ChatQueue extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={{ padding: '0px 0px 24px 24px' }}>
             <Column>
-              {this._renderFromConversations(conversationsByCategory[key], currentRoom)}
+              {this._renderFromConversations(conversationsByCategory[key], currentRoom, selectChat)}
             </Column>
           </ExpansionPanelDetails>
         </ExpansionPanel>
@@ -76,7 +76,7 @@ class ChatQueue extends Component {
     return returnArray;
   }
 
-  _renderFromConversations(conversations, currentRoom) {
+  _renderFromConversations(conversations, currentRoom, selectChat) {
     return conversations.map(({ name, number, lastMessageText, lastMessageDate, room, unread, userDisconnected, isWhatsapp, isBotOn }) => {
       return (
         <ChatQueueItemWrapper
