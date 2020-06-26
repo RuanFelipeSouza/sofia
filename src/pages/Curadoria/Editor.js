@@ -198,6 +198,7 @@ export default function Editor(props) {
                                     />
                                 </Grid>
                                 <Grid item xs={5} >
+                                    <TextField id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br />
                                     <FormControlLabel
                                         control={
                                             <Checkbox 
