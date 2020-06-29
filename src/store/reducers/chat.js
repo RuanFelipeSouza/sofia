@@ -318,7 +318,7 @@ const fetchOngoingConversations = (state, action) => {
     const messages = history.map(({ _id, from, date, ...rest }) => {
       return {
         messageId: _id,
-        origin: from === 'Assistentea' ? 'agent' : 'user',
+        origin: from === 'Assistente' ? 'agent' : 'user',
         date: moment(date).format('HH:mm'),
         ...rest
       };
