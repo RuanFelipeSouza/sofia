@@ -166,11 +166,7 @@ export const fetchOngoingConversations = () => {
       dispatch(action(FETCH_ONGOING_CONVERSATIONS_REQUEST, {}));
       const conversations = await Api.fetchOngoingConversations();
       const botStates = TWILLIO_BASE_URL ? await Twillio.fetchBotState(conversations.map(({ telefone }) => `whatsapp:+${telefone}`)) : [];
-      new Set(
-        conversations
-          .filter(({ telefone }) => !telefone)
-          .map(({ id }) => id)
-      ).forEach((id) => Socketio.joinAgent(id));
+      conversations.forEach(({ _id }) => Socketio.joinAgent(_id));
       return dispatch(action(FETCH_ONGOING_CONVERSATIONS_SUCCESS, { conversations, botStates }));
     } catch (e) {
       console.log('Erro ao buscar conversas em andamento', e);
