@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { arrayOf, string, func, object, bool, number } from 'prop-types';
 import { connect } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 
 import './components/chat.css';
 import ChatDialog from './components/ChatDialog';
@@ -47,6 +48,9 @@ class ChatConversation extends Component {
       showInteractionCost: isWhatsapp
     };
 
+    const token = localStorage.getItem('Authorization');
+    const { isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
+
     return (
       <ChatWrapper>
         <ChatHeader
@@ -65,7 +69,7 @@ class ChatConversation extends Component {
         <ChatInput
           sendMessage={(message) => isWhatsapp ? this.handleSendWhatsappMessage(number, message, isBotOn) : this.handleSendMessage(message)}
           chatSelectCount={chatSelectCount}
-          isDisabled={userDisconnected}
+          isDisabled={userDisconnected || isSupervisor}
         />
       </ChatWrapper>
     );

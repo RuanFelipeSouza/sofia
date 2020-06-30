@@ -45,10 +45,10 @@ export const userJoined = (room, user, socketId, recipientId, messages = [], isW
   return (dispatch, getState) => {
     console.log(room, user, socketId, recipientId);
     const { chat } = getState();
-    const token = sessionStorage.getItem('Authorization');
-    console.log(jwtDecode(token.replace('Bearer ', '')));
+    const token = localStorage.getItem('Authorization');
+    const { email, isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
 
-    if (jwtDecode(token.replace('Bearer ', '')).email === recipientId) {
+    if (email === recipientId || isSupervisor) {
       if (!chat.conversations.find(item => item.room === room)) {
         Socketio.joinAgent(room);
         dispatch(types.action(types.USER_JOINED, { room, user, socketId, messages, isWhatsapp }));
@@ -113,16 +113,23 @@ export const selectChat = (room) => {
   return types.action(types.SELECT_CHAT, room);
 };
 
-export const closeChat = (room, number) => {
+export const closeChat = async (room, number) => {
+  try {
+    await Api.closeChat(room);
+    if (number) {
+      await Twillio.endService(number);
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const removeChats = (room) => {
   const { action, CLOSE_CHAT } = types;
 
   return async (dispatch) => {
     try {
-      await Api.closeChat(room);
-      if (number) {
-        await Twillio.endService(number);
-      }
-      dispatch(action(CLOSE_CHAT, { room, number }));
+      dispatch(action(CLOSE_CHAT, { room }));
     } catch (e) {
       console.log(e);
     }
@@ -166,11 +173,7 @@ export const fetchOngoingConversations = () => {
       dispatch(action(FETCH_ONGOING_CONVERSATIONS_REQUEST, {}));
       const conversations = await Api.fetchOngoingConversations();
       const botStates = TWILLIO_BASE_URL ? await Twillio.fetchBotState(conversations.map(({ telefone }) => `whatsapp:+${telefone}`)) : [];
-      new Set(
-        conversations
-          .filter(({ telefone }) => !telefone)
-          .map(({ id }) => id)
-      ).forEach((id) => Socketio.joinAgent(id));
+      conversations.forEach(({ _id }) => Socketio.joinAgent(_id));
       return dispatch(action(FETCH_ONGOING_CONVERSATIONS_SUCCESS, { conversations, botStates }));
     } catch (e) {
       console.log('Erro ao buscar conversas em andamento', e);
@@ -181,7 +184,7 @@ export const fetchOngoingConversations = () => {
 
 const buildMessage = (origin, text, room, messageId = null, tempId = null) => {
   return {
-    origin: origin === ASSISTANT_WHATSAPP ? 'agent' : 'user',
+    origin: (origin === ASSISTANT_WHATSAPP || origin === 'Assistente') ? 'agent' : 'user',
     text,
     date: moment().format('HH:mm'),
     room,

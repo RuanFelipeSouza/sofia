@@ -1,5 +1,6 @@
 import * as types from '../actions/types';
 import moment from 'moment';
+import removeAcento from './../../utils/removeAcento';
 
 const INITIAL_STATE = {
   conversations: [],
@@ -169,11 +170,11 @@ const userJoined = (state, action) => {
       lastMessageDate: moment().format('HH:mm'),
       unread: messages.length,
       userDisconnected: false,
-      messages: messages.map(({ origem, mensagem, data }) => {
+      messages: messages.map(({ from, text, date }) => {
         return {
-          origin: origem === 'usuario' ? 'user' : 'agent',
-          text: mensagem.split(':')[1],
-          date: moment(data).format('HH:mm')
+          origin: removeAcento(from.toLowerCase()) === 'usuario' ? 'user' : 'agent',
+          text,
+          date: moment(date).format('HH:mm')
         };
       }),
       isWhatsapp,
@@ -307,42 +308,37 @@ const changeMessageStatus = (state, action) => {
 };
 
 const fetchOngoingConversations = (state, action) => {
-  const conversations = INITIAL_STATE.conversations;
+  // eslint-disable-next-line no-unused-vars
   const { botStates, conversations: fetchedConversations } = action.payload;
 
-  fetchedConversations.forEach(({ id, nome, telefone, mensagem, data, origem, idMensagem, status }, index) => {
-    const formattedDate = moment(data).format('HH:mm');
+  const conversations = fetchedConversations.map(({ _id, history, name, phone }, index) => {
+    const phoneNumber = phone ? `whatsapp:+${phone}` : undefined;
+    const lastMessageIndex = history.length - 1;
 
-    if (!conversations.find(({ room }) => room === id)) {
-      const phoneNumber = telefone ? `whatsapp:+${telefone}` : undefined;
-      const currentState = botStates.find(({ number }) => phoneNumber === number);
-      conversations.push({
-        socketId: index,
-        room: id,
-        name: toProperCase(nome),
-        number: phoneNumber,
-        unread: 0,
-        userDisconnected: false,
-        isWhatsapp: !!telefone,
-        isBotOn: currentState ? currentState.isBotOn : true,
-        messages: [],
-        lastMessageText: mensagem,
-        lastMessageDate: formattedDate
-      });
-    }
-
-    const currentConversation = conversations.find(({ room }) => room === id);
-    currentConversation.lastMessageDate = formattedDate;
-    currentConversation.lastMessageText = mensagem;
-    currentConversation.messages.push({
-      origin: origem === 'Agendador' ? 'agent' : 'user',
-      text: mensagem,
-      date: formattedDate,
-      room: id,
-      messageId: idMensagem,
-      status
+    const messages = history.map(({ _id, from, date, ...rest }) => {
+      return {
+        messageId: _id,
+        origin: from === 'Assistente' ? 'agent' : 'user',
+        date: moment(date).format('HH:mm'),
+        ...rest
+      };
     });
+
+    return {
+      socketId: index,
+      room: _id,
+      name: toProperCase(name),
+      number: phoneNumber,
+      unread: 0,
+      userDisconnected: false,
+      isWhatsapp: !!phoneNumber,
+      isBotOn: true, // TODO busca status do bot
+      messages,
+      lastMessageText: history[lastMessageIndex].text,
+      lastMessageDate: moment(history[lastMessageIndex].date).format('HH:mm')
+    };
   });
+
 
   return {
     ...state,

@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 import { BACKEND_URL } from './constants';
 import store from './../store';
-import { messageReceived, userJoined, userDisconnected, disconnectUserByRoom, botStateChanged, messageStatusChanged } from './../store/actions/chat';
+import { messageReceived, userJoined, userDisconnected, disconnectUserByRoom, botStateChanged, messageStatusChanged, removeChats } from './../store/actions/chat';
 
 let socket;
 
@@ -34,6 +34,10 @@ export const connect = (room, user) => {
       store.dispatch(disconnectUserByRoom(room));
     });
 
+    socket.on('closeChat', ({room}) => {
+      store.dispatch(removeChats(room));
+    });
+
     socket.on('botStateChanged', ({ room, botState }) => {
       store.dispatch(botStateChanged(room, botState));
     });
@@ -45,7 +49,7 @@ export const connect = (room, user) => {
 };
 
 export const emitMessage = (message, room) => {
-  socket.emit('sendMessage', { message, room });
+  socket.emit('sendMessage', { message, room, origin: 'Assistente' });
 };
 
 export const joinAgent = (room) => {
