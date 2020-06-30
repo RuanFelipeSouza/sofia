@@ -20,6 +20,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import TextField from '@material-ui/core/TextField';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const defaultAvatar = 'https://cdn0.iconfinder.com/data/icons/user-pictures/100/malecostume-512.png';
 const whatsappAvatar = 'https://www.sharethis.com/wp-content/uploads/2017/05/WhatsApp.png';
@@ -41,37 +45,39 @@ class ChatQueue extends Component {
       return e.name?.toUpperCase()?.includes(searchTerm) || e.number?.includes(searchTerm) || e.cpf?.includes(searchTerm);
     }) || [];
 
-    return filteredConversations.map(({ name, number, lastMessageText, lastMessageDate, room, unread, userDisconnected, isWhatsapp, isBotOn }) => {
-      // return (
-      //   <TooltipWrapper key={room}
-      //     tooltip='Clique com o botão direito para opções'
-      //     tooltipPosition='right'
-      //     tooltipDelay={1000}
-      //     tooltipHideOnClick
-      //     isCurrent={room === currentRoom}
-      //   >
-      //     <ContextMenuTrigger
-      //       key={`context-${room}`}
-      //       id={CHAT_QUEUE_MENU}
-      //       collect={props => props}
-      //       onCloseChat={() => closeChat(room, number)}
-      //       onChangeBotState={() => changeBotState(room, number, !isBotOn)}
-      //       isWhatsapp={isWhatsapp}
-      //       isBotOn={isBotOn}
-      //     >
-      //       <ChatItem
-      //         avatar={isWhatsapp ? whatsappAvatar : defaultAvatar}
-      //         title={name}
-      //         subtitle={lastMessageText}
-      //         dateString={lastMessageDate}
-      //         unread={unread}
-      //         statusColor={userDisconnected || !isBotOn ? 'crimson' : '	lime'}
-      //         onClick={() => selectChat(room)}
-      //         className='chatItem'
-      //       />
-      //     </ContextMenuTrigger>
-      //   </TooltipWrapper>
-      // );
+    let conversationsByCategory = {};
+    filteredConversations.forEach(e => {
+      const category = e.category || 'Sem Categoria';
+      if (!conversationsByCategory[category]) {
+        conversationsByCategory[category] = [e];
+      } else {
+        conversationsByCategory[category].push(e);
+      }
+    });
+
+    let returnArray = [];
+    for (let key in conversationsByCategory) {
+      returnArray.push(
+        <ExpansionPanel style={{ margin: '2px 0' }}>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
+            <Typography>{key}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={{ padding: '0px 0px 24px 24px' }}>
+            <Column>
+              {this._renderFromConversations(conversationsByCategory[key], currentRoom, selectChat)}
+            </Column>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      );
+    }
+
+    return returnArray;
+  }
+
+  _renderFromConversations(conversations, currentRoom, selectChat) {
+    return conversations.map(({ name, number, lastMessageText, lastMessageDate, room, unread, userDisconnected, isWhatsapp, isBotOn }) => {
       return (
         <ChatQueueItemWrapper
           key={room}

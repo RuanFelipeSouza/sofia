@@ -7,7 +7,8 @@ export const ChatQueueWrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-right: 1px solid lightgray;
-  width: 35%;
+  width: 325px;
+  min-width: 325px;
   z-index: 5;
 `;
 
