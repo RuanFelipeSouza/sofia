@@ -8,7 +8,8 @@ import {
 
 const endpoints = {
   INTELLILOGS_GET_ONGOING_CONVERSATIONS: 'conversation/fetchOngoingConversations',
-  INTELLILOGS_END_SERVICE: 'alterStatusTicket'
+  INTELLILOGS_END_SERVICE: 'alterStatusTicket',
+  INTELLILOGS_SAVE_MESSAGE: 'conversation/add',
 };
 
 const basicAuth = `Basic ${Buffer.from(`${INTELLILOGS_USER}:${INTELLILOGS_PASS}`).toString('base64')}`;
@@ -24,6 +25,17 @@ export const fetchOngoingConversations = async () => {
   try {
     const { data } = await API.get(endpoints.INTELLILOGS_GET_ONGOING_CONVERSATIONS);
     return data;
+  } catch (error) {
+    throw new Error('Erro ao buscar conversas em aberto', error);
+  }
+};
+
+export const saveMessage = (id, mensagem, origem) => {
+  try {
+    const body = { id, mensagem, origem };
+
+    API.post(endpoints.INTELLILOGS_SAVE_MESSAGE, body);
+    return;
   } catch (error) {
     throw new Error('Erro ao buscar conversas em aberto', error);
   }
