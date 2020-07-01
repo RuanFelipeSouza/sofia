@@ -308,8 +308,9 @@ const changeMessageStatus = (state, action) => {
 };
 
 const fetchOngoingConversations = (state, action) => {
-  // eslint-disable-next-line no-unused-vars
-  const { botStates, conversations: fetchedConversations } = action.payload;
+  // TODO: Allow turn bot on/off. Should destructure the variable 'botStates'
+  // when implementing it
+  const { conversations: fetchedConversations } = action.payload;
 
   const conversations = fetchedConversations.map(({ _id, history, name, phone }, index) => {
     const phoneNumber = phone ? `whatsapp:+${phone}` : undefined;

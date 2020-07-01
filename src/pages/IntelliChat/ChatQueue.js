@@ -65,7 +65,7 @@ class ChatQueue extends Component {
             <Typography>{key}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={{ padding: '0px 0px 24px 24px' }}>
-            <Column>
+            <Column style={{ maxWidth: '100%' }}>
               {this._renderFromConversations(conversationsByCategory[key], currentRoom, selectChat)}
             </Column>
           </ExpansionPanelDetails>
