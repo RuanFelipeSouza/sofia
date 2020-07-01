@@ -71,9 +71,9 @@ export default function Editor(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [editorState, setEditorState] = useState({});
     const [alteredFields, setAlteredFields] = useState([]);
-    
+
     useEffect(() => {
-        if(!props.id) return;
+        if (!props.id) return;
 
         setLoading(true);
         api.get(`/curadoria/${props.id}`).then(response => {
@@ -95,14 +95,35 @@ export default function Editor(props) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-
+        if (props.id === '') {
+            const data = {}; //data armazena o que vai ser exibido na tabela, editorState é o que será enviado para salvar no db
+            for (let key in editorState) {
+                if (key === 'respostas') {
+                    data[key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
+                } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
+                    data[key] = !!editorState[key];
+                    editorState[key] = !!editorState[key];
+                }else{
+                    data[key] = editorState[key];
+                }
+            }
+            editorState.bot = props.bot;
+            const { data: { _id } } = await api.post('/curadoria', editorState);
+            data.updatedAt = new Date();
+            data._id = _id;
+            data.bot = props.bot;
+            props.setCuradorias(prevState => [...prevState, data]);
+            setEditorState({});
+            props.setOpen(false);
+            return;
+        }
         props.setCuradorias((prevState) => {
             const data = prevState;
             const index = data.findIndex(e => e._id === editorState._id);
             for (let key in editorState) {
-                if(key === 'respostas') {
+                if (key === 'respostas') {
                     data[index][key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
-                }else if(key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
+                } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
                     data[index][key] = !!editorState[key];
                     editorState[key] = !!editorState[key];
                 } else {
@@ -128,7 +149,7 @@ export default function Editor(props) {
         props.setOpen(false);
         setOpenDeleteDialog(false);
     }
-        
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -140,11 +161,14 @@ export default function Editor(props) {
             BackdropProps={{
                 timeout: 500,
             }}
+            onClose={() => {
+                props.setItemSelecionado('');
+            }}
         >
             <Fade in={props.open}>
-                { loading ? 
-                    (<CircularProgress size={25} />) 
-                    : 
+                {loading ?
+                    (<CircularProgress size={25} />)
+                    :
                     <Paper className={classes.editor} >
                         <form onSubmit={handleSubmit} component="fieldset" className={classes.formControl}>
                             <Grid container spacing={6}>
@@ -187,22 +211,22 @@ export default function Editor(props) {
                                 </Grid>
                                 <Grid item xs={12} className={classes.respostas} >
                                     Respostas
-                                    <RichText 
-                                        value={editorState.respostas} 
+                                    <RichText
+                                        value={editorState.respostas}
                                         setValue={text => handleChange({
                                             target: {
                                                 name: 'respostas',
                                                 value: text
                                             }
-                                        })} 
+                                        })}
                                     />
                                 </Grid>
                                 <Grid item xs={5} >
                                     <TextField id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br />
                                     <FormControlLabel
                                         control={
-                                            <Checkbox 
-                                                color="primary" 
+                                            <Checkbox
+                                                color="primary"
                                                 checked={Boolean(editorState.validacaoConteudo)}
                                                 name="validacaoConteudo"
                                                 onChange={handleChange}
@@ -212,8 +236,8 @@ export default function Editor(props) {
                                     />  <br />
                                     <FormControlLabel
                                         control={
-                                            <Checkbox 
-                                                color="primary" 
+                                            <Checkbox
+                                                color="primary"
                                                 checked={Boolean(editorState.possivelValidarBOT)}
                                                 name="possivelValidarBOT"
                                                 onChange={handleChange}
@@ -223,8 +247,8 @@ export default function Editor(props) {
                                     />  <br />
                                     <FormControlLabel
                                         control={
-                                            <Checkbox 
-                                                color="primary" 
+                                            <Checkbox
+                                                color="primary"
                                                 checked={Boolean(editorState.validacaoBOT)}
                                                 name="validacaoBOT"
                                                 onChange={handleChange}
@@ -235,14 +259,14 @@ export default function Editor(props) {
                                 </Grid>
                                 <Grid item xs={7} >
                                     {editorState.image && <React.Fragment>
-                                        <img alt={editorState.arquivo} style={{width: '50%', cursor: 'pointer'}} src={editorState.image} onClick={() => { setImageOpen(true); }} />
+                                        <img alt={editorState.arquivo} style={{ width: '50%', cursor: 'pointer' }} src={editorState.image} onClick={() => { setImageOpen(true); }} />
                                         <br />
-                                        <Button 
+                                        <Button
                                             onClick={() => {
                                                 props.setCuradorias((prevState) => {
                                                     const data = prevState;
                                                     data.find(e => e._id === editorState._id).image = null;
-                                                    api.put('/curadoria', {newData: data.find(e => e._id === editorState._id), alteredFields: ['imagem']});
+                                                    api.put('/curadoria', { newData: data.find(e => e._id === editorState._id), alteredFields: ['imagem'] });
                                                     return [...data];
                                                 });
                                             }}
@@ -260,13 +284,13 @@ export default function Editor(props) {
                                             closeAfterTransition
                                             BackdropComponent={Backdrop}
                                             BackdropProps={{
-                                            timeout: 500,
+                                                timeout: 500,
                                             }}
                                         >
                                             <Fade in={imageOpen}>
-                                            <div className={classes.paper}>
-                                                <img alt={editorState?.arquivo} src={editorState?.image} />
-                                            </div>
+                                                <div className={classes.paper}>
+                                                    <img alt={editorState?.arquivo} src={editorState?.image} />
+                                                </div>
                                             </Fade>
                                         </Modal>
                                     </React.Fragment>}

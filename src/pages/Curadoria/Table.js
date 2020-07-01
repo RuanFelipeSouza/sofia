@@ -91,7 +91,7 @@ export default function Curadoria(props) {
 
     return (
         <>
-            <Editor id={itemSelecionado} open={editModalOpen} setOpen={setEditModalOpen} setCuradorias={props.setCuradorias} />
+            <Editor bot={props.botName} id={itemSelecionado} setIitemSelecionado={setItemSelecionado} open={editModalOpen} setOpen={setEditModalOpen} setCuradorias={props.setCuradorias} />
             <Dialog name="deleteDialog"
                 open={openDeleteDialog}
                 TransitionComponent={Transition}
@@ -154,9 +154,6 @@ export default function Curadoria(props) {
                     header: {
                         actions: 'Ações'
                     },
-                    toolbar: {
-                        nRowsSelected: '{0} linha(s) selecionada(s)'
-                    },
                     body: {
                         emptyDataSourceMessage: 'Nenhum registro para ser exibido',
                         addTooltip: 'Adicionar',
@@ -172,6 +169,7 @@ export default function Curadoria(props) {
                         }
                     },
                     toolbar: {
+                        nRowsSelected: '{0} linha(s) selecionada(s)',
                         exportTitle: 'Exportar',
                         exportAriaLabel: 'Exportar',
                         exportName: 'Exportar como CSV',
@@ -187,21 +185,22 @@ export default function Curadoria(props) {
                             setSelectedRows(data);
                             setOpenDeleteDialog(true);
                         }
+                    }, {
+                        tooltip: 'Adicionar linha',
+                        icon: 'add',
+                        onClick: (evt, data) => {
+                            setItemSelecionado('');
+                            setEditModalOpen(true);
+                        },
+                        disabled: false,
+                        hidden: false,
+                        position: 'toolbar'
                     }
                 ]}
                 onRowClick={(event, rowData, togglePanel) => {
+                    console.log(rowData._id);
                     setItemSelecionado(rowData._id);
                     setEditModalOpen(true);
-                }}
-                editable={{
-                    onRowAdd: async newData => {
-                        props.setCuradorias((prevState) => {
-                            newData.updatedAt = new Date();
-                            newData.bot = props.botName;
-                            return [...prevState, newData];
-                        });
-                        await api.post('/curadoria', newData);
-                    }
                 }}
             />
         </>
