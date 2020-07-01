@@ -157,7 +157,7 @@ const toProperCase = (text) => {
 };
 
 const userJoined = (state, action) => {
-  const { room, user: { name, number, cpf }, socketId, messages, isWhatsapp } = action.payload;
+  const { room, user: { name, number, cpf }, socketId, messages, isWhatsapp, sector } = action.payload;
   return {
     ...state,
     conversations: [{
@@ -179,7 +179,8 @@ const userJoined = (state, action) => {
       }),
       isWhatsapp,
       //TODO: maybe isBotOn will begin turned off
-      isBotOn: true
+      isBotOn: true,
+      category: sector
     }, ...state.conversations]
   };
 };
@@ -312,8 +313,8 @@ const fetchOngoingConversations = (state, action) => {
   // when implementing it
   const { conversations: fetchedConversations } = action.payload;
 
-  const conversations = fetchedConversations.map(({ _id, history, name, phone }, index) => {
-    const phoneNumber = phone ? `whatsapp:+${phone}` : undefined;
+  const conversations = fetchedConversations.map(({ _id, history, name, phone, sector }, index) => {
+    const phoneNumber = phone ? phone : undefined;
     const lastMessageIndex = history.length - 1;
 
     const messages = history.map(({ _id, from, date, ...rest }) => {
@@ -336,10 +337,10 @@ const fetchOngoingConversations = (state, action) => {
       isBotOn: true, // TODO busca status do bot
       messages,
       lastMessageText: history[lastMessageIndex].text,
-      lastMessageDate: moment(history[lastMessageIndex].date).format('HH:mm')
+      lastMessageDate: moment(history[lastMessageIndex].date).format('HH:mm'),
+      category: sector
     };
   });
-
 
   return {
     ...state,

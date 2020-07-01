@@ -17,20 +17,27 @@ class ChatConversation extends Component {
     sendMessage(message, room);
   }
 
-  handleSendWhatsappMessage(number, message, isBotOn) {
-    const { sendWhatsappMessage, showDialog, hideDialog, room, disableBotAndSendMessage } = this.props;
+  // TODO Mostrar alert ao enviar mensagem quando o bot está ligado
+  // handleSendWhatsappMessage(number, message, isBotOn) {
+  //   const { sendWhatsappMessage, showDialog, hideDialog, room, disableBotAndSendMessage } = this.props;
 
-    if (isBotOn) {
-      const title = 'Atenção!';
-      const dialogMessage = 'Você está tentando enviar mensagem para um usuário que está com atendimento automático habilitado. O que deseja fazer?';
-      const actions = [
-        { label: 'Não enviar a mensagem', onClick: () => hideDialog() },
-        { label: 'Desabilitar o robô e enviar a mensagem', onClick: () => disableBotAndSendMessage(room, number, message) }
-      ];
-      showDialog(title, dialogMessage, actions);
-    } else {
-      sendWhatsappMessage(number, message, room);
-    }
+  //   if (isBotOn) {
+  //     const title = 'Atenção!';
+  //     const dialogMessage = 'Você está tentando enviar mensagem para um usuário que está com atendimento automático habilitado. O que deseja fazer?';
+  //     const actions = [
+  //       { label: 'Não enviar a mensagem', onClick: () => hideDialog() },
+  //       { label: 'Desabilitar o robô e enviar a mensagem', onClick: () => disableBotAndSendMessage(room, number, message) }
+  //     ];
+  //     showDialog(title, dialogMessage, actions);
+  //   } else {
+  //     sendWhatsappMessage(number, message, room);
+  //   }
+  // }
+
+  handleSendWhatsappMessage(number, message) {
+    const { sendWhatsappMessage, room } = this.props;
+
+    sendWhatsappMessage(number, message, room);
   }
 
   formatNumber(number) {

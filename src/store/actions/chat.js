@@ -7,7 +7,7 @@ import * as Socketio from './../../services/Socketio';
 import * as Api from './../../services/api';
 import * as Twillio from './../../services/Twillio';
 // import * as Assistant from './../../services/Assistant';
-// import * as Intellilogs from './../../services/Intellilogs';
+import * as Intellilogs from './../../services/Intellilogs';
 // import store from './../';
 import { showSnackbar } from './layout';
 import { ASSISTANT_WHATSAPP, TWILLIO_BASE_URL } from './../../services/constants';
@@ -27,6 +27,7 @@ export const sendWhatsappMessage = (number, messageText, room) => {
       const message = buildMessage(ASSISTANT_WHATSAPP, messageText, room, null, tempId);
       dispatch(action(SEND_WHATSAPP_MESSAGE_REQUEST, message));
       const messageId = await Twillio.sendMessage(number, messageText);
+      Intellilogs.saveMessage(room, messageText, 'Assistente');
       dispatch(action(SEND_WHATSAPP_MESSAGE_SUCCESS, { room, tempId, messageId }));
     } catch (e) {
       console.log(e);
@@ -41,9 +42,8 @@ export const messageReceived = (messageText, room, origin = 'client', messageId)
   };
 };
 
-export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false) => {
+export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false, sector) => {
   return (dispatch, getState) => {
-    console.log(room, user, socketId, recipientId);
     const { chat } = getState();
     const token = localStorage.getItem('Authorization');
     const { email, isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
@@ -51,7 +51,7 @@ export const userJoined = (room, user, socketId, recipientId, messages = [], isW
     if (email === recipientId || isSupervisor) {
       if (!chat.conversations.find(item => item.room === room)) {
         Socketio.joinAgent(room);
-        dispatch(types.action(types.USER_JOINED, { room, user, socketId, messages, isWhatsapp }));
+        dispatch(types.action(types.USER_JOINED, { room, user, socketId, messages, isWhatsapp, sector }));
         /* TODO adicionar mensagem de alerta quando usuário receber mensagem e não 
          estiver na rota do intellichat */
         // if (store.getState().router.location.pathname !== '/chat') {
