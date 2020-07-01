@@ -2,7 +2,10 @@ import io from 'socket.io-client';
 
 import { BACKEND_URL } from './constants';
 import store from './../store';
-import { messageReceived, userJoined, userDisconnected, disconnectUserByRoom, botStateChanged, messageStatusChanged, removeChats } from './../store/actions/chat';
+import {
+  messageReceived, userJoined, userDisconnected, removeChats,
+  disconnectUserByRoom, botStateChanged, messageStatusChanged
+} from './../store/actions/chat';
 
 let socket;
 
@@ -22,8 +25,8 @@ export const connect = (room, user) => {
       store.dispatch(messageReceived(message, room, origin, messageId));
     });
 
-    socket.on('userJoined', ({ room, user, socketId, recipientId, conversation, isWhatsapp }) => {
-      store.dispatch(userJoined(room, user, socketId, recipientId, conversation, isWhatsapp));
+    socket.on('userJoined', ({ room, user, socketId, recipientId, conversation, isWhatsapp, sector }) => {
+      store.dispatch(userJoined(room, user, socketId, recipientId, conversation, isWhatsapp, sector));
     });
 
     socket.on('userDisconnected', (socketId) => {
@@ -34,7 +37,7 @@ export const connect = (room, user) => {
       store.dispatch(disconnectUserByRoom(room));
     });
 
-    socket.on('closeChat', ({room}) => {
+    socket.on('closeChat', ({ room }) => {
       store.dispatch(removeChats(room));
     });
 

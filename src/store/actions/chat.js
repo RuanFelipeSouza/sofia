@@ -42,9 +42,8 @@ export const messageReceived = (messageText, room, origin = 'client', messageId)
   };
 };
 
-export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false) => {
+export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false, sector) => {
   return (dispatch, getState) => {
-    console.log(room, user, socketId, recipientId);
     const { chat } = getState();
     const token = localStorage.getItem('Authorization');
     const { email, isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
@@ -52,7 +51,7 @@ export const userJoined = (room, user, socketId, recipientId, messages = [], isW
     if (email === recipientId || isSupervisor) {
       if (!chat.conversations.find(item => item.room === room)) {
         Socketio.joinAgent(room);
-        dispatch(types.action(types.USER_JOINED, { room, user, socketId, messages, isWhatsapp }));
+        dispatch(types.action(types.USER_JOINED, { room, user, socketId, messages, isWhatsapp, sector }));
         /* TODO adicionar mensagem de alerta quando usuário receber mensagem e não 
          estiver na rota do intellichat */
         // if (store.getState().router.location.pathname !== '/chat') {
