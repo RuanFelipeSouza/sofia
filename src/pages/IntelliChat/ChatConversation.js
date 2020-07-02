@@ -45,15 +45,15 @@ class ChatConversation extends Component {
   }
 
   render() {
-    const { messages, clientMessages, room, name, number, cpf, userDisconnected, closeChat, chatSelectCount, isWhatsapp, isBotOn, toggleSidebar } = this.props;
-    const userInfo = {
-      name,
-      number: this.formatNumber(number),
-      cpf,
-      conversationId: room,
-      totalMessages: messages.length,
-      showInteractionCost: isWhatsapp
-    };
+    const { messages, clientMessages, room, name, number, cpf, userDisconnected, closeChat, chatSelectCount, isWhatsapp, isBotOn } = this.props;
+    // const userInfo = {
+    //   name,
+    //   number: this.formatNumber(number),
+    //   cpf,
+    //   conversationId: room,
+    //   totalMessages: messages.length,
+    //   showInteractionCost: isWhatsapp
+    // };
 
     const token = localStorage.getItem('Authorization');
     const { isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
@@ -63,7 +63,8 @@ class ChatConversation extends Component {
         <ChatHeader
           title={name}
           subtitle={isWhatsapp ? this.formatNumber(number) : cpf}
-          onClick={() => toggleSidebar(userInfo)}
+          closeChat={() => closeChat(room, number)}
+          // onClick={() => toggleSidebar(userInfo)}
         />
         <ChatDialog
           messages={room ? messages : clientMessages}

@@ -6,12 +6,12 @@ import { func, bool, array, number } from 'prop-types';
 import api from './../services/api';
 
 export default function Table(props) {
+  console.log(props.atendimentos);
 
   const columns = [
-    { title: 'Aluno', field: 'studentName' },
-    { title: 'Professor', field: 'teacherName' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
+    { title: 'Setor', field: 'sector' },
     // eslint-disable-next-line react/prop-types, react/display-name
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
   ];

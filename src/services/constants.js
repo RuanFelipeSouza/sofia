@@ -13,7 +13,7 @@ export const CLOSE_CHAT_ENDPOINT = '/chat/close';
 
 //TWILLIO endpoints
 export const ASSISTANT_WHATSAPP = 'whatsapp:+14155238886';
-export const TWILLIO_BASE_URL = undefined;
+export const TWILLIO_BASE_URL = 'http://assistente01.intelliway.com.br:3050/';
 
 //ASSISTANT endpoints
 export const ASSISTANT_BASE_URL = 'http://assistente01.intelliway.com.br:3005/';

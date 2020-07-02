@@ -112,10 +112,7 @@ class ChatQueue extends Component {
           <Avatar />
           <ChatHeaderTextContainer>
             <Typography variant="subtitle2" style={{ fontSize: 16 }}>
-              Global Touch
-            </Typography>
-            <Typography variant="subtitle1" style={{ fontSize: 12 }}>
-              Consumo Mensal: R$ 200,00
+              Intelliway
             </Typography>
           </ChatHeaderTextContainer>
         </ChatHeader>

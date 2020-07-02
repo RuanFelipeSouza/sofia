@@ -11,7 +11,6 @@ import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded'
 import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
 import List from '@material-ui/core/List';
 
-import Logo from './../../assets/logo1.png';
 import LogoIntelliway from './../../assets/logo-intelliway-nova.png';
 
 import { UpperLogo, BottomLogo } from './styles.js';
@@ -64,7 +63,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={'logo da global touch'} />
+      <UpperLogo src={LogoIntelliway} alt={'logo da intelliway'} />
       <Divider />
       <List>
         {
