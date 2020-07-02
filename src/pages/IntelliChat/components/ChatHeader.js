@@ -7,7 +7,7 @@ import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
 import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import IconButton from '@material-ui/core/IconButton';
 
-const ChatHeader = ({ title, subtitle, onClick }) => {
+const ChatHeader = ({ title, subtitle, onClick, closeChat }) => {
   return (
     <ChatHeaderWrapper onClick={onClick}>
       <Column>
@@ -18,7 +18,7 @@ const ChatHeader = ({ title, subtitle, onClick }) => {
         <IconButton>
           <StarBorderRoundedIcon style={{ color: 'white' }} />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={closeChat} >
           <DeleteForeverRoundedIcon style={{ color: 'white' }} />
         </IconButton>
         <IconButton>
@@ -32,7 +32,8 @@ const ChatHeader = ({ title, subtitle, onClick }) => {
 ChatHeader.propTypes = {
   title: string.isRequired,
   subtitle: string,
-  onClick: func.isRequired
+  onClick: func.isRequired,
+  closeChat: func.isRequired
 };
 
 export default ChatHeader;

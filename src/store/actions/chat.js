@@ -113,15 +113,17 @@ export const selectChat = (room) => {
   return types.action(types.SELECT_CHAT, room);
 };
 
-export const closeChat = async (room, number) => {
-  try {
-    await Api.closeChat(room);
-    if (number) {
-      await Twillio.endService(number);
+export const closeChat = (room, number) => {
+  return async () => {
+    try {
+      await Api.closeChat(room);
+      if (number) {
+        await Twillio.endService(number);
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
-  }
+  };
 };
 
 export const removeChats = (room) => {
