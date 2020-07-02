@@ -19,9 +19,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
-  banner: {
-    height: '100%'
-  },
   paper: {
     margin: theme.spacing(8, 4),
     display: 'flex',
