@@ -71,6 +71,7 @@ export default function Editor(props) {
     const [editorState, setEditorState] = useState({});
     const [alteredFields, setAlteredFields] = useState([]);
     const [alertValidacao, setAlertValidacao] = useState(false);
+    console.log(alteredFields);
 
     useEffect(() => {
         if (!props.id) return;
@@ -94,12 +95,12 @@ export default function Editor(props) {
                 [name]: checked || value
             }
         });
-        setAlteredFields(oldValue => new Set(...oldValue, name));
+        setAlteredFields(oldValue => new Set([...oldValue, name]));
     };
 
     const handleSubmit = async e => {
         e.preventDefault();
-        setLoading(true)
+        setLoading(true);
         if (!editorState['respostas'] || editorState['respostas'].replace(/<[^>]*>/g, "") === '') return alert('Preencha o campo respostas')
         const data = {}; //data armazena o que vai ser exibido na tabela, editorState é o que será enviado para salvar no db
         for (let key in editorState) {
@@ -114,7 +115,7 @@ export default function Editor(props) {
             }
         }
         editorState.bot = props.bot;
-        const { data: { _id } } = props.id === '' ? await api.post('/curadoria', editorState) : await api.put('/curadoria', { newData: editorState, alteredFields });
+        const { data: { _id } } = props.id === '' ? await api.post('/curadoria', editorState) : await api.put('/curadoria', { newData: editorState, alteredFields: [...alteredFields] });
         data.updatedAt = new Date();
         data._id = _id ? _id : props.id;
         data.bot = props.bot;
@@ -129,9 +130,6 @@ export default function Editor(props) {
         setEditorState({});
         props.setOpen(false);
         setLoading(false);
-        return;
-        setEditorState({});
-        props.setOpen(false);
     };
 
     const handleDelete = async e => {
