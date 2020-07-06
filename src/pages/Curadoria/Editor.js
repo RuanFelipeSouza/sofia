@@ -19,7 +19,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-
 import api from '../../services/api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -71,6 +70,7 @@ export default function Editor(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [editorState, setEditorState] = useState({});
     const [alteredFields, setAlteredFields] = useState([]);
+    const [alertValidacao, setAlertValidacao] = useState(false);
 
     useEffect(() => {
         if (!props.id) return;
@@ -83,6 +83,10 @@ export default function Editor(props) {
     }, [props]);
 
     const handleChange = (event) => {
+        if (!alertValidacao && event.target.id === 'tema') {
+            setAlertValidacao(true);
+            alert('Caro Colaborador, ao inserir o conteúdo lembre-se de marcar o campo validação de conteúdo.');
+        }
         const { name, value, checked } = event.target;
         setEditorState(oldState => {
             return {
@@ -95,45 +99,55 @@ export default function Editor(props) {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (props.id === '') {
-            const data = {}; //data armazena o que vai ser exibido na tabela, editorState é o que será enviado para salvar no db
-            for (let key in editorState) {
-                if (key === 'respostas') {
-                    data[key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
-                } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
-                    data[key] = !!editorState[key];
-                    editorState[key] = !!editorState[key];
-                }else{
-                    data[key] = editorState[key];
-                }
+        setLoading(true)
+        if (!editorState['respostas'] || editorState['respostas'].replace(/<[^>]*>/g, "") === '') return alert('Preencha o campo respostas')
+        const data = {}; //data armazena o que vai ser exibido na tabela, editorState é o que será enviado para salvar no db
+        for (let key in editorState) {
+            if (key === 'respostas') {
+                data[key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
+                data['hasImage'] = /<img.*>/g.test(data[key])
+            } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
+                data[key] = !!editorState[key];
+                editorState[key] = !!editorState[key];
+            } else {
+                data[key] = editorState[key];
             }
-            editorState.bot = props.bot;
-            const { data: { _id } } = await api.post('/curadoria', editorState);
-            data.updatedAt = new Date();
-            data._id = _id;
-            data.bot = props.bot;
-            props.setCuradorias(prevState => [...prevState, data]);
-            setEditorState({});
-            props.setOpen(false);
-            return;
         }
-        props.setCuradorias((prevState) => {
-            const data = prevState;
-            const index = data.findIndex(e => e._id === editorState._id);
-            for (let key in editorState) {
-                if (key === 'respostas') {
-                    data[index][key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
-                } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
-                    data[index][key] = !!editorState[key];
-                    editorState[key] = !!editorState[key];
-                } else {
-                    data[index][key] = editorState[key];
-                }
+        editorState.bot = props.bot;
+        const { data: { _id } } = props.id === '' ? await api.post('/curadoria', editorState) : await api.put('/curadoria', { newData: editorState, alteredFields });
+        data.updatedAt = new Date();
+        data._id = _id ? _id : props.id;
+        data.bot = props.bot;
+        props.setCuradorias(prevState => {
+            if (props.id !== '') {
+                const index = prevState.findIndex(e => e._id === editorState._id);
+                prevState[index] = data;
+                return prevState;
             }
-            api.put('/curadoria', { newData: editorState, alteredFields });
-            data[index].updatedAt = new Date();
-            return [...data];
+            return [...prevState, data]
         });
+        setEditorState({});
+        props.setOpen(false);
+        setLoading(false);
+        return;
+
+        // props.setCuradorias((prevState) => {
+        //     const data = prevState;
+        //     const index = data.findIndex(e => e._id === editorState._id);
+        //     for (let key in editorState) {
+        //         if (key === 'respostas') {
+        //             data[index][key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
+        //         } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
+        //             data[index][key] = !!editorState[key];
+        //             editorState[key] = !!editorState[key];
+        //         } else {
+        //             data[index][key] = editorState[key];
+        //         }
+        //     }
+
+        //     data[index].updatedAt = new Date();
+        //     return [...data];
+        // });
         setEditorState({});
         props.setOpen(false);
     };
@@ -203,11 +217,11 @@ export default function Editor(props) {
                                 </Grid>
                                 <Grid item xs={12} className={classes.formTop} >
                                     <TextField id="arquivo" label="Arquivo" variant="outlined" defaultValue={editorState.arquivo} className={classes.arquivoTema} name="arquivo" onChange={handleChange} />
-                                    <TextField id="tema" label="Tema" variant="outlined" defaultValue={editorState.tema} className={classes.arquivoTema} name="tema" onChange={handleChange} />
+                                    <TextField required id="tema" label="Tema" variant="outlined" defaultValue={editorState.tema} className={classes.arquivoTema} name="tema" onChange={handleChange} />
                                 </Grid>
-                                <Grid item xs={12} className={classes.perguntas} >
+                                <Grid required item xs={12} className={classes.perguntas} >
                                     Perguntas
-                                    <TextareaAutosize id="perguntas" label="Perguntas" variant="outlined" defaultValue={editorState.perguntas} className={classes.perguntas} name="perguntas" onChange={handleChange} />
+                                    <TextareaAutosize required id="perguntas" label="Perguntas" variant="outlined" defaultValue={editorState.perguntas} className={classes.perguntas} name="perguntas" onChange={handleChange} />
                                 </Grid>
                                 <Grid item xs={12} className={classes.respostas} >
                                     Respostas
@@ -222,7 +236,7 @@ export default function Editor(props) {
                                     />
                                 </Grid>
                                 <Grid item xs={5} >
-                                    <TextField id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br />
+                                    <TextField required id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br />
                                     <FormControlLabel
                                         control={
                                             <Checkbox

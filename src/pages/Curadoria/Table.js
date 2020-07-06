@@ -24,7 +24,6 @@ export default function Curadoria(props) {
     const [itemSelecionado, setItemSelecionado] = useState(null);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [selectedRows, setSelectedRows] = useState([]);
-
     const columns = [
         {
             title: 'Mídias',
@@ -204,5 +203,6 @@ export default function Curadoria(props) {
                 }}
             />
         </>
+        
     );
 }
