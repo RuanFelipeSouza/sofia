@@ -24,13 +24,6 @@ export default function Table(props) {
         <Link 
           id={props2._id} 
           to={`/conversation/${props2._id}`}
-          onClick={(e) => {
-            const data = props.atendimentos;
-            const oldData = data.find(d => d._id === e.target.id);
-            data[data.indexOf(oldData)].viewed = true;
-            props.setAtendimentos(data);
-            api.put('/updateViewed', {_id: e.target.id, viewed: true});
-          }} 
         > 
           Visualizar conversa <ArrowForwardOutlined size={16} />
         </Link>, 
