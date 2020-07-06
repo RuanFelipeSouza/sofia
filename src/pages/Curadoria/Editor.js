@@ -130,24 +130,6 @@ export default function Editor(props) {
         props.setOpen(false);
         setLoading(false);
         return;
-
-        // props.setCuradorias((prevState) => {
-        //     const data = prevState;
-        //     const index = data.findIndex(e => e._id === editorState._id);
-        //     for (let key in editorState) {
-        //         if (key === 'respostas') {
-        //             data[index][key] = editorState[key].replace(/<img.*img>/g, '');  // remove base64 das imagens
-        //         } else if (key === 'validacaoConteudo' || key === 'possivelValidarBOT' || key === 'validacaoBOT') {
-        //             data[index][key] = !!editorState[key];
-        //             editorState[key] = !!editorState[key];
-        //         } else {
-        //             data[index][key] = editorState[key];
-        //         }
-        //     }
-
-        //     data[index].updatedAt = new Date();
-        //     return [...data];
-        // });
         setEditorState({});
         props.setOpen(false);
     };
