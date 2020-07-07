@@ -70,8 +70,6 @@ export default function Editor(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [editorState, setEditorState] = useState({});
     const [alteredFields, setAlteredFields] = useState([]);
-    const [alertValidacao, setAlertValidacao] = useState(false);
-    console.log(alteredFields);
 
     useEffect(() => {
         if (!props.id) return;
@@ -84,10 +82,6 @@ export default function Editor(props) {
     }, [props]);
 
     const handleChange = (event) => {
-        if (!alertValidacao && event.target.id === 'tema') {
-            setAlertValidacao(true);
-            alert('Caro Colaborador, ao inserir o conteúdo lembre-se de marcar o campo validação de conteúdo.');
-        }
         const { name, value, checked } = event.target;
         setEditorState(oldState => {
             return {
@@ -167,7 +161,7 @@ export default function Editor(props) {
                         <form onSubmit={handleSubmit} component="fieldset" className={classes.formControl}>
                             <Grid container spacing={6}>
                                 <Grid item xs={12} className={classes.editorHeader} >
-                                    <Button className={classes.editBackButton} onClick={() => { props.setOpen(false); }} ><ArrowBackIcon /></Button>
+                                    <Button className={classes.editBackButton} onClick={() => { props.setOpen(false); setEditorState({}); }} ><ArrowBackIcon /></Button>
                                     <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)} >
                                         Excluir
                                     </Button>
@@ -215,19 +209,19 @@ export default function Editor(props) {
                                         })}
                                     />
                                 </Grid>
-                                <Grid item xs={5} >
-                                    <TextField required id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br />
+                                <Grid item xs={12} >
+                                    <TextField required id="responsavel" label="Responsável" variant="outlined" defaultValue={editorState.responsavel} className={classes.arquivoTema} name="responsavel" onChange={handleChange} /> <br /> <br />
                                     <FormControlLabel
                                         control={
                                             <Checkbox
                                                 color="primary"
-                                                checked={Boolean(editorState.validacaoConteudo)}
+                                                checked={Boolean(editorState.validacaoConteudo === undefined ? true : editorState.validacaoConteudo)}
                                                 name="validacaoConteudo"
                                                 onChange={handleChange}
                                             />
                                         }
                                         label="Validação do Conteúdo"
-                                    />  <br />
+                                    /> <b style={{color: 'red'}}>CARO COLABORADOR, LEMBRE-SE DE DEIXAR ESTE CAMPO MARCADO.</b> <br />
                                     <FormControlLabel
                                         control={
                                             <Checkbox
