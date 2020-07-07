@@ -7,8 +7,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
   let logged = false;
   try {
-    const jwt = localStorage.getItem('Authorization').split(' ')[1];
-    verify(jwt, 'intelli');
+    const jwt = localStorage.getItem('Authorization');
+    verify(jwt, 'intelliway-secret');
     logged = true;
   } catch (e) {
     logged = false;

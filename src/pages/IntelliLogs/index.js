@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import * as constants from '../../services/constants';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -11,6 +12,9 @@ import Table from './../../components/Table';
 import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 import api from './../../services/api';
 import localStorageStateHook from './../../utils/useLocalStorageState';
@@ -79,19 +83,21 @@ export default function Intellilogs() {
   const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
+  const [project, setProject] = useState(constants.PROJECTS[0].value);
 
   useEffect(() => {
     setLoading(true);
     api.get('/atendimentos', {
       params: {
         dataInicio,
-        dataFim
+        dataFim,
+        projeto: project,
       }
     }).then(response => {
       setLoading(false);
       setAtendimentos(response.data);
     });
-  }, [dataInicio, dataFim]);
+  }, [dataInicio, dataFim, project]);
 
   return (
     <div className={classes.root}>
@@ -105,6 +111,17 @@ export default function Intellilogs() {
               <Paper className={classes.dataPickers}>
                 <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={'data_inicio'} label={'Data inicial'} />
                 <DatePicker value={dataFim} handleChangeDate={setDataFim} id={'data_fim'} label={'Data final'} />
+                <FormControl style={{ marginTop: 16, marginBottom: 8 }}>
+                  <InputLabel shrink htmlFor="age-native-label-placeholder">
+                    Projeto
+                  </InputLabel>
+                  <NativeSelect
+                    value={project}
+                    onChange={e => setProject(e.target.value)}
+                  >
+                    { constants.PROJECTS.map(e => (<option value={e.value} key={e.value}>{e.name}</option>)) }
+                  </NativeSelect>
+                </FormControl>
               </Paper>
             </Grid>
             <Grid item xs={12}>

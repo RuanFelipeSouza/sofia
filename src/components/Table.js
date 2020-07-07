@@ -3,17 +3,20 @@ import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { func, bool, array, number } from 'prop-types';
-import api from './../services/api';
 
 export default function Table(props) {
 
   const columns = [
-    { title: 'Aluno', field: 'studentName' },
-    { title: 'Professor', field: 'teacherName' },
-    { title: 'ID', field: '_id' },
-    { title: 'Data', field: 'createdAt' },
+    { title: 'ID', field: 'id' },
+    // eslint-disable-next-line react/prop-types
+    { title: 'Data', render: props => `${props.dia}/${props.mes}/${props.ano}` },
+    { title: 'Cód Cliente', field: 'cliente_id' },
+    { title: 'Nome', field: 'nome' },
+    { title: 'CPF/CNPJ', field: 'cpf_cnpj' },
+    { title: 'Telefone', field: 'telefone' },
+    { title: 'Status', field: 'status' },
     // eslint-disable-next-line react/prop-types, react/display-name
-    { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
+    { title: 'Detalhes', field: 'id', render: props => <Link to={`/conversation/${props.id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
   ];
 
   return (
@@ -38,14 +41,10 @@ export default function Table(props) {
         pagination: {
           labelDisplayedRows: '{from}-{to} de {count}'
         },
-        header: {
-          actions: 'Ações'
-        },
         body: {
           emptyDataSourceMessage: 'Nenhum registro para ser exibido',
           addTooltip: 'Adicionar',
           deleteTooltip: 'Apagar',
-          editTooltip: 'Editar',
           filterRow: {
             filterTooltip: 'Filtro'
           },
@@ -61,19 +60,6 @@ export default function Table(props) {
           exportName: 'Exportar como CSV',
           searchTooltip: 'Buscar',
           searchPlaceholder: 'Buscar'
-        }
-      }}
-      editable={{
-        onRowUpdate: async (newData, oldData) => {
-          if (oldData) {
-            props.setAtendimentos((prevState) => {
-              const data = prevState;
-              data[data.indexOf(oldData)].viewed = newData.viewed;
-              return data;
-            });
-
-            await api.put('/updateViewed', newData);
-          }
         }
       }}
     />

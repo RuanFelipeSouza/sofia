@@ -55,11 +55,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [conversa, setConversa] = useState({});
+  const [conversa, setConversa] = useState([]);
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/conversation/${id}`).then(response => {
+    api.get(`/getConversation/${id}`).then(response => {
       setConversa(response.data);
     });
   }, [id]);

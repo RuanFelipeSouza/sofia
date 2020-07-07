@@ -14,6 +14,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Baner from './../../assets/Baner.png';
 import api from './../../services/api';
+import loginApi from './../../services/loginApi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,13 +64,14 @@ export default function SignInSide() {
     e.preventDefault();
     setError(false);
     try {
-      const result = await api.post('/login', {
+      const result = await loginApi.post('/users/login', {
         email: user,
         password
       });
-      await localStorage.setItem('Authorization', result.headers.authorization);
+      await localStorage.setItem('Authorization', result.data.token);
+      console.log('item set!', localStorage.getItem('Authorization'), result.data.token);
       api.defaults.headers.common = {
-        Authorization: result.headers.authorization
+        Authorization: result.data.token
       };
 
       history.push('/intellilogs');

@@ -1,11 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { object, string, oneOfType } from 'prop-types';
+import { object, string, oneOfType, array } from 'prop-types';
 
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple, green } from '@material-ui/core/colors';
-import * as moment from 'moment';
 import * as parse from 'html-react-parser';
 
 const useStyles = makeStyles((theme) => ({
@@ -90,43 +89,36 @@ function formatMessage(msg) {
 const createMessage = (props, classes) =>
   <>
     <p>
-      <b>{props.from}</b><br />
+      <b>{props.origem}</b><br />
       {props.media && (<> <img className={classes.innerImage} src={props.media} alt={''} /> <br /> </>)}
-      {formatMessage(props.text)}
+      {formatMessage(props.mensagem)}
     </p>
-    <h5 className={classes.messageDatetime}>{moment(props.date).format('DD/MM/YYYY HH:mm')}</h5>
+    {/* <h5 className={classes.messageDatetime}>{moment(props.date).format('DD/MM/YYYY HH:mm')}</h5> */}
   </>;
 
 createMessage.propTypes = {
-  from: string,
+  origem: string,
   media: string,
-  text: string,
-  date: string,
+  mensagem: string,
 };
 
 export default function Dialog(props) {
   const classes = useStyles();
   const { conversa } = props;
+  console.log(conversa);
 
   return (
     <Paper className={classes.conversation}>
-      {conversa.history && conversa.history?.map((row) => {
-        if (row.from === 'Assistente')
-          return <div key={row._id} className={classes.assistantLine}>
-            <Avatar className={classes.purpleAvatar}>A</Avatar>
+      {conversa?.map((row) => {
+        if (row.origem === 'Usuário')
+          return <div key={row.id} className={classes.assistantLine}>
+            <Avatar className={classes.purpleAvatar}>U</Avatar>
             <Paper className={classes.assistantMessage}>
               {createMessage(row, classes)}
             </Paper>
           </div>;
-        if (row.from === conversa.teacherName)
-          return <div key={row._id} className={classes.teacherLine}>
-            <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
-            <Paper className={classes.teacherMessage}>
-              {createMessage(row, classes)}
-            </Paper>
-          </div>;
         return <div key={row._id} className={classes.studentLine}>
-          <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
+          <Avatar className={classes.orangeAvatar}>{row.origem?.charAt()}</Avatar>
           <Paper className={classes.studentMessage}>
             {createMessage(row, classes)}
           </Paper>
@@ -137,5 +129,5 @@ export default function Dialog(props) {
 }
 
 Dialog.propTypes = {
-  conversa: oneOfType([object, string]),
+  conversa: oneOfType([object, string, array]),
 };

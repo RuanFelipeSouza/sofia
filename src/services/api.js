@@ -7,7 +7,7 @@ const endpoints = {
 };
 
 const api = axios.create({
-  baseURL: 'http://assistente01.intelliway.com.br:3005'
+  baseURL: 'http://vilanova.intelliway.com.br:3010/'
 });
 
 let tokenStorage = localStorage.getItem('Authorization');
