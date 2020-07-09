@@ -6,8 +6,13 @@ const endpoints = {
   INTELLILOGS_END_SERVICE: 'alterStatusTicket'
 };
 
+const basicAuth = `Basic ${Buffer.from(`${constants.INTELLILOGS_USER}:${constants.INTELLILOGS_PASS}`).toString('base64')}`;
 const api = axios.create({
-  baseURL: 'http://vilanova.intelliway.com.br:3010/'
+  baseURL: 'http://vilanova.intelliway.com.br:3010/',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: basicAuth
+  }
 });
 
 let tokenStorage = localStorage.getItem('Authorization');

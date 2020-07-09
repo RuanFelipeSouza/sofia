@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#008bd4',
   },
   form: {
     width: '60%',
@@ -68,7 +68,7 @@ export default function SignInSide() {
         email: user,
         password
       });
-      await localStorage.setItem('Authorization', result.data.token);
+      localStorage.setItem('Authorization', result.data.token);
       console.log('item set!', localStorage.getItem('Authorization'), result.data.token);
       api.defaults.headers.common = {
         Authorization: result.data.token

@@ -7,8 +7,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
-import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+// import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
+// import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
 import List from '@material-ui/core/List';
 
 import Logo from './../../assets/logo1.png';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#2B2846',
+    backgroundColor: '#2e3092',
     color: 'white',
   },
 }));
@@ -36,16 +36,16 @@ const _menuOptions = [
     icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
     path: '/intellilogs',
   },
-  {
-    label: 'IntelliChat',
-    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-    path: '/intellichat',
-  },
-  {
-    label: 'Dashboard',
-    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/dashboard',
-  },
+  // {
+  //   label: 'IntelliChat',
+  //   icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+  //   path: '/intellichat',
+  // },
+  // {
+  //   label: 'Dashboard',
+  //   icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+  //   path: '/dashboard',
+  // },
 ];
 
 export default function Sidebar() {
@@ -64,7 +64,7 @@ export default function Sidebar() {
       }}
       anchor="left"
     >
-      <UpperLogo src={Logo} alt={'logo da global touch'} />
+      <UpperLogo src={Logo} alt={'logo da vila nova'} />
       <Divider />
       <List>
         {
