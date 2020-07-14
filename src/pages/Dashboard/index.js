@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import DatePicker from './../../components/Datepicker';
 import Select from './../../components/Select';
-import Chart from './../../components/Chart';
+import LineChart from './../../components/LineChart';
 import PieChart from './../../components/PieChart';
 import GenericBarChart from '../../components/GenericBarChart';
 import Copyright from './../../components/Copyright';
@@ -57,7 +57,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignSelf: 'center',
     justifyContent: 'space-between',
-    padding: '0 5%'
+    padding: '0 5%',
+    alignItems: 'center'
   },
   main: {
     width: '100%'
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const rightWrongColors = ['#004000', '#660000']
+const rightWrongColors = ['#8884d8', '#BAB8D7']
 
 const columns = [
   { title: 'Intenção', field: 'intent' },
@@ -182,8 +183,8 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <Chart atendimentos={atendimentos} />
                 <PieChart data={misunderstoodMessages} />
+                <LineChart atendimentos={atendimentos} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
@@ -191,8 +192,8 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
                 <PieChart data={contentPendencies.total} />
+                <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
@@ -200,8 +201,8 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
                 <PieChart data={intelliwayPendencies.total} />
+                <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
@@ -209,8 +210,8 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={botPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
                 <PieChart data={botPendencies.total} />
+                <GenericBarChart data={botPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
               </Paper>
             </Grid>
             <Grid item xs={6}>
@@ -218,7 +219,7 @@ export default function Intellilogs() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
-                <GenericBarChart data={intents} width={1000} />
+                <GenericBarChart data={intents} width={1000} colors={rightWrongColors} />
               </Paper>
             </Grid>
             {unusedIntents.length &&
