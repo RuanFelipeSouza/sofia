@@ -1,35 +1,37 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+import Sidebar from './../../components/Sidebar';
+import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { FavoriteBorder, Assignment, BarChart } from '@material-ui/icons';
+import SwipeableViews from 'react-swipeable-views';
+import localStorageStateHook from './../../utils/useLocalStorageState';
+import api from './../../services/api';
+import Desempenho from './desempenho';
+import NPS from './nps';
+import Sugestoes from './sugestoes';
 import DatePicker from './../../components/Datepicker';
 import Select from './../../components/Select';
-import LineChart from './../../components/LineChart';
-import PieChart from './../../components/PieChart';
-import GenericBarChart from '../../components/GenericBarChart';
-import Copyright from './../../components/Copyright';
-import Sidebar from './../../components/Sidebar';
-import Table from './../../components/GenericTable';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
 
-import api from './../../services/api';
-import localStorageStateHook from './../../utils/useLocalStorageState';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
+  main: {
+    overflow: 'hidden'
+  },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'row',
   },
   dataPickers: {
     display: 'flex',
@@ -38,62 +40,58 @@ const useStyles = makeStyles((theme) => ({
     padding: '0 10%',
     justifyContent: 'space-between'
   },
-  form: {
-    display: 'flex',
-    padding: '0 15%',
-    justifyContent: 'space-between'
-  },
-  sendButton: {
-    marginBottom: '15px'
-  },
-  logo: {
-    display: 'table',
-    margin: '-10px auto',
-    width: '40%',
-    padding: '0 10px'
-  },
-  chart: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignSelf: 'center',
-    justifyContent: 'space-between',
-    padding: '0 5%',
-    alignItems: 'center'
-  },
-  main: {
-    width: '100%'
-  },
-  table: {
-    width: '100%',
-    padding: '1%'
-  },
-  details: {
-    margin: '2% 0 5% 0',
-    padding: '1%',
-    width: '30%'
-  }
 }));
 
-const rightWrongColors = ['#8884d8', '#BAB8D7']
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-const columns = [
-  { title: 'Intenção', field: 'intent' },
-  { title: 'Descrição', field: 'description' }
-];
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `full-width-tab-${index}`,
+    'aria-controls': `full-width-tabpanel-${index}`,
+  };
+}
 
 export default function Intellilogs() {
-  const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
+  const { keys, useLocalStorageState } = localStorageStateHook;
+  const [tabIndex, setTabValue] = useState(0);
+  const [atendimentos, setAtendimentos] = useState([]);
+  const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
   const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
-  const [atendimentos, setAtendimentos] = useState([]);
-  const [misunderstoodMessages, setMisunderstoodMessages] = useState([]);
-  const [contentPendencies, setContentPendencies] = useState({ pendencies: [], total: [] });
-  const [intelliwayPendencies, setIntelliwayPendencies] = useState({ pendencies: [], total: [] });
-  const [botPendencies, setBotPendencies] = useState({ pendencies: [], total: [] });
-  const [intents, setIntents] = useState([]);
-  const [unusedIntents, setUnusedIntents] = useState([]);
+
+  const handleChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleChangeIndex = (index) => {
+    setTabValue(index);
+  };
 
   useEffect(_ => {
     api.get('/atendimentos', {
@@ -115,133 +113,57 @@ export default function Intellilogs() {
     })
   }, [dataInicio, dataFim, project]);
 
-  useEffect(() => {
-    const fetchPendencies = (tipoValidacao, setState) => {
-      api.get('/pendenciaPorResponsavel', {
-        params: {
-          dataInicio,
-          dataFim,
-          projeto: project,
-          tipoValidacao
-        }
-      }).then(({ data }) => {
-        const totalDependencies = [
-          { name: 'Validado', value: 0, fill: rightWrongColors[0] },
-          { name: 'Não Validado', value: 0, fill: rightWrongColors[1] }
-        ];
-        data.forEach((element) => {
-          totalDependencies[0].value = totalDependencies[0].value + element['Validado'];
-          totalDependencies[1].value = totalDependencies[1].value + element['Não Validado'];
-        });
-        setState({ pendencies: data, total: totalDependencies });
-      })
-    };
-
-    fetchPendencies('validacaoConteudo', setContentPendencies);
-    fetchPendencies('possivelValidarBOT', setIntelliwayPendencies);
-    fetchPendencies('validacaoBOT', setBotPendencies);
-  }, [dataInicio, dataFim, project]);
-
-  useEffect(() => {
-    api.get('/utilizazaoIntencao', {
-      params: {
-        dataInicio,
-        dataFim,
-        projeto: project
-      }
-    }).then(response => {
-      setIntents(response.data);
-    })
-  }, [dataInicio, dataFim, project]);
-
-  useEffect(() => {
-    api.get('/intencoesNaoUtilizadas', {
-      params: {
-        projeto: project
-      }
-    }).then(response => {
-      setUnusedIntents(response.data);
-    })
-  }, [project]);
-
   return (
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} >
-              <Paper className={classes.dataPickers}>
-                <Select value={project} handleSelectChange={setProject} />
-                <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
-                <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <b>Total de atendimentos no período: </b>{atendimentos.length}
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.chart}>
-                <PieChart data={misunderstoodMessages} />
-                <LineChart atendimentos={atendimentos} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <b>Validação de Curadoria por Responsável (Conteúdo) </b>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.chart}>
-                <PieChart data={contentPendencies.total} />
-                <GenericBarChart data={contentPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <b>Validação de Curadoria por Responsável (Possível Validar no Bot) </b>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.chart}>
-                <PieChart data={intelliwayPendencies.total} />
-                <GenericBarChart data={intelliwayPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <b>Validação de Curadoria por Responsável (Bot) </b>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.chart}>
-                <PieChart data={botPendencies.total} />
-                <GenericBarChart data={botPendencies.pendencies} isStacked interval={0} colors={rightWrongColors} />
-              </Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <b>Intenções Utilizadas</b>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.chart}>
-                <GenericBarChart data={intents} width={1000} colors={rightWrongColors} />
-              </Paper>
-            </Grid>
-            {unusedIntents.length &&
-              <Fragment>
-                <Grid item xs={6}>
-                  <b>Intenções Nunca Utilizadas</b>
-                </Grid>
-                <Grid item xs={12}>
-                  <Table
-                    title='Intenções'
-                    columns={columns}
-                    data={unusedIntents}
-                  />
-                </Grid>
-              </Fragment>
-            }
-
+        <AppBar position="static" color="default">
+          <Tabs
+            value={tabIndex}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            // aria-label="full width tabs example"
+          >
+            <Tab label="Central de desempenho" icon={<BarChart />} {...a11yProps(2)} />
+            <Tab label="Central de sugestões" icon={<Assignment />} {...a11yProps(1)} />
+            <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(0)} />
+          </Tabs>
+        </AppBar>
+        <Container maxWidth='lg' className={classes.container}>
+          <Grid item xs={12}>
+            <Paper className={classes.dataPickers}>
+              <Select value={project} handleSelectChange={setProject} />
+              <DatePicker
+                value={dataInicio}
+                handleChangeDate={setDataInicio}
+                id={'data_inicio'}
+                label={'Data inicial'}
+              />
+              <DatePicker
+                value={dataFim}
+                handleChangeDate={setDataFim}
+                id={'data_fim'}
+                label={'Data final'}
+              />
+            </Paper>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
+        <SwipeableViews
+          axis='x'
+          index={tabIndex}
+          onChangeIndex={handleChangeIndex}
+          style={{width: '100%'}}
+        >
+          {/* <NPS surveys={surveys.filter(e => e.nota)}/>
+          <Sugestoes surveys={surveys.filter(e => e.nota)}/>
+          <Desempenho surveys={surveys} connections={connections} users={users} /> */}
+          <Desempenho atendimentos={atendimentos} misunderstoodMessages={misunderstoodMessages} />
+          <Sugestoes atendimentos={atendimentos} />
+          <NPS atendimentos={atendimentos.filter(e => e.rating)} />
+        </SwipeableViews>
       </main>
     </div>
   );
