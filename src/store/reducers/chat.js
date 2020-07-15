@@ -313,7 +313,7 @@ const fetchOngoingConversations = (state, action) => {
   // when implementing it
   const { conversations: fetchedConversations } = action.payload;
 
-  const conversations = fetchedConversations.map(({ _id, history, name, phone, sector }, index) => {
+  const conversations = fetchedConversations.map(({ _id, history, user, phone, sector }, index) => {
     const phoneNumber = phone ? phone : undefined;
     const lastMessageIndex = history.length - 1;
 
@@ -329,7 +329,7 @@ const fetchOngoingConversations = (state, action) => {
     return {
       socketId: index,
       room: _id,
-      name: toProperCase(name),
+      name: toProperCase(user.name),
       number: phoneNumber,
       unread: 0,
       userDisconnected: false,
