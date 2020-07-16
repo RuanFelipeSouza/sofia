@@ -214,8 +214,11 @@ export default function Jira() {
   const [listaClientes, setListaClientes] = useLocalStorageState(keys.JIRA_CLIENTES, [], useState);
   const [cliente, setCliente] = useLocalStorageState(keys.JIRA_CLIENTE, null, useState);
   const [openModal, setOpenModal] = useState(false);
+  const [emailModal, setEmailModal] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [pacoteHoras, setPacoteHoras] = useState(0);
+  const [clientEmail, setClientEmail] = useState(null);
 
   const handleUpdate = () => {
     setLoadingUpdate(true);
@@ -235,6 +238,21 @@ export default function Jira() {
       setLoadingUpdate(false);
       alert('Erro ao atualizar', error);
     });
+  };
+
+  const handleEditEmail = async () => {
+    setEmailLoading(true);
+    try {
+      await api.put(`/clients/${cliente._id}/email`, {
+        email: clientEmail
+      });
+
+      setEmailModal(false);
+    } catch (e) {
+      alert('Erro ao atualizar email');
+    }
+
+    setEmailLoading(false);
   };
 
   const handleOpen = () => {
@@ -262,7 +280,8 @@ export default function Jira() {
 
   useEffect(_ => {
     setPacoteHoras(cliente?.limits[dataReferencia]?.pack || 0);
-  }, [dataReferencia]);
+    setClientEmail(cliente?.email);
+  }, [dataReferencia, cliente]);
 
   useEffect(_ => {
     const mes = Object.keys(cliente?.limits || {})[0];
@@ -340,6 +359,39 @@ export default function Jira() {
                           /><br /><br />
                           <Button variant="contained" onClick={handleUpdatePacoteHoras}>
                             Salvar
+                        </Button>
+                        </div>
+                      </Fade>
+                    </Modal>
+                    <hr />
+                    {clientEmail ? (<><b>Email: </b> <span>{clientEmail}</span></>) : <b>O client ainda não possui um email cadastrado</b>}<br /><br />
+                    <Button variant="contained" onClick={() => setEmailModal(true)}>
+                      Editar Email
+                    </Button>
+                    <Modal
+                      className={classes.modal}
+                      open={emailModal}
+                      onClose={() => setEmailModal(false)}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={emailModal}>
+                        <div className={classes.paper}>
+                          <TextField
+                            id="outlined-number"
+                            label="E-mail"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            variant="outlined"
+                            value={clientEmail}
+                            onChange={e => setClientEmail(e.target.value)}
+                          /><br /><br />
+                          <Button variant="contained" onClick={handleEditEmail} disabled={emailLoading}>
+                            {emailLoading ? (<CircularProgress size={25} />) : 'Salvar'}
                         </Button>
                         </div>
                       </Fade>
