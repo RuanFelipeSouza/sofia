@@ -19,7 +19,7 @@ const groupBy = (list, keyGetter) => {
 
 export default function Chart({ atendimentos }) {
   atendimentos && atendimentos.forEach(function (element) {
-    element.createdAt = moment(element.createdAt).format('DD/MM/YYYY');
+    element.createdAt = moment(element.createdAt, ['YYYY-MM-DD', 'DD/MM/YYYY']).format('DD/MM/YYYY');
   });
   atendimentos = groupBy(atendimentos, e => e.createdAt);
 
