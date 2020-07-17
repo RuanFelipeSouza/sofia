@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        height: '100%'
+        height: '500px'
     },
     wordCloud: {
         height: '100%'
@@ -49,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Table(props) {
     const columns = [
-        { title: 'Nome', field: 'from' },
         { title: 'Sugestão', field: 'text' },
     ]
   
@@ -103,7 +102,7 @@ export default function Sugestoes({ atendimentos }) {
     useEffect(() => {
         let wordMap = [];
         filteredMessages.forEach(message => {
-            return message.text.replace(/[,.?!]/g, '').split(' ').forEach(word => {
+            return message.replace(/[,.?!]/g, '').split(' ').forEach(word => {
                 if(word.length <= 2) return;
                 let element = wordMap.find(e => e.text === word);
                 if(element) {
@@ -120,7 +119,7 @@ export default function Sugestoes({ atendimentos }) {
     }, [filteredMessages]);
 
     useEffect(() => {
-        const messages = filteredMessages.filter(message => message.text.includes(selectedWord));
+        const messages = filteredMessages.filter(message => message.includes(selectedWord)).map(e => ({text: e}));
         setMessagesMathSelectedWord(messages);
     }, [selectedWord, filteredMessages]);
 

@@ -128,7 +128,7 @@ export default function NPS({ atendimentos }) {
   const [notaNPS, setNotaNPS] = useState(0);
   const [zonaNPS, setZonaNPS] = useState('');
   const [pesquisasPorDia, setPesquisasPorDia] = useState([]);
-console.log(atendimentos)
+
   useEffect(() => {
     setNPS([
       {

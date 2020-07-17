@@ -157,9 +157,6 @@ export default function Intellilogs() {
           onChangeIndex={handleChangeIndex}
           style={{width: '100%'}}
         >
-          {/* <NPS surveys={surveys.filter(e => e.nota)}/>
-          <Sugestoes surveys={surveys.filter(e => e.nota)}/>
-          <Desempenho surveys={surveys} connections={connections} users={users} /> */}
           <Desempenho atendimentos={atendimentos} misunderstoodMessages={misunderstoodMessages} />
           <Sugestoes atendimentos={atendimentos} />
           <NPS atendimentos={atendimentos.filter(e => e.rating)} />
