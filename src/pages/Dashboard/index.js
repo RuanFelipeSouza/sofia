@@ -9,6 +9,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { FavoriteBorder, Assignment, BarChart } from '@material-ui/icons';
+import AccountTreeRoundedIcon from '@material-ui/icons/AccountTreeRounded';
 import SwipeableViews from 'react-swipeable-views';
 import localStorageStateHook from './../../utils/useLocalStorageState';
 import api from './../../services/api';
@@ -20,6 +21,7 @@ import Select from './../../components/Select';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
+import Nodes from './nodes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,6 +86,7 @@ export default function Intellilogs() {
   const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
   const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
+  const [nodeCount, setNodeCount] = useState({});
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -94,6 +97,7 @@ export default function Intellilogs() {
   };
 
   useEffect(_ => {
+
     api.get('/atendimentos', {
       params: {
         dataInicio,
@@ -113,6 +117,12 @@ export default function Intellilogs() {
     })
   }, [dataInicio, dataFim, project]);
 
+  useEffect(() => {
+    api.get('/nodes').then(response => {
+      setNodeCount(response.data);
+    });
+  }, []);
+
   return (
     <div className={classes.root}>
       <Sidebar />
@@ -127,9 +137,10 @@ export default function Intellilogs() {
             variant="fullWidth"
             // aria-label="full width tabs example"
           >
-            <Tab label="Central de desempenho" icon={<BarChart />} {...a11yProps(2)} />
-            <Tab label="Central de sugestões" icon={<Assignment />} {...a11yProps(1)} />
-            <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(0)} />
+            <Tab label="Central de desempenho" icon={<BarChart />} {...a11yProps(3)} />
+            <Tab label="Central de sugestões" icon={<Assignment />} {...a11yProps(2)} />
+            <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(1)} />
+            <Tab label="Nós Watson" icon={<AccountTreeRoundedIcon />} {...a11yProps(0)} />
           </Tabs>
         </AppBar>
         <Container maxWidth='lg' className={classes.container}>
@@ -160,6 +171,7 @@ export default function Intellilogs() {
           <Desempenho atendimentos={atendimentos} misunderstoodMessages={misunderstoodMessages} />
           <Sugestoes atendimentos={atendimentos} />
           <NPS atendimentos={atendimentos.filter(e => e.rating)} />
+          <Nodes nodeCount={nodeCount} />
         </SwipeableViews>
       </main>
     </div>
