@@ -75,7 +75,6 @@ export default function FullWidthTabs() {
           perguntas: e.inputText
         }
       }))
-      console.log(data)
       setCuradorias(data);
       setLoading(false);
     });

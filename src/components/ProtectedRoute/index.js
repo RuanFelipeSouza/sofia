@@ -4,8 +4,6 @@ import { verify } from 'jsonwebtoken';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   // here you should write the logic to enter the protected route
-  console.log(rest);
-  // console.log(localStorage)
   let logged = false;
   try {
     const jwt = localStorage.getItem('Authorization').split(' ')[1];

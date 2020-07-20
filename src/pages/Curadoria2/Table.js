@@ -197,7 +197,6 @@ export default function Curadoria(props) {
                     }
                 ]}
                 onRowClick={(event, rowData, togglePanel) => {
-                    console.log(rowData._id);
                     setItemSelecionado(rowData._id);
                     setEditModalOpen(true);
                 }}
