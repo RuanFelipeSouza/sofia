@@ -7,6 +7,7 @@ import IntelliChat from './pages/IntelliChat'
 import Curadoria from './pages/Curadoria'
 import Responsible from './pages/Curadoria/Responsible'
 import Dashboard from './pages/Dashboard'
+import Curadoria2 from './pages/Curadoria2'
 import Login from './pages/Login';
 
 export default function Routes() {
@@ -20,6 +21,7 @@ export default function Routes() {
                 <ProtectedRoute path="/curadoria/planilhas" component={Curadoria} />
                 <ProtectedRoute path="/curadoria/responsaveis" component={Responsible} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/curadoria2" component={Curadoria2} />
                 <ProtectedRoute path="*" component={() => "404 NOT FOUND"} />
             </Switch>
         </BrowserRouter>
