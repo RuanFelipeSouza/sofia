@@ -7,9 +7,11 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   let logged = false;
   try {
     const jwt = localStorage.getItem('Authorization').split(' ')[1];
-    verify(jwt, 'intelli');
+    const { email } = verify(jwt, 'intelli');
+    localStorage.setItem('email', email);
+    if (rest.path.includes('curadoria2') && email !== 'intelli') throw new Error('Este Usuário não possui acesso a essa área')
     logged = true;
-  }catch(e) {
+  } catch (e) {
     logged = false;
   }
 

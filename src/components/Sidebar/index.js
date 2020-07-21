@@ -58,34 +58,42 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const _menuOptions = [
-  {
-    label: "IntelliLogs",
-    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/intellilogs'
-  },
-  {
-    label: "Curadoria",
-    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-    children: [
-      {
-        label: "Planilhas",
-        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-        path: '/curadoria/planilhas'
-      },
-      {
-        label: "Responsáveis",
-        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-        path: '/curadoria/responsaveis'
-      },
-    ]
-  },
-  {
-    label: "Dashboard",
+const generateMenuOption = () => {
+  const _menuOptions = [
+    {
+      label: "IntelliLogs",
+      icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+      path: '/intellilogs'
+    },
+    {
+      label: "Curadoria",
+      icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+      children: [
+        {
+          label: "Planilhas",
+          icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+          path: '/curadoria/planilhas'
+        },
+        {
+          label: "Responsáveis",
+          icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+          path: '/curadoria/responsaveis'
+        },
+      ]
+    },
+    {
+      label: "Dashboard",
+      icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+      path: '/dashboard'
+    }
+  ]
+  if (localStorage.getItem('email') === 'intelli') _menuOptions.push({
+    label: "Curadoria Novo",
     icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/dashboard'
-  }
-];
+    path: '/curadoria2'
+  });
+  return _menuOptions;
+}
 
 export default function Sidebar() {
   const history = useHistory();
@@ -112,6 +120,7 @@ export default function Sidebar() {
     }
   };
   
+
   return (
     <Drawer
       className={isOpen ? classes.drawer : classes.closedDrawer}
@@ -126,7 +135,7 @@ export default function Sidebar() {
       <Divider />
       <List>
         {
-          _menuOptions.map(({ label, icon, path, children }) => (
+          generateMenuOption().map(({ label, icon, path, children }) => (
             <div key={label}>
               <ListItem button onClick={() => children ? handleClick(label) : _redirect(path)} className={!isOpen ? classes.closedItem : {}} >
                 <ListItemIcon>
