@@ -2,12 +2,17 @@ import React from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
+import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded';
+import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded';
 
 export default function Table(props) {
+  const _renderUnderstood = props => props.understood ? <ThumbUpRoundedIcon style={{ color: '#4caf50' }} /> : <ThumbDownRoundedIcon style={{ color: '#f44336' }}  />;
+
   const columns = [
     { title: 'Aluno', field: 'studentName' },
     { title: 'Professor', field: 'teacherName' },
     { title: 'Status', field: 'class.status' },
+    { title: 'Entendimento', field: 'understood', render: _renderUnderstood },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
