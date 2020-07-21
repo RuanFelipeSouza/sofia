@@ -129,6 +129,7 @@ export default function Conversation(props) {
                       <p><b>Aluno:</b> {conversa?.studentName}</p>
                       <p><b>Professor:</b> {conversa?.teacherName}</p>
                       <p><b>Status:</b> {conversa['class']?.status}</p>
+                      <p><b>Board:</b> {conversa['class']?.boardId}</p>
                       <p><b>Data marcada:</b> {conversa['class']?.date && moment(conversa['class']?.date).format("DD/MM/YYYY HH:mm")}</p>
                     </div>
                     <div>

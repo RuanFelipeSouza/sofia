@@ -13,6 +13,7 @@ export default function Table(props) {
     { title: 'Professor', field: 'teacherName' },
     { title: 'Status', field: 'class.status' },
     { title: 'Entendimento', field: 'understood', render: _renderUnderstood },
+    { title: 'Board', field: 'class.boardId' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
     { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
