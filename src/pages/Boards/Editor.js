@@ -38,14 +38,9 @@ const useStyles = makeStyles((theme) => ({
         overflowY: 'scroll',
     },
     form: {
-        display: 'flex',
-        // justifyContent: 'space-between'
+        display: 'flex'
     },
-    phases: {
-        maxWidth: '35%',
-        margin: '0 5%'
-    },
-    fields: {
+    formFields: {
         maxWidth: '35%',
         margin: '0 5%'
     },
@@ -58,9 +53,6 @@ const useStyles = makeStyles((theme) => ({
     editorHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-    },
-    name: {
-        marginLeft: '5%'
     }
 }));
 
@@ -79,8 +71,8 @@ export default function Editor(props) {
         });
     };
 
-    const handleSubmit = async e => {
-        e.preventDefault();
+    const handleSubmit = async event => {
+        event.preventDefault();
 
         if(props.novo) {
             await api.post('/board', { data: editorState });
@@ -115,6 +107,7 @@ export default function Editor(props) {
         props.setOpen(false);
         props.setNovo(false);
         setOpenDeleteDialog(false);
+        props.setEditorState({});
     }
         
     return (
@@ -163,34 +156,37 @@ export default function Editor(props) {
                                 </Dialog>
                             </Grid>
                             <Grid item xs={12} >
-                                <TextField disabled={!props.novo} id="id" label="Identificador do board" variant="outlined" value={editorState._id} name="_id" onChange={handleChange} required />
-                                <TextField id="name" label="Nome do board" variant="outlined" value={editorState.name} name="name" onChange={handleChange} required className={classes.name} />
                                 <Grid container spacing={3}>
+                                    <Grid item xs={12} className={classes.form} >
+                                        <TextField disabled={!props.novo} id="id" label="Identificador do board" variant="outlined" value={editorState._id} name="_id" onChange={handleChange} required className={classes.formFields} />
+                                        <TextField id="name" label="Nome do board" variant="outlined" value={editorState.name} name="name" onChange={handleChange} required className={classes.formFields} />
+                                        <TextField id="assistantName" label="Nome do assistente" variant="outlined" value={editorState.assistantName} name="assistantName" onChange={handleChange} required className={classes.formFields} />
+                                    </Grid>
                                     <br /><br /> Fases
                                     <Grid item xs={12} className={classes.form} >
-                                        <TextField id="readyToContactPhaseId" label="Pronto para entrar em contato" variant="outlined" value={editorState.readyToContactPhaseId} className={classes.phases} name="readyToContactPhaseId" onChange={handleChange} required />
-                                        <TextField id="inProgressPhaseId" label="Em atendimento" variant="outlined" value={editorState.inProgressPhaseId} className={classes.phases} name="inProgressPhaseId" onChange={handleChange} required />
-                                        <TextField id="scheduleConnectionPhaseId" label="Conexão agendada" variant="outlined" value={editorState.scheduleConnectionPhaseId} className={classes.phases} name="scheduleConnectionPhaseId" onChange={handleChange} required />
+                                        <TextField id="readyToContactPhaseId" label="Pronto para entrar em contato" variant="outlined" value={editorState.readyToContactPhaseId} className={classes.formFields} name="readyToContactPhaseId" onChange={handleChange} required />
+                                        <TextField id="inProgressPhaseId" label="Em atendimento" variant="outlined" value={editorState.inProgressPhaseId} className={classes.formFields} name="inProgressPhaseId" onChange={handleChange} required />
+                                        <TextField id="scheduleConnectionPhaseId" label="Conexão agendada" variant="outlined" value={editorState.scheduleConnectionPhaseId} className={classes.formFields} name="scheduleConnectionPhaseId" onChange={handleChange} required />
                                     </Grid>
                                     <Grid item xs={12} className={classes.form} >
-                                        <TextField id="completedConnectionPhaseId" label="Conexão realizada" variant="outlined" value={editorState.completedConnectionPhaseId} className={classes.phases} name="completedConnectionPhaseId" onChange={handleChange} required />
-                                        <TextField id="satisfactionSurveyAnsweredPhaseId" label="Pesquisa de satisfação respondida" variant="outlined" value={editorState.satisfactionSurveyAnsweredPhaseId} className={classes.phases} name="satisfactionSurveyAnsweredPhaseId" onChange={handleChange} required />
-                                        <TextField id="notConnectedPhaseId" label="Não conectado/cancelado" variant="outlined" value={editorState.notConnectedPhaseId} className={classes.phases} name="notConnectedPhaseId" onChange={handleChange} required />
+                                        <TextField id="completedConnectionPhaseId" label="Conexão realizada" variant="outlined" value={editorState.completedConnectionPhaseId} className={classes.formFields} name="completedConnectionPhaseId" onChange={handleChange} required />
+                                        <TextField id="satisfactionSurveyAnsweredPhaseId" label="Pesquisa de satisfação respondida" variant="outlined" value={editorState.satisfactionSurveyAnsweredPhaseId} className={classes.formFields} name="satisfactionSurveyAnsweredPhaseId" onChange={handleChange} required />
+                                        <TextField id="notConnectedPhaseId" label="Não conectado/cancelado" variant="outlined" value={editorState.notConnectedPhaseId} className={classes.formFields} name="notConnectedPhaseId" onChange={handleChange} required />
                                     </Grid>
                                     <br /><br /> Campos
                                     <Grid item xs={12} className={classes.form} >
-                                        <TextField id="nameFieldId" label="Nome" variant="outlined" value={editorState.nameFieldId} className={classes.fields} name="nameFieldId" onChange={handleChange} required />
-                                        <TextField id="phoneFieldId" label="Telefone" variant="outlined" value={editorState.phoneFieldId} className={classes.fields} name="phoneFieldId" onChange={handleChange} required />
-                                        <TextField id="emailFieldId" label="Email" variant="outlined" value={editorState.emailFieldId} className={classes.fields} name="emailFieldId" onChange={handleChange} required />
+                                        <TextField id="nameFieldId" label="Nome" variant="outlined" value={editorState.nameFieldId} className={classes.formFields} name="nameFieldId" onChange={handleChange} required />
+                                        <TextField id="phoneFieldId" label="Telefone" variant="outlined" value={editorState.phoneFieldId} className={classes.formFields} name="phoneFieldId" onChange={handleChange} required />
+                                        <TextField id="emailFieldId" label="Email" variant="outlined" value={editorState.emailFieldId} className={classes.formFields} name="emailFieldId" onChange={handleChange} required />
                                     </Grid>
                                     <Grid item xs={12} className={classes.form} >
-                                        <TextField id="linkedinFieldId" label="LinkedIn" variant="outlined" value={editorState.linkedinFieldId} className={classes.fields} name="linkedinFieldId" onChange={handleChange} required />
-                                        <TextField id="bioFieldId" label="Minibio" variant="outlined" value={editorState.bioFieldId} className={classes.fields} name="bioFieldId" onChange={handleChange} required />
-                                        <TextField id="desafiosFieldId" label="Desafios" variant="outlined" value={editorState.desafiosFieldId} className={classes.fields} name="desafiosFieldId" onChange={handleChange} required />
+                                        <TextField id="linkedinFieldId" label="LinkedIn" variant="outlined" value={editorState.linkedinFieldId} className={classes.formFields} name="linkedinFieldId" onChange={handleChange} required />
+                                        <TextField id="bioFieldId" label="Minibio" variant="outlined" value={editorState.bioFieldId} className={classes.formFields} name="bioFieldId" onChange={handleChange} required />
+                                        <TextField id="desafiosFieldId" label="Desafios" variant="outlined" value={editorState.desafiosFieldId} className={classes.formFields} name="desafiosFieldId" onChange={handleChange} required />
                                     </Grid>
                                     <Grid item xs={12} className={classes.form} >
-                                        <TextField id="cidadeFieldId" label="Cidade" variant="outlined" value={editorState.cidadeFieldId} className={classes.fields} name="cidadeFieldId" onChange={handleChange} required />
-                                        <TextField id="descricaoFieldId" label="Descrição do desafio" variant="outlined" value={editorState.descricaoFieldId} className={classes.fields} name="descricaoFieldId" onChange={handleChange} required />
+                                        <TextField id="cidadeFieldId" label="Cidade" variant="outlined" value={editorState.cidadeFieldId} className={classes.formFields} name="cidadeFieldId" onChange={handleChange} required />
+                                        <TextField id="descricaoFieldId" label="Descrição do desafio" variant="outlined" value={editorState.descricaoFieldId} className={classes.formFields} name="descricaoFieldId" onChange={handleChange} required />
                                     </Grid>
                                 </Grid>
                             </Grid>

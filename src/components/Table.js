@@ -6,7 +6,8 @@ import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded';
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded';
 
 export default function Table(props) {
-  const _renderUnderstood = props => props.understood ? <ThumbUpRoundedIcon style={{ color: '#4caf50' }} /> : <ThumbDownRoundedIcon style={{ color: '#f44336' }}  />;
+  const _renderUnderstood = ({ understood }) => understood ? <ThumbUpRoundedIcon style={{ color: '#4caf50' }} /> : <ThumbDownRoundedIcon style={{ color: '#f44336' }}  />;
+  const _renderLink = ({ _id }) => <Link to={`/conversation/${_id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>
 
   const columns = [
     { title: 'Aluno', field: 'studentName' },
@@ -16,7 +17,7 @@ export default function Table(props) {
     { title: 'Board', field: 'class.boardId' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
-    { title: 'Detalhes', field: '_id', render: props => <Link to={`/conversation/${props._id}`}> Visualizar conversa <ArrowForwardOutlined size={16} /></Link>, export: false }
+    { title: 'Detalhes', field: '_id', render: _renderLink, export: false }
   ]
 
   return (
