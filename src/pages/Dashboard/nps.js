@@ -125,52 +125,42 @@ const COLORS = [corPromotor, corNeutro, corDetrator];
 export default function NPS({ atendimentos }) {
   const classes = useStyles();
   const [NPS, setNPS] = useState([]);
-  const [notaNPS, setNotaNPS] = useState(0);
-  const [zonaNPS, setZonaNPS] = useState('');
   const [pesquisasPorDia, setPesquisasPorDia] = useState([]);
 
+  const nonRatedPercentage = React.useMemo(() => {
+    const nonRatedAmount = atendimentos?.filter(e => e.rating === undefined)?.length;
+    return (nonRatedAmount / atendimentos.length * 100).toFixed(2);
+  }, [atendimentos]);
+
   useEffect(() => {
+    const ratedAtendimentos = atendimentos.filter(e => e.rating);
     setNPS([
       {
         name: 'Promotor',
-        value: atendimentos.filter((e) => e.rating >= 9).length,
-        percent: atendimentos.filter((e) => e.rating >= 9).length / atendimentos.length,
+        value: ratedAtendimentos.filter((e) => e.rating >= 9).length,
+        percent: ratedAtendimentos.filter((e) => e.rating >= 9).length / ratedAtendimentos.length,
       },
       {
         name: 'Neutro',
-        value: atendimentos.filter((e) => e.rating < 9 && e.rating >= 7).length,
+        value: ratedAtendimentos.filter((e) => e.rating < 9 && e.rating >= 7).length,
         percent:
-          atendimentos.filter((e) => e.rating < 9 && e.rating >= 7).length /
-          atendimentos.length,
+          ratedAtendimentos.filter((e) => e.rating < 9 && e.rating >= 7).length /
+          ratedAtendimentos.length,
       },
       {
         name: 'Detrator',
-        value: atendimentos.filter((e) => e.rating < 7).length,
-        percent: atendimentos.filter((e) => e.rating < 7).length / atendimentos.length,
+        value: ratedAtendimentos.filter((e) => e.rating < 7).length,
+        percent: ratedAtendimentos.filter((e) => e.rating < 7).length / ratedAtendimentos.length,
       },
     ]);
     let grouped = [];
-    groupBy(atendimentos, (e) => moment(e.createdAt, 'DD/MM/YYYY').format('DD/MM/YYYY')).forEach(
+    groupBy(ratedAtendimentos, (e) => moment(e.createdAt, 'DD/MM/YYYY').format('DD/MM/YYYY')).forEach(
       (value, key) => {
         grouped.push({ date: key, quantidade: value.length });
       }
     );
     setPesquisasPorDia(grouped);
   }, [atendimentos]);
-
-  useEffect(() => {
-    setNotaNPS(
-      NPS.find((e) => e.name === 'Promotor')?.percent * 100 -
-        NPS.find((e) => e.name === 'Detrator')?.percent * 100
-    );
-  }, [NPS]);
-
-  useEffect(() => {
-    if (notaNPS >= 75) setZonaNPS('Zona de Excelência');
-    else if (notaNPS >= 50) setZonaNPS('Zona de Qualidade');
-    else if (notaNPS >= 0) setZonaNPS('Zona de Aperfeiçoamento');
-    else setZonaNPS('Zona Crítica');
-  }, [notaNPS]);
 
   const renderPieLabel = (entry) => {
     return (
@@ -320,18 +310,18 @@ export default function NPS({ atendimentos }) {
                     <Grid container spacing={2}>
                       <Grid item style={{ height: '40%' }} xs={12}>
                         <Paper className={classes.title}>
-                          <text>Nota de NPS</text>
+                          <text>Pesquisas Não Respondidas</text>
                         </Paper>
                         <Paper className={classes.notaNPSValue}>
-                          <text>{notaNPS.toFixed(2)}</text>
+                          <text>{nonRatedPercentage}%</text>
                         </Paper>
                       </Grid>
-                      <Grid item style={{ height: '60%' }} xs={12}>
+                      <Grid item style={{ height: '40%' }} xs={12}>
                         <Paper className={classes.title}>
-                          <text>Classificação</text>
+                          <text>Total de pesquisas respondidas</text>
                         </Paper>
-                        <Paper className={classes.classificationValue}>
-                          <text style={{ margin: 'auto 0' }}>{zonaNPS}</text>
+                        <Paper className={classes.notaNPSValue}>
+                          <text>{pesquisasPorDia.reduce((t, n) => t + n.quantidade, 0)}</text>
                         </Paper>
                       </Grid>
                     </Grid>

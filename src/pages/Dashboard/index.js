@@ -170,7 +170,7 @@ export default function Intellilogs() {
         >
           <Desempenho atendimentos={atendimentos} misunderstoodMessages={misunderstoodMessages} />
           <Sugestoes atendimentos={atendimentos} />
-          <NPS atendimentos={atendimentos.filter(e => e.rating)} />
+          <NPS atendimentos={atendimentos} />
           <Nodes nodeCount={nodeCount} />
         </SwipeableViews>
       </main>
