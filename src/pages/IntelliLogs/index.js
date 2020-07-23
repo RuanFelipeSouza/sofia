@@ -117,7 +117,7 @@ export default function Intellilogs() {
                 <Chart atendimentos={atendimentos} />
                 <Paper className={classes.details} >
                   <b>Total de atendimentos no período: </b>{atendimentos?.length || 0} <br /><br />
-                  <b>Conexões agendadas com sucesso: </b>{atendimentos.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length || 0} ({atendimentos?.length && (atendimentos?.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length/atendimentos.length*100).toFixed(2)}%) <br /><br />
+                  <b>Conexões agendadas com sucesso: </b>{atendimentos?.length && (atendimentos.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length || 0)} ({atendimentos?.length && (atendimentos?.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length/atendimentos.length*100).toFixed(2)}%) <br /><br />
                   <b>Exceções ao fluxo: </b>{atendimentos?.length && atendimentos.filter(a => !a.understood).length} ({atendimentos.length && (atendimentos.filter(a => !a.understood).length/atendimentos.length*100).toFixed(2)}%) <br /><br />
                 </Paper>
               </Paper>
