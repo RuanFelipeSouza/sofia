@@ -66,7 +66,7 @@ export default function FullWidthTabs() {
   const [filterBot3, setFilterBot3] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_3, {}, useState);
 
   useEffect(() => {
-    api.get('/tested-messages?project=cliente').then(result => {
+    api.get('/curadoria2/tested-messages').then(result => {
       result.data = convertProjectToBotNumber(result.data);
       const data = result.data.map((e => {
         return {

@@ -20,7 +20,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import api from '../../services/api';
-
+import { mapBotToProject } from '../../utils/convertProjectToBot';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -109,6 +109,7 @@ export default function Editor2(props) {
             }
         }
         editorState.bot = props.bot;
+        if (props.id === '') editorState.project = mapBotToProject[editorState.bot]
         const { data: { _id } } = props.id === '' ? await api.post('/curadoria2', editorState) : await api.put('/curadoria2', { newData: editorState, alteredFields: [...alteredFields] });
         data.updatedAt = new Date();
         data._id = _id ? _id : props.id;
@@ -221,7 +222,7 @@ export default function Editor2(props) {
                                             />
                                         }
                                         label="Validação do Conteúdo"
-                                    /> <b style={{color: 'red'}}>CARO COLABORADOR, LEMBRE-SE DE DEIXAR ESTE CAMPO MARCADO.</b> <br />
+                                    /> <b style={{ color: 'red' }}>CARO COLABORADOR, LEMBRE-SE DE DEIXAR ESTE CAMPO MARCADO.</b> <br />
                                     <FormControlLabel
                                         control={
                                             <Checkbox
