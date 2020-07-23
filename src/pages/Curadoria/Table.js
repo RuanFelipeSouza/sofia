@@ -37,7 +37,6 @@ export default function Curadoria(props) {
                     {fields?.hasVideo && <VideoIcon />}
                 </React.Fragment>
         },
-        { title: 'Arquivo', field: 'arquivo', width: 100, defaultFilter: props.filter.arquivo },
         { title: 'Tema', field: 'tema', width: 100, initialEditValue: '', defaultFilter: props.filter.tema },
         {
             title: 'Possíveis perguntas',
@@ -60,7 +59,6 @@ export default function Curadoria(props) {
             },
         },
         { title: 'Validação do conteúdo', field: 'validacaoConteudo', width: 50, type: 'boolean', defaultFilter: props.filter.validacaoConteudo },
-        { title: 'Possível validar no BOT', field: 'possivelValidarBOT', width: 50, type: 'boolean', defaultFilter: props.filter.possivelValidarBOT },
         { title: 'Validação BOT', field: 'validacaoBOT', width: 50, type: 'boolean', defaultFilter: props.filter.validacaoBOT },
         { title: 'Responsável', field: 'responsavel', defaultFilter: props.filter.responsavel, customFilterAndSearch: (term, { responsavel }) => term === '!' ? !responsavel : responsavel && responsavel.toLowerCase().includes(term.toLowerCase()) },
         {

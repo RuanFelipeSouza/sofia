@@ -4,11 +4,16 @@ import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import api from './../services/api'
 import TableIndicador from './TableIndicador';
+import moment from 'moment';
 
 export default function Table(props) {
+  const _sortCreatedAt = (a, b) => {
+    return moment(a.createdAt, 'DD/MM/YYYY').isAfter(moment(b.createdAt, 'DD/MM/YYYY')) ? 1 : -1;
+  };
+
   const columns = [
     { title: 'ID', field: '_id', editable: 'never' },
-    { title: 'Data', field: 'createdAt', editable: 'never' },
+    { title: 'Data', field: 'createdAt', editable: 'never', customSort: _sortCreatedAt },
     {
       title: 'Indicador',
       field: 'misunderstoodMessages.length',
