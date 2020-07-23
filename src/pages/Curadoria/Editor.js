@@ -110,7 +110,6 @@ export default function Editor(props) {
         }
         editorState.bot = props.bot;
         const { data: { _id } } = props.id === '' ? await api.post('/curadoria', editorState) : await api.put('/curadoria', { newData: editorState, alteredFields: [...alteredFields] });
-        console.log('_id', _id)
         data.updatedAt = new Date();
         data._id = _id ? _id : props.id;
         data.bot = props.bot;
