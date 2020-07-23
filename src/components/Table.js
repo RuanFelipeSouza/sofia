@@ -13,7 +13,7 @@ export default function Table(props) {
     { title: 'Aluno', field: 'studentName' },
     { title: 'Professor', field: 'teacherName' },
     { title: 'Status', field: 'class.status' },
-    { title: 'Entendimento', field: 'understood', render: _renderUnderstood },
+    { title: 'Fluxo correto', field: 'understood', render: _renderUnderstood },
     { title: 'Board', field: 'class.boardId' },
     { title: 'ID', field: '_id' },
     { title: 'Data', field: 'createdAt' },
