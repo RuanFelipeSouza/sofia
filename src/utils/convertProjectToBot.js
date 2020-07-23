@@ -12,6 +12,4 @@ const convertProjectToBotNumber = (data) => {
     }))
 }
 
-module.exports = Object.freeze({
-    convertProjectToBotNumber,
-})
+export default convertProjectToBotNumber;

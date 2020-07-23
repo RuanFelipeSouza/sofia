@@ -13,7 +13,7 @@ import Table from './Table';
 
 import api from '../../services/api'
 import localStorageStateHook from '../../utils/useLocalStorageState';
-import { convertProjectToBotNumber } from '../../utils/convertProjectToBot';
+import convertProjectToBotNumber from '../../utils/convertProjectToBot';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
