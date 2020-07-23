@@ -64,6 +64,10 @@ const columns = [
   { title: 'Intenção', field: 'intent' },
   { title: 'Descrição', field: 'description' }
 ];
+const entityColumns = [
+  { title: 'Intenção', field: 'data' },
+  { title: 'Quantidade', field: 'Utilizações' }
+];
 
 const Desempenho = (props) => {
   const { misunderstoodMessages, atendimentos } = props;
@@ -113,7 +117,7 @@ const Desempenho = (props) => {
         projeto: project
       }
     }).then(response => {
-      setIntents(response.data);
+      setIntents(response.data.sort((a,b) => b.Utilizações - a.Utilizações));
     })
   }, [dataInicio, dataFim, project]);
 
@@ -188,13 +192,7 @@ const Desempenho = (props) => {
           <b>Intenções Utilizadas</b>
         </Grid>
         <Grid item xs={12}>
-          <Paper className={classes.chart}>
-            <GenericBarChart
-              data={intents}
-              width={1000}
-              colors={rightWrongColors}
-            />
-          </Paper>
+          <Table title='Intenções' columns={entityColumns} data={intents} />
         </Grid>
         {unusedIntents.length && (
           <Fragment>
