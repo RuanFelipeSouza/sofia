@@ -3,10 +3,13 @@ const _mapProjectToBot = {
     'FORNECEDOR': 'BOT 2',
     'CLIENTE': 'BOT 3',
 }
-const mapBotToProject = {
-    'BOT 1': 'LOGIN',
-    'BOT 2': 'FORNECEDOR',
-    'BOT 3': 'CLIENTE',
+const mapBotToProject = (bot) => {
+    const botMap = {
+        'BOT 1': 'LOGIN',
+        'BOT 2': 'FORNECEDOR',
+        'BOT 3': 'CLIENTE',
+    }
+    return botMap(bot)
 }
 const convertProjectToBotNumber = (data) => {
     return data.map((e => {
