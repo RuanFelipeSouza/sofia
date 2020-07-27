@@ -9,7 +9,7 @@ const mapBotToProject = (bot) => {
         'BOT 2': 'FORNECEDOR',
         'BOT 3': 'CLIENTE',
     }
-    return botMap(bot)
+    return botMap[bot]
 }
 const convertProjectToBotNumber = (data) => {
     return data.map((e => {
