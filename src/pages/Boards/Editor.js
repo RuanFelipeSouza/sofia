@@ -14,6 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import Switch from '@material-ui/core/Switch';
 
 import api from '../../services/api';
 
@@ -53,6 +54,10 @@ const useStyles = makeStyles((theme) => ({
     editorHeader: {
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    formControl: {
+        width: '80%',
+        margin: '0 auto'
     }
 }));
 
@@ -62,11 +67,11 @@ export default function Editor(props) {
     const { editorState } = props;
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value, checked } = event.target;
         props.setEditorState(oldState => {
             return {
                 ...oldState,
-                [name]: value
+                [name]: value || checked
             }
         });
     };
@@ -156,13 +161,21 @@ export default function Editor(props) {
                                 </Dialog>
                             </Grid>
                             <Grid item xs={12} >
+                                <Switch
+                                    checked={!!editorState?.active}
+                                    onChange={handleChange}
+                                    name="active"
+                                    color="primary"
+                                /> Ativo
+                            </Grid>
+                            <Grid item xs={12} >
                                 <Grid container spacing={3}>
                                     <Grid item xs={12} className={classes.form} >
                                         <TextField disabled={!props.novo} id="id" label="Identificador do board" variant="outlined" value={editorState._id} name="_id" onChange={handleChange} required className={classes.formFields} />
                                         <TextField id="name" label="Nome do board" variant="outlined" value={editorState.name} name="name" onChange={handleChange} required className={classes.formFields} />
                                         <TextField id="assistantName" label="Nome do assistente" variant="outlined" value={editorState.assistantName} name="assistantName" onChange={handleChange} required className={classes.formFields} />
                                     </Grid>
-                                    <br /><br /> Fases
+                                    <Grid item>Fases</Grid>
                                     <Grid item xs={12} className={classes.form} >
                                         <TextField id="readyToContactPhaseId" label="Pronto para entrar em contato" variant="outlined" value={editorState.readyToContactPhaseId} className={classes.formFields} name="readyToContactPhaseId" onChange={handleChange} required />
                                         <TextField id="inProgressPhaseId" label="Em atendimento" variant="outlined" value={editorState.inProgressPhaseId} className={classes.formFields} name="inProgressPhaseId" onChange={handleChange} required />
@@ -173,7 +186,7 @@ export default function Editor(props) {
                                         <TextField id="satisfactionSurveyAnsweredPhaseId" label="Pesquisa de satisfação respondida" variant="outlined" value={editorState.satisfactionSurveyAnsweredPhaseId} className={classes.formFields} name="satisfactionSurveyAnsweredPhaseId" onChange={handleChange} required />
                                         <TextField id="notConnectedPhaseId" label="Não conectado/cancelado" variant="outlined" value={editorState.notConnectedPhaseId} className={classes.formFields} name="notConnectedPhaseId" onChange={handleChange} required />
                                     </Grid>
-                                    <br /><br /> Campos
+                                    <Grid item>Campos</Grid>
                                     <Grid item xs={12} className={classes.form} >
                                         <TextField id="nameFieldId" label="Nome" variant="outlined" value={editorState.nameFieldId} className={classes.formFields} name="nameFieldId" onChange={handleChange} required />
                                         <TextField id="phoneFieldId" label="Telefone" variant="outlined" value={editorState.phoneFieldId} className={classes.formFields} name="phoneFieldId" onChange={handleChange} required />
