@@ -46,7 +46,6 @@ export default function Boards() {
   const [openEditor, setOpenEditor] = useState(false);
   const [novo, setNovo] = useState(false);
   const [editorState, setEditorState] = useState({});
-
   useEffect(_ => {
     api.get('/board').then(response => {
       setBoards(response.data);
