@@ -83,6 +83,8 @@ export default function Intellilogs() {
   const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
   const [isLoading, setLoading] = useState(false);
 
+console.log(atendimentos);
+
   useEffect(_ => {
     setLoading(true);
     api.get('/atendimentos', {
@@ -107,7 +109,7 @@ export default function Intellilogs() {
           <Grid container spacing={3}>
             <Grid item xs={12} >
               <Paper className={classes.dataPickers}>
-                <Select value={project} handleSelectChange={setProject} />
+                {/* <Select value={project} handleSelectChange={setProject} /> */}
                 <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
                 <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
               </Paper>

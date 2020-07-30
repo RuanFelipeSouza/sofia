@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#F0703F',
+    backgroundColor: '#000',
     color: 'white',
   },
   nested: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
   closedDrawerPaper: {
     width: closedDrawerWidth,
-    backgroundColor: '#F0703F',
+    backgroundColor: '#000',
     color: 'white',
     overflow: 'hidden'
   },
@@ -65,25 +65,25 @@ const _menuOptions = [
     path: '/intellilogs'
   },
   {
-    label: "Curadoria",
-    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-    children: [
-      {
-        label: "Planilhas",
-        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-        path: '/curadoria/planilhas'
-      },
-      {
-        label: "Responsáveis",
-        icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
-        path: '/curadoria/responsaveis'
-      },
-    ]
+    // label: "Curadoria",
+    // icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    // children: [
+    //   {
+    //     label: "Planilhas",
+    //     icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    //     path: '/curadoria/planilhas'
+    //   },
+    //   {
+    //     label: "Responsáveis",
+    //     icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    //     path: '/curadoria/responsaveis'
+    //   },
+    // ]
   },
   {
-    label: "Dashboard",
-    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
-    path: '/dashboard'
+    // label: "Dashboard",
+    // icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+    // path: '/dashboard'
   }
 ];
 

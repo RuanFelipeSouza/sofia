@@ -9,12 +9,12 @@ export default function Table(props) {
   const columns = [
     { title: 'ID', field: '_id', editable: 'never' },
     { title: 'Data', field: 'createdAt', editable: 'never' },
-    {
-      title: 'Indicador',
-      field: 'misunderstoodMessages.length',
-      editable: 'never',
-      render: ({ misunderstoodMessages }) => <TableIndicador messages={misunderstoodMessages} />
-    },
+    // {
+    //   title: 'Indicador',
+    //   field: 'misunderstoodMessages.length',
+    //   editable: 'never',
+    //   // render: ({ misunderstoodMessages }) => <TableIndicador messages={misunderstoodMessages} />
+    // },
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
     { 
       title: 'Detalhes', 
