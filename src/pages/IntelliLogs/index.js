@@ -12,7 +12,7 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 
-import api from './../../services/api';
+import api from './../../services/Intelliboard';
 import localStorageStateHook from './../../utils/useLocalStorageState';
 
 const useStyles = makeStyles((theme) => ({

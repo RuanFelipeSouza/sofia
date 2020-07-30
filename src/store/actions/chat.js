@@ -4,16 +4,16 @@ import uuidv4 from 'uuid/v4';
 
 import * as types from './types';
 import * as Socketio from './../../services/Socketio';
-import * as Api from './../../services/api';
+import * as Api from '../../services/Intelliboard';
 import * as Twillio from './../../services/Twillio';
 // import * as Assistant from './../../services/Assistant';
-import * as Intellilogs from './../../services/Intellilogs';
+import * as Intellilogs from './../../services/Intelliboard';
 // import store from './../';
 import { showSnackbar } from './layout';
-import { ASSISTANT_WHATSAPP, TWILLIO_BASE_URL } from './../../services/constants';
+import { TWILIO_NUMBER, TWILLIO_BASE_URL } from './../../services/constants';
 
 export const sendMessage = (messageText, room) => {
-  const message = buildMessage(ASSISTANT_WHATSAPP, messageText, room);
+  const message = buildMessage(TWILIO_NUMBER, messageText, room);
   Socketio.emitMessage(messageText, room);
   return types.action(types.SEND_MESSAGE, message);
 };
@@ -24,7 +24,7 @@ export const sendWhatsappMessage = (number, messageText, room) => {
   return async (dispatch) => {
     try {
       const tempId = uuidv4();
-      const message = buildMessage(ASSISTANT_WHATSAPP, messageText, room, null, tempId);
+      const message = buildMessage(TWILIO_NUMBER, messageText, room, null, tempId);
       dispatch(action(SEND_WHATSAPP_MESSAGE_REQUEST, message));
       const messageId = await Twillio.sendMessage(number, messageText);
       Intellilogs.saveMessage(room, messageText, 'Assistente');
@@ -186,7 +186,7 @@ export const fetchOngoingConversations = () => {
 
 const buildMessage = (origin, text, room, messageId = null, tempId = null) => {
   return {
-    origin: (origin === ASSISTANT_WHATSAPP || origin === 'Assistente') ? 'agent' : 'user',
+    origin: (origin === TWILIO_NUMBER || origin === 'Assistente') ? 'agent' : 'user',
     text,
     date: moment().format('HH:mm'),
     room,

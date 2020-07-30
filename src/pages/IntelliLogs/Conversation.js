@@ -13,7 +13,7 @@ import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import * as moment from 'moment';
 
-import api from './../../services/api';
+import api from './../../services/Intelliboard';
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
