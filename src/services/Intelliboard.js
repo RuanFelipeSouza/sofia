@@ -1,10 +1,11 @@
 import axios from 'axios';
-import * as constants from './constants';
+import * as constants from '../env';
 
 const endpoints = {
   INTELLILOGS_GET_ONGOING_CONVERSATIONS: 'conversation/fetchOngoingConversations',
   INTELLILOGS_END_SERVICE: 'alterStatusTicket',
-  INTELLILOGS_SAVE_MESSAGE: 'conversation/add'
+  INTELLILOGS_SAVE_MESSAGE: 'conversation/add',
+  CLOSE_CHAT_ENDPOINT: '/chat/close'
 };
 
 const api = axios.create({
@@ -25,7 +26,7 @@ export const closeChat = async (room) => {
   };
 
   try {
-    await api.post(constants.CLOSE_CHAT_ENDPOINT, body);
+    await api.post(endpoints.CLOSE_CHAT_ENDPOINT, body);
     return;
   } catch (e) {
     console.log('Erro ao fechar chat', e);

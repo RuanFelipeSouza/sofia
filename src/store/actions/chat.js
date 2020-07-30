@@ -6,11 +6,10 @@ import * as types from './types';
 import * as Socketio from './../../services/Socketio';
 import * as Api from '../../services/Intelliboard';
 import * as Twillio from './../../services/Twillio';
-// import * as Assistant from './../../services/Assistant';
 import * as Intellilogs from './../../services/Intelliboard';
 // import store from './../';
 import { showSnackbar } from './layout';
-import { TWILIO_NUMBER, TWILLIO_BASE_URL } from './../../services/constants';
+import { TWILIO_NUMBER, TWILLIO_BASE_URL } from '../../env';
 
 export const sendMessage = (messageText, room) => {
   const message = buildMessage(TWILIO_NUMBER, messageText, room);
@@ -154,19 +153,6 @@ export const disableBotAndSendMessage = (room, number, message) => {
     }
   };
 };
-
-// export const contactCustomers = () => {
-//   return async (dispatch) => {
-//     try {
-//       await Assistant.contactCustomer();
-//       dispatch(showSnackbar('Mensagens disparadas', 'Dispensar', 'accept'));
-//     } catch (e) {
-//       console.log('Erro ao contactar clientes', e);
-//       const errorMessage = e.response && e.response.data ? e.response.data : 'Erro ao contactar clientes';
-//       dispatch(showSnackbar(errorMessage, 'Dispensar', 'cancel'));
-//     }
-//   };
-// };
 
 export const fetchOngoingConversations = () => {
   const { FETCH_ONGOING_CONVERSATIONS_REQUEST, FETCH_ONGOING_CONVERSATIONS_SUCCESS, FETCH_ONGOING_CONVERSATIONS_FAILURE, action } = types;

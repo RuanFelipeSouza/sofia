@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import ChatRoundedIcon from '@material-ui/icons/ChatRounded';
 import { fetchOngoingConversations } from './../../store/actions/chat';
 import Typography from '@material-ui/core/Typography';
-import { BASE_COLOR } from '../../services/constants';
+import { BASE_COLOR } from '../../constants';
 
 const Wrapper = styled.div`
   display: flex;

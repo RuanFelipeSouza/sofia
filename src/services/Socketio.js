@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { INTELLIBOARD_BACKEND_URL } from './constants';
+import { INTELLIBOARD_BACKEND_URL } from '../env';
 import store from './../store';
 import {
   messageReceived, userJoined, userDisconnected, removeChats,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import * as constants from './constants';
+import * as constants from '../env';
 
 const endpoints = {
   TWILLIO_SEND_MESSAGE_ENPOINT: '/enviaMensagem',
