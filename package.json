@@ -39,6 +39,7 @@
     "uuidv4": "^6.0.9"
   },
   "devDependencies": {
+    "express": "^4.17.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.6"
   },
