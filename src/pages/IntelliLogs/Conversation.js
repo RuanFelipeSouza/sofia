@@ -15,11 +15,14 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import * as moment from 'moment';
 
-import api from './../../services/api'
+import api from './../../services/api';
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,19 +45,19 @@ const useStyles = makeStyles((theme) => ({
   backLink: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'    
+    alignItems: 'center',
   },
   logo: {
     display: 'table',
     margin: '-5px auto',
     width: '40%',
-    padding: '0 10px'
+    padding: '0 10px',
   },
   main: {
-    width: '100%'
+    width: '100%',
   },
   infos: {
-    margin: '0 2%'
+    margin: '0 2%',
   },
   modal: {
     display: 'flex',
@@ -68,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   editButton: {
-    margin: '1% 2%'
-  }
+    margin: '1% 2%',
+  },
 }));
 
 export default function Conversation(props) {
@@ -82,9 +85,9 @@ export default function Conversation(props) {
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/conversation/${id}`).then(response => {
+    api.get(`/conversation/${id}`).then((response) => {
       setConversa(response.data);
-    })
+    });
   }, [id]);
 
   const handleOpen = () => {
@@ -97,95 +100,138 @@ export default function Conversation(props) {
 
   const handleUpdateConnection = () => {
     setLoadingUpdate(true);
-    api.put('/updateConnection', {
-      id,
-      data: selectedDate
-    }).then(response => {
-      setConversa(response.data);
-      setLoadingUpdate(false);
-      setOpenModal(false);
-    });
-  }
+    api
+      .put('/updateConnection', {
+        id,
+        data: selectedDate,
+      })
+      .then((response) => {
+        setConversa(response.data);
+        setLoadingUpdate(false);
+        setOpenModal(false);
+      });
+  };
 
   return (
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <img className={classes.logo} src={Logo} alt={""} />
-        <Container maxWidth="lg" className={classes.container}>
+        <img className={classes.logo} src={Logo} alt={''} />
+        <Container maxWidth='lg' className={classes.container}>
           <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Paper className={classes.form}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} >
-                    <Link className="backLink" onClick={() => { history.goBack() }} >
+                  <Grid item xs={12}>
+                    <Link
+                      className='backLink'
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                    >
                       <ArrowLeftIcon size={16} />
                       Voltar
                     </Link>
                   </Grid>
-                  <Grid item xs={9} >
+                  <Grid item xs={9}>
                     <div className={classes.infos}>
-                      <p><b>Aluno:</b> {conversa?.studentName}</p>
-                      <p><b>Professor:</b> {conversa?.teacherName}</p>
-                      <p><b>Status:</b> {conversa['class']?.status}</p>
-                      <p><b>Board:</b> {conversa['class']?.boardId}</p>
-                      <p><b>Data marcada:</b> {conversa['class']?.date && moment(conversa['class']?.date).format("DD/MM/YYYY HH:mm")}</p>
+                      <p>
+                        <b>Aluno:</b> {conversa?.studentName}
+                      </p>
+                      <p>
+                        <b>Professor:</b> {conversa?.teacherName}
+                      </p>
+                      <p>
+                        <b>Status:</b> {conversa['class']?.status}
+                      </p>
+                      <p>
+                        <b>Board:</b> {conversa['class']?.boardId}
+                      </p>
+                      <p>
+                        <b>Data marcada:</b>{' '}
+                        {conversa['class']?.date &&
+                          moment(conversa['class']?.date).format(
+                            'DD/MM/YYYY HH:mm'
+                          )}
+                      </p>
                     </div>
                     <div>
-                    <Button variant="contained" onClick={handleOpen} className={classes.editButton} >
-                      Editar
-                    </Button>
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      className={classes.modal}
-                      open={openModal}
-                      onClose={handleClose}
-                      disabled={loadingUpdate}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={openModal}>
-                        <div className={classes.editForm}>
-                          <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                            <KeyboardDateTimePicker
-                              variant="inline"
-                              ampm={false}
-                              label="Data"
-                              value={selectedDate}
-                              onChange={handleDateChange}
-                              onError={console.log}
-                              disablePast
-                              format="dd/MM/yyyy HH:mm"
-                            />
-                          </MuiPickersUtilsProvider>
-                          <br /><br />
-                          <Button variant="contained" onClick={handleUpdateConnection}>
-                            {loadingUpdate ? (<CircularProgress size={25} />) : 'Salvar'}
-                          </Button>
-                        </div>
-                      </Fade>
-                    </Modal>
+                      <Button
+                        variant='contained'
+                        onClick={handleOpen}
+                        className={classes.editButton}
+                      >
+                        Editar
+                      </Button>
+                      <Modal
+                        aria-labelledby='transition-modal-title'
+                        aria-describedby='transition-modal-description'
+                        className={classes.modal}
+                        open={openModal}
+                        onClose={handleClose}
+                        disabled={loadingUpdate}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={openModal}>
+                          <div className={classes.editForm}>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <KeyboardDateTimePicker
+                                variant='inline'
+                                ampm={false}
+                                label='Data'
+                                value={selectedDate}
+                                onChange={handleDateChange}
+                                onError={console.log}
+                                disablePast
+                                format='dd/MM/yyyy HH:mm'
+                              />
+                            </MuiPickersUtilsProvider>
+                            <br />
+                            <br />
+                            <Button
+                              variant='contained'
+                              onClick={handleUpdateConnection}
+                            >
+                              {loadingUpdate ? (
+                                <CircularProgress size={25} />
+                              ) : (
+                                'Salvar'
+                              )}
+                            </Button>
+                          </div>
+                        </Fade>
+                      </Modal>
                     </div>
                   </Grid>
-                  <Grid item xs={3} >
-                    {conversa['class']?.studentSurveyId && <Link className="backLink" to={`/survey/${conversa['class']?.studentSurveyId}`} >
-                      Visualizar pesquisa do Aluno
-                    </Link>}
-                    <br/>
-                    {conversa['class']?.teacherSurveyId && <Link className="backLink" to={`/survey/${conversa['class']?.teacherSurveyId}`} >
-                      Visualizar pesquisa do Professor
-                    </Link>}
+                  <Grid item xs={3}>
+                    {conversa['class']?.studentSurveyId && (
+                      <Link
+                        className='backLink'
+                        to={`/survey/${conversa['class']?.studentSurveyId}`}
+                      >
+                        Visualizar pesquisa do Aluno
+                      </Link>
+                    )}
+                    <br />
+                    {conversa['class']?.teacherSurveyId && (
+                      <Link
+                        className='backLink'
+                        to={`/survey/${conversa['class']?.teacherSurveyId}`}
+                      >
+                        Visualizar pesquisa do Professor
+                      </Link>
+                    )}
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
-            <Grid item xs={12} >
-              <Dialog conversa={conversa}/>
+            <Grid item xs={12}>
+              <Dialog conversa={conversa} />
             </Grid>
           </Grid>
           <Box pt={4}>

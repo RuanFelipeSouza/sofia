@@ -35,21 +35,21 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     overflow: 'auto',
     padding: '0 15%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   form: {
     display: 'flex',
     padding: '0 15%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   sendButton: {
-    marginBottom: '15px'
+    marginBottom: '15px',
   },
   logo: {
     display: 'table',
     margin: '-10px auto',
     width: '40%',
-    padding: '0 10px'
+    padding: '0 10px',
   },
   chart: {
     display: 'flex',
@@ -58,72 +58,137 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   main: {
-    width: '100%'
+    width: '100%',
   },
   table: {
     width: '100%',
-    padding: '1%'
+    padding: '1%',
   },
   details: {
     margin: '2% 0 5% 0',
     padding: '1%',
-    width: '30%'
-  }
+    width: '30%',
+  },
 }));
 
 export default function Intellilogs() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
-  const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
-  const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
+  const [dataInicio, setDataInicio] = useLocalStorageState(
+    keys.INTELLILOGS_DATA_INICIO,
+    new Date(),
+    useState
+  );
+  const [dataFim, setDataFim] = useLocalStorageState(
+    keys.INTELLILOGS_DATA_FIM,
+    new Date(),
+    useState
+  );
   const [atendimentos, setAtendimentos] = useState([]);
-  const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
-  const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
+  const [page, setPage] = useLocalStorageState(
+    keys.INTELLILOGS_PAGINA_ATUAL,
+    0,
+    useState
+  );
+  const [pageSize, setPageSize] = useLocalStorageState(
+    keys.INTELLILOGS_TAMANHO_PAGINA,
+    5,
+    useState
+  );
   const [isLoading, setLoading] = useState(false);
   console.log(atendimentos);
 
-  useEffect(_ => {
-    setLoading(true);
-    api.get('/atendimentos', {
-      params: {
-        dataInicio,
-        dataFim
-      }
-    }).then(response => {
-      setLoading(false);
-      response.data.map(atendimento => {
-        return atendimento.createdAt = moment(atendimento.createdAt).format("DD/MM/YYYY");
-      })
-      setAtendimentos(response.data);
-    })
-  }, [dataInicio, dataFim]);
+  useEffect(
+    (_) => {
+      setLoading(true);
+      api
+        .get('/atendimentos', {
+          params: {
+            dataInicio,
+            dataFim,
+          },
+        })
+        .then((response) => {
+          setLoading(false);
+          response.data.map((atendimento) => {
+            return (atendimento.createdAt = moment(
+              atendimento.createdAt
+            ).format('DD/MM/YYYY'));
+          });
+          setAtendimentos(response.data);
+        });
+    },
+    [dataInicio, dataFim]
+  );
 
   return (
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <img className={classes.logo} src={Logo} alt={""} />
-        <Container maxWidth="lg" className={classes.container}>
+        <img className={classes.logo} src={Logo} alt={''} />
+        <Container maxWidth='lg' className={classes.container}>
           <Grid container spacing={3}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Paper className={classes.dataPickers}>
-                <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={"data_inicio"} label={"Data inicial"} />
-                <DatePicker value={dataFim} handleChangeDate={setDataFim} id={"data_fim"} label={"Data final"} />
+                <DatePicker
+                  value={dataInicio}
+                  handleChangeDate={setDataInicio}
+                  id={'data_inicio'}
+                  label={'Data inicial'}
+                />
+                <DatePicker
+                  value={dataFim}
+                  handleChangeDate={setDataFim}
+                  id={'data_fim'}
+                  label={'Data final'}
+                />
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.chart}>
                 <Chart atendimentos={atendimentos} />
-                <Paper className={classes.details} >
-                  <b>Total de atendimentos no período: </b>{atendimentos?.length || 0} <br /><br />
-                  <b>Conexões agendadas com sucesso: </b>{atendimentos?.length && (atendimentos.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length || 0)} ({atendimentos?.length && (atendimentos?.filter(a => a.class.status === 'agendado' || a.class.status === 'realizado').length/atendimentos.length*100).toFixed(2)}%) <br /><br />
-                  <b>Exceções ao fluxo: </b>{atendimentos?.length && atendimentos.filter(a => !a.understood).length} ({atendimentos.length && (atendimentos.filter(a => !a.understood).length/atendimentos.length*100).toFixed(2)}%) <br /><br />
+                <Paper className={classes.details}>
+                  <b>Total de atendimentos no período: </b>
+                  {atendimentos?.length || 0} <br />
+                  <br />
+                  <b>Conexões agendadas com sucesso: </b>
+                  {atendimentos?.length &&
+                    (atendimentos.filter(
+                      (a) =>
+                        a.class.status === 'agendado' ||
+                        a.class.status === 'realizado'
+                    ).length ||
+                      0)}{' '}
+                  (
+                  {atendimentos?.length &&
+                    (
+                      (atendimentos?.filter(
+                        (a) =>
+                          a.class.status === 'agendado' ||
+                          a.class.status === 'realizado'
+                      ).length /
+                        atendimentos.length) *
+                      100
+                    ).toFixed(2)}
+                  %) <br />
+                  <br />
+                  <b>Não entendimento: </b>
+                  {atendimentos?.length &&
+                    atendimentos.filter((a) => !a.understood).length}{' '}
+                  (
+                  {atendimentos.length &&
+                    (
+                      (atendimentos.filter((a) => !a.understood).length /
+                        atendimentos.length) *
+                      100
+                    ).toFixed(2)}
+                  %) <br />
+                  <br />
                 </Paper>
               </Paper>
             </Grid>
-            {
-              atendimentos.length > 0 &&
+            {atendimentos.length > 0 && (
               <Grid item xs={12}>
                 <Paper className={classes.table}>
                   <Table
@@ -136,7 +201,7 @@ export default function Intellilogs() {
                   />
                 </Paper>
               </Grid>
-            }
+            )}
           </Grid>
           <Box pt={4}>
             <Copyright />

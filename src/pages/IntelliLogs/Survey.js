@@ -11,7 +11,7 @@ import Copyright from '../../components/Copyright';
 import Sidebar from '../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 
-import api from '../../services/api'
+import api from '../../services/api';
 import Dialog from './Dialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,20 +34,20 @@ const useStyles = makeStyles((theme) => ({
   backLink: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'    
+    alignItems: 'center',
   },
   logo: {
     display: 'table',
     margin: '-5px auto',
     width: '40%',
-    padding: '0 10px'
+    padding: '0 10px',
   },
   main: {
-    width: '100%'
+    width: '100%',
   },
   infos: {
-    margin: '0 2%'
-  }
+    margin: '0 2%',
+  },
 }));
 
 export default function Survey(props) {
@@ -57,9 +57,9 @@ export default function Survey(props) {
   const { id } = props.match.params;
 
   useEffect(() => {
-    api.get(`/survey/${id}`).then(response => {
+    api.get(`/survey/${id}`).then((response) => {
       setConversa(response.data);
-    })
+    });
   }, [id]);
 
   console.log(conversa);
@@ -69,30 +69,42 @@ export default function Survey(props) {
       <Sidebar />
       <CssBaseline />
       <main className={classes.main}>
-        <img className={classes.logo} src={Logo} alt={""} />
-        <Container maxWidth="lg" className={classes.container}>
+        <img className={classes.logo} src={Logo} alt={''} />
+        <Container maxWidth='lg' className={classes.container}>
           <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Paper className={classes.form}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} >
-                    <Link className="backLink" onClick={() => { history.goBack() }} >
+                  <Grid item xs={12}>
+                    <Link
+                      className='backLink'
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                    >
                       <ArrowLeftIcon size={16} />
                       Voltar
                     </Link>
                   </Grid>
-                  <Grid item xs={12} >
+                  <Grid item xs={12}>
                     <div className={classes.infos}>
-                      <p><b>Nome:</b> {conversa.name}</p>
-                      <p><b>Nota:</b> {conversa.nota}</p>
-                      <p><b>Sugestão:</b> {conversa.context && conversa.context.sugestao}</p>
+                      <p>
+                        <b>Nome:</b> {conversa.name}
+                      </p>
+                      <p>
+                        <b>Nota:</b> {conversa.nota}
+                      </p>
+                      <p>
+                        <b>Sugestão:</b>{' '}
+                        {conversa.context && conversa.context.sugestao}
+                      </p>
                     </div>
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
-            <Grid item xs={12} >
-              <Dialog conversa={conversa}/>
+            <Grid item xs={12}>
+              <Dialog conversa={conversa} />
             </Grid>
           </Grid>
           <Box pt={4}>
