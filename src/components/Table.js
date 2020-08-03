@@ -3,7 +3,7 @@ import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { func, bool, array, number } from 'prop-types';
-import api from './../services/api';
+import api from './../services/Intelliboard';
 
 export default function Table(props) {
   console.log(props.atendimentos);

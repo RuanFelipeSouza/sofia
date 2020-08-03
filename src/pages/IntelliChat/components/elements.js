@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 
-const BASE_COLOR = '#4a148c';
+import { BASE_COLOR } from '../../../constants';
 
 export const ChatQueueWrapper = styled.div`
   display: flex;

@@ -1,68 +1,33 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Intelliboard Starter Frontend
 
-## Available Scripts
+This is a blueprint for Intelliboard Frontend made by Intelliway. It was designed to be cloned to every new project that uses a chatbot and serve as a base to them.
+Important: this project is supposed to be forked!
 
-In the project directory, you can run:
+## Code Guidelines
+ - Code is written in English
+ - Use arrow functions only when creating one-line functions or anonymous functions.
+ - Use function syntax when creating functions to be exported on files.
+ - Use Object.freeze when exporting multiple functions or objects.
+ - Try not to deconstruct objects directly on function parameters
+ - Format code with CTRL + SHIFT + F (or equivalent)
+ - Don't use var (only let and const)
+ - Promises should be handled with async/await
+ - Name variables and functions with camelCase, constants with UPPER_CASE
 
-### `yarn start`
+ ## Initial configurations
+ - After forking and cloning, you should create a file called env.js on src folder. On the same folder there is a env-example.js file that you can use as a template.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Important information
+### Files and Folder meanings
+ - Every variable that may change depending if it's running on production or dev, should be on **env.js**. Every other constant variable should be on **constants.js**.
+ - To deploy on production, run **npm run build** to generate the **build** folder. Then, run **pm2 start server.js --name intelliboard-frontend**. The default port is 3000, change it on the **server.js** file if needed.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Folder structure
+**server.js** File to serve the app on production
+**src/** Here is all code of project
+**src/assets/** Here we should put all assets (images, most of the time)
+**src/components/** Here we should put all components that can be reused on several locations, like a Button or Avatar component
+**src/pages/** Here we should put all components that represent a new page on the application, like Intellilogs or Intellichat
+**src/services/** Here we should put all functions that connect to external apis or services
+**src/store/** Here we should put all Redux actions e reducers
+**src/utils/** Here are all functions shared by other functions, basically some utility functions

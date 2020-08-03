@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-import { BACKEND_URL } from './constants';
+import { INTELLIBOARD_BACKEND_URL } from '../env';
 import store from './../store';
 import {
   messageReceived, userJoined, userDisconnected, removeChats,
@@ -11,7 +11,7 @@ let socket;
 
 export const connect = (room, user) => {
   if (!socket) {
-    socket = io.connect(BACKEND_URL);
+    socket = io.connect(INTELLIBOARD_BACKEND_URL);
 
     if (room) {
       socket.emit('joinUser', { room, user });

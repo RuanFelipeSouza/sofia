@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Baner from './../../assets/Baner.png';
-import api from './../../services/api';
+import api from '../../services/Intelliboard';
 
 const useStyles = makeStyles((theme) => ({
   root: {
