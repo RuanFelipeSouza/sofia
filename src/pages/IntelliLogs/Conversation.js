@@ -83,6 +83,7 @@ export default function Conversation(props) {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
+  console.log(conversa);
 
   useEffect(() => {
     api.get(`/conversation/${id}`).then((response) => {
@@ -146,7 +147,10 @@ export default function Conversation(props) {
                         <b>Status:</b> {conversa['class']?.status}
                       </p>
                       <p>
-                        <b>Board:</b> {conversa['class']?.boardId}
+                        <b>Id do board:</b> {conversa?.board?._id}
+                      </p>
+                      <p>
+                        <b>Nome do board:</b> {conversa?.board?.name}
                       </p>
                       <p>
                         <b>Data marcada:</b>{' '}
