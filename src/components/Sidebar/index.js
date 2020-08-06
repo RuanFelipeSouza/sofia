@@ -17,14 +17,14 @@ import { UpperLogo, BottomLogo } from './styles.js';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#2B2846',
+    backgroundColor: theme.palette.primary.light,
     color: 'white',
   },
 }));
