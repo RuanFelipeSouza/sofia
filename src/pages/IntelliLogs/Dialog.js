@@ -4,7 +4,6 @@ import { object, string, oneOfType } from 'prop-types';
 
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple, green } from '@material-ui/core/colors';
 import * as moment from 'moment';
 import * as parse from 'html-react-parser';
 
@@ -22,54 +21,43 @@ const useStyles = makeStyles((theme) => ({
   assistantMessage: {
     marginTop: '1.5%',
     marginBottom: '1.5%',
-    backgroundColor: '#DBF6C6',
+    color: theme.palette.secondary.contrastText,
+    backgroundColor: theme.palette.secondary.light,
     padding: '0 3%',
     maxWidth: '60%',
     minWidth: '25%'
   },
-  teacherLine: {
+  userLine: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end'
   },
-  teacherMessage: {
+  userMessage: {
     marginTop: '1.5%',
     marginBottom: '1.5%',
-    backgroundColor: '#FFFFFA',
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.light,
     padding: '0 3%',
     maxWidth: '60%',
     minWidth: '25%'
   },
-  studentLine: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end'
-  },
-  studentMessage: {
-    marginTop: '1.5%',
-    marginBottom: '1.5%',
-    backgroundColor: '#FFFFEF',
-    padding: '0 3%',
-    maxWidth: '60%',
-    minWidth: '25%'
-  },
-  orangeAvatar: {
+  userAvatar: {
     margin: '1.5% 2%',
-    color: theme.palette.getContrastText(deepOrange[500]),
-    backgroundColor: deepOrange[500],
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.dark,
   },
-  purpleAvatar: {
+  assistantAvatar: {
     margin: '1.5% 2%',
-    color: theme.palette.getContrastText(deepPurple[500]),
-    backgroundColor: deepPurple[500],
+    color: theme.palette.secondary.contrastText,
+    backgroundColor: theme.palette.secondary.dark,
   },
-  greenAvatar: {
-    margin: '1.5% 2%',
-    color: theme.palette.getContrastText(green[500]),
-    backgroundColor: green[500],
+  userMessageDatetime: {
+    color: theme.palette.primary.contrastText,
+    margin: '0',
+    textAlign: 'right'
   },
-  messageDatetime: {
-    color: '#888',
+  assistantMessageDatetime: {
+    color: theme.palette.secondary.contrastText,
     margin: '0',
     textAlign: 'right'
   },
@@ -94,7 +82,6 @@ const createMessage = (props, classes) =>
       {props.media && (<> <img className={classes.innerImage} src={props.media} alt={''} /> <br /> </>)}
       {formatMessage(props.text)}
     </p>
-    <h5 className={classes.messageDatetime}>{moment(props.date).format('DD/MM/YYYY HH:mm')}</h5>
   </>;
 
 createMessage.propTypes = {
@@ -113,22 +100,17 @@ export default function Dialog(props) {
       {conversa.history && conversa.history?.map((row) => {
         if (row.from === 'Assistente')
           return <div key={row._id} className={classes.assistantLine}>
-            <Avatar className={classes.purpleAvatar}>A</Avatar>
+            <Avatar className={classes.assistantAvatar}>A</Avatar>
             <Paper className={classes.assistantMessage}>
               {createMessage(row, classes)}
+              <h5 className={classes.assistantMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
             </Paper>
           </div>;
-        if (row.from === conversa.teacherName)
-          return <div key={row._id} className={classes.teacherLine}>
-            <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
-            <Paper className={classes.teacherMessage}>
-              {createMessage(row, classes)}
-            </Paper>
-          </div>;
-        return <div key={row._id} className={classes.studentLine}>
-          <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
-          <Paper className={classes.studentMessage}>
+        return <div key={row._id} className={classes.userLine}>
+          <Avatar className={classes.userAvatar}>{row.from?.charAt()}</Avatar>
+          <Paper className={classes.userMessage}>
             {createMessage(row, classes)}
+            <h5 className={classes.userMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
           </Paper>
         </div>;
       })}
