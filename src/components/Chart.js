@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { array } from 'prop-types';
+import { useTheme } from '@material-ui/core/styles';
 import * as moment from 'moment';
 
 const groupBy = (list, keyGetter) => {
@@ -18,6 +19,7 @@ const groupBy = (list, keyGetter) => {
 };
 
 export default function Chart({ atendimentos }) {
+  const theme = useTheme();
   atendimentos && atendimentos.forEach(function (element) {
     element.createdAt = moment(element.createdAt, ['YYYY-MM-DD', 'DD/MM/YYYY']).format('DD/MM/YYYY');
   });
@@ -42,7 +44,7 @@ export default function Chart({ atendimentos }) {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="Atendimentos" fill="#8884d8" />
+      <Bar dataKey="Atendimentos" fill={theme.palette.secondary.main} />
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>
   );

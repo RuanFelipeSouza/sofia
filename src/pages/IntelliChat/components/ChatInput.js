@@ -62,7 +62,7 @@ class ChatInput extends Component {
             endAdornment:(
               <InputAdornment position="end">
                 <IconButton size="small" onClick={() => this.sendMessage()}>
-                  <SendRoundedIcon />
+                  <SendRoundedIcon color='primary' />
                 </IconButton>
               </InputAdornment>
             )

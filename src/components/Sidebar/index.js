@@ -6,9 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AssignmentRoundedIcon from '@material-ui/icons/AssignmentRounded';
-import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import AssessmentRoundedIcon from '@material-ui/icons/AssessmentRounded';
+import Icon from '@material-ui/core/Icon';
 import List from '@material-ui/core/List';
 
 import LogoIntelliway from './../../assets/logo-intelliway-nova.png';
@@ -17,32 +15,35 @@ import { UpperLogo, BottomLogo } from './styles.js';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: '#2B2846',
-    color: 'white',
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
+  },
+  icon: {
+    color: theme.palette.primary.contrastText,
   },
 }));
 
 const _menuOptions = [
   {
     label: 'IntelliLogs',
-    icon: <AssignmentRoundedIcon style={{ color: 'white' }} />,
+    iconName: 'assignment_rounded',
     path: '/intellilogs',
   },
   {
     label: 'IntelliChat',
-    icon: <QuestionAnswerRoundedIcon style={{ color: 'white' }} />,
+    iconName: 'question_answer',
     path: '/intellichat',
   },
   {
     label: 'Dashboard',
-    icon: <AssessmentRoundedIcon style={{ color: 'white' }} />,
+    iconName: 'assessment_rounded',
     path: '/dashboard',
   },
 ];
@@ -67,10 +68,10 @@ export default function Sidebar() {
       <Divider />
       <List>
         {
-          _menuOptions.map(({ label, icon, path }) => (
+          _menuOptions.map(({ label, iconName, path }) => (
             <ListItem button key={label} onClick={() => _redirect(path)}>
               <ListItemIcon>
-                {icon}
+                <Icon className={classes.icon}>{iconName}</Icon>
               </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>

@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 
-import { BASE_COLOR } from '../../../constants';
-
 export const ChatQueueWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,9 +17,9 @@ export const EmptyChatQueueWrapper = styled(ChatQueueWrapper)`
 `;
 
 export const ChatQueueItemWrapper = styled.div`
-  border-left: ${props => props.isCurrent ? `4px solid ${BASE_COLOR}` : null};
+  border-left: ${props => props.isCurrent ? `4px solid ${props.color}` : null};
   z-index: ${props => props.isCurrent ? 1 : null};
-  color: ${props => props.isCurrent ? BASE_COLOR : ''};
+  color: ${props => props.isCurrent ? props.color : ''};
   font-weight: ${props => props.isCurrent ? 'bold' : ''};
 `;
 
@@ -70,7 +68,7 @@ export const EmptyText = styled.p`
 
 export const ChatHeaderWrapper = styled.div`
   display: flex;
-  background: rgba(170,141,205,1);
+  background: ${props => props.backgroundColor};
   padding: 10px 10px;
   cursor: pointer;
   height: 70px;

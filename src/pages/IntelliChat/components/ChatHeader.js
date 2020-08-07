@@ -1,5 +1,6 @@
 import React from 'react';
 import { string, func } from 'prop-types';
+import { useTheme } from '@material-ui/core/styles';
 
 import { ChatHeaderWrapper, ChatHeaderTitle, ChatHeaderSubtitle, Column, Row } from './elements';
 import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
@@ -8,8 +9,10 @@ import MoreVertRoundedIcon from '@material-ui/icons/MoreVertRounded';
 import IconButton from '@material-ui/core/IconButton';
 
 const ChatHeader = ({ title, subtitle, onClick, closeChat }) => {
+  const theme = useTheme();
+
   return (
-    <ChatHeaderWrapper onClick={onClick}>
+    <ChatHeaderWrapper onClick={onClick} backgroundColor={theme.palette.primary.light}>
       <Column>
         <ChatHeaderTitle>{title}</ChatHeaderTitle>
         <ChatHeaderSubtitle>{subtitle}</ChatHeaderSubtitle>
