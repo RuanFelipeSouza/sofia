@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { bool, func } from 'prop-types';
+import { bool, func, object } from 'prop-types';
+import { withTheme } from '@material-ui/core/styles';
 
 import * as Socketio from './../../services/Socketio';
 import ChatConversation from './ChatConversation';
@@ -12,7 +13,6 @@ import Paper from '@material-ui/core/Paper';
 import ChatRoundedIcon from '@material-ui/icons/ChatRounded';
 import { fetchOngoingConversations } from './../../store/actions/chat';
 import Typography from '@material-ui/core/Typography';
-import { BASE_COLOR } from '../../constants';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,7 +42,7 @@ const CustomPaper = styled(Paper)`
 const Background = styled.div`
   position: absolute;
   height: 150px;
-  background-color: ${BASE_COLOR};
+  background-color: ${props => props.backgroundColor};
   top: 0;
   left: 240px;
   width: calc(100% - 240px);
@@ -76,7 +76,7 @@ class Chat extends Component {
       <Wrapper>
         <Sidebar />
         <Container>
-          <Background />
+          <Background backgroundColor={this.props.theme.palette.primary.dark} />
           <div style={{ display: 'flex', color: 'white' }}>
             <Typography variant="h4">INTELLICHAT</Typography>
             <ChatRoundedIcon style={{ margin: 'auto 20px', fontSize: 24 }} />
@@ -93,7 +93,8 @@ class Chat extends Component {
 
 Chat.propTypes = {
   isChatSelected: bool.isRequired,
-  fetchOngoingConversations: func.isRequired
+  fetchOngoingConversations: func.isRequired,
+  theme: object.isRequired
 };
 
 const mapStateToProps = state => {
@@ -108,4 +109,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+const ThemedChat = withTheme(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(ThemedChat);

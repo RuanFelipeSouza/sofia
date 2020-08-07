@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { ChatItem } from 'react-chat-elements';
 import { connect } from 'react-redux';
-import { arrayOf, shape, string, func, bool } from 'prop-types';
+import { arrayOf, shape, string, func, bool, object } from 'prop-types';
+import { withTheme } from '@material-ui/core/styles';
 
 import 'react-chat-elements/dist/main.css';
 import EmptyChat from './components/EmptyChat';
@@ -82,6 +83,7 @@ class ChatQueue extends Component {
         <ChatQueueItemWrapper
           key={room}
           isCurrent={room === currentRoom}
+          color={this.props.theme.palette.primary.main}
         >
           <ChatItem
             avatar={isWhatsapp ? whatsappAvatar : defaultAvatar}
@@ -162,7 +164,8 @@ ChatQueue.propTypes = {
   currentRoom: string,
   selectChat: func.isRequired,
   closeChat: func.isRequired,
-  changeBotState: func.isRequired
+  changeBotState: func.isRequired,
+  theme: object.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -182,4 +185,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatQueue);
+const ThemeChatQueue = withTheme(ChatQueue);
+export default connect(mapStateToProps, mapDispatchToProps)(ThemeChatQueue);
