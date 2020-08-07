@@ -14,6 +14,12 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
+import Slide from '@material-ui/core/Slide';
+import DialogModal from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   KeyboardDateTimePicker,
@@ -24,6 +30,10 @@ import * as moment from 'moment';
 
 import api from './../../services/api';
 import Dialog from './Dialog';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,6 +91,7 @@ export default function Conversation(props) {
   const [conversa, setConversa] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
   console.log(conversa);
@@ -112,6 +123,19 @@ export default function Conversation(props) {
         setOpenModal(false);
       });
   };
+
+  const handleDelete = async e => {
+    setOpenDeleteDialog(false);
+    api
+      .put('/updateConnection', {
+        id
+      })
+      .then((response) => {
+        setConversa(response.data);
+        setLoadingUpdate(false);
+        setOpenModal(false);
+      });
+  }
 
   return (
     <div className={classes.root}>
@@ -210,6 +234,33 @@ export default function Conversation(props) {
                           </div>
                         </Fade>
                       </Modal>
+                      {conversa.class && conversa['class'].status !== 'cancelada' && <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)} >
+                          Encerrar
+                        </Button>
+                      }
+                      <DialogModal
+                        open={openDeleteDialog}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={() => setOpenDeleteDialog(false)}
+                        aria-labelledby="alert-dialog-slide-title"
+                        aria-describedby="alert-dialog-slide-description"
+                      >
+                        <DialogTitle id="alert-dialog-slide-title">{"Você confirma o encerramento?"}</DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-slide-description">
+                            Essa ação não pode ser desfeita.
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                            Cancelar
+                          </Button>
+                          <Button onClick={handleDelete} color="primary">
+                            Confirmar
+                          </Button>
+                        </DialogActions>
+                      </DialogModal>
                     </div>
                   </Grid>
                   <Grid item xs={3}>
