@@ -12,13 +12,13 @@ const api = axios.create({
   baseURL: constants.INTELLIBOARD_BACKEND_URL
 });
 
-let tokenStorage = localStorage.getItem('Authorization');
-
-if (tokenStorage) {
-  api.defaults.headers.common = {
-    Authorization: tokenStorage
-  };
-}
+api.interceptors.request.use(async config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const closeChat = async (room) => {
   const body = {
