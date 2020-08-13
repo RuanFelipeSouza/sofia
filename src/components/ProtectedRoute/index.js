@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-// import { verify } from 'jsonwebtoken';
 import { func } from 'prop-types';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
