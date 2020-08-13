@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as constants from '../env';
 
 const endpoints = {
-  INTELLILOGS_GET_ONGOING_CONVERSATIONS: 'conversation/fetchOngoingConversations',
+  INTELLILOGS_GET_ONGOING_CONVERSATIONS: '/conversation/fetchongoingconversations',
   INTELLILOGS_END_SERVICE: 'alterStatusTicket',
   INTELLILOGS_SAVE_MESSAGE: 'conversation/add',
   CLOSE_CHAT_ENDPOINT: '/chat/close'

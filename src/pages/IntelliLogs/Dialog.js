@@ -93,11 +93,11 @@ createMessage.propTypes = {
 
 export default function Dialog(props) {
   const classes = useStyles();
-  const { conversa } = props;
+  const { dialog } = props;
 
   return (
     <Paper className={classes.conversation}>
-      {conversa.history && conversa.history?.map((row) => {
+      {dialog.messages && dialog.messages?.map((row) => {
         if (row.from === 'Assistente')
           return <div key={row._id} className={classes.assistantLine}>
             <Avatar className={classes.assistantAvatar}>A</Avatar>
@@ -119,5 +119,5 @@ export default function Dialog(props) {
 }
 
 Dialog.propTypes = {
-  conversa: oneOfType([object, string]),
+  dialog: oneOfType([object, string]),
 };
