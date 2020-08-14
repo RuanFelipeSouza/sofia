@@ -55,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
 export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [conversa, setConversa] = useState({});
+  const [dialog, setDialog] = useState({});
   const { id } = props.match.params;
 
   useEffect(() => {
     api.get(`/conversation/${id}`).then(response => {
-      setConversa(response.data);
+      setDialog(response.data);
     });
   }, [id]);
 
@@ -83,7 +83,7 @@ export default function Conversation(props) {
                   </Grid>
                   <Grid item xs={9} >
                     <div className={classes.infos}>
-                      <p><b>Data:</b> {moment(conversa.createdAt).format('DD/MM/YYYY HH:mm')}</p>
+                      <p><b>Data:</b> {moment(dialog.createdAt).format('DD/MM/YYYY HH:mm')}</p>
                     </div>
                   </Grid>
                   <Grid item xs={3} >
@@ -93,7 +93,7 @@ export default function Conversation(props) {
               </Paper>
             </Grid>
             <Grid item xs={12} >
-              <Dialog conversa={conversa} />
+              <Dialog dialog={dialog} />
             </Grid>
           </Grid>
           <Box pt={4}>
