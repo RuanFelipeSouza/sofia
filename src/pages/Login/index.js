@@ -64,7 +64,7 @@ export default function SignInSide() {
         email: user,
         password
       });
-      await localStorage.setItem('token', data.token);
+      localStorage.setItem('token', data.token);
       history.push('/intellilogs');
       setLoading(false);
     } catch (e) {

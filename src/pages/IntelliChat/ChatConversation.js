@@ -55,8 +55,8 @@ class ChatConversation extends Component {
     //   showInteractionCost: isWhatsapp
     // };
 
-    const token = localStorage.getItem('Authorization');
-    const { isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
+    const token = localStorage.getItem('token');
+    const { isSupervisor } = jwtDecode(token);
 
     return (
       <ChatWrapper>

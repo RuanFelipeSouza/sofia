@@ -44,8 +44,8 @@ export const messageReceived = (messageText, room, origin = 'client', messageId)
 export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false, sector) => {
   return (dispatch, getState) => {
     const { chat } = getState();
-    const token = localStorage.getItem('Authorization');
-    const { email, isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
+    const token = localStorage.getItem('token');
+    const { email, isSupervisor } = jwtDecode(token);
 
     if (email === recipientId || isSupervisor) {
       if (!chat.conversations.find(item => item.room === room)) {
