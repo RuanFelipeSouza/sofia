@@ -313,11 +313,11 @@ const fetchOngoingConversations = (state, action) => {
   // when implementing it
   const { conversations: fetchedConversations } = action.payload;
 
-  const conversations = fetchedConversations.map(({ _id, history, user, phone, sector }, index) => {
+  const conversations = fetchedConversations.map(({ _id, messages, user, phone, sector }, index) => {
     const phoneNumber = phone ? phone : undefined;
-    const lastMessageIndex = history.length - 1;
+    const lastMessageIndex = messages.length - 1;
 
-    const messages = history.map(({ _id, from, date, ...rest }) => {
+    const messagesList = messages.map(({ _id, from, date, ...rest }) => {
       return {
         messageId: _id,
         origin: from === 'Assistente' ? 'agent' : 'user',
@@ -329,15 +329,15 @@ const fetchOngoingConversations = (state, action) => {
     return {
       socketId: index,
       room: _id,
-      name: toProperCase(user.name),
+      name: toProperCase(user && user.name),
       number: phoneNumber,
       unread: 0,
       userDisconnected: false,
       isWhatsapp: !!phoneNumber,
       isBotOn: true, // TODO busca status do bot
-      messages,
-      lastMessageText: history[lastMessageIndex].text,
-      lastMessageDate: moment(history[lastMessageIndex].date).format('HH:mm'),
+      messages: messagesList,
+      lastMessageText: messages[lastMessageIndex].text,
+      lastMessageDate: moment(messages[lastMessageIndex].date).format('HH:mm'),
       category: sector
     };
   });

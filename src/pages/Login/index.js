@@ -60,15 +60,11 @@ export default function SignInSide() {
     e.preventDefault();
     setError(false);
     try {
-      const result = await api.post('/login', {
+      const {data} = await api.post('/login', {
         email: user,
         password
       });
-      await localStorage.setItem('Authorization', result.headers.authorization);
-      api.defaults.headers.common = {
-        Authorization: result.headers.authorization
-      };
-
+      await localStorage.setItem('token', data.token);
       history.push('/intellilogs');
       setLoading(false);
     } catch (e) {

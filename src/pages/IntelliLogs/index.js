@@ -73,8 +73,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Intellilogs() {
   const { keys, useLocalStorageState } = localStorageStateHook;
   const classes = useStyles();
-  const [dataInicio, setDataInicio] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
-  const [dataFim, setDataFim] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
+  const [startDate, setstartDate] = useLocalStorageState(keys.INTELLILOGS_DATA_INICIO, new Date(), useState);
+  const [endDate, setendDate] = useLocalStorageState(keys.INTELLILOGS_DATA_FIM, new Date(), useState);
   const [atendimentos, setAtendimentos] = useState([]);
   const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.INTELLILOGS_TAMANHO_PAGINA, 5, useState);
@@ -84,14 +84,14 @@ export default function Intellilogs() {
     setLoading(true);
     api.get('/atendimentos', {
       params: {
-        dataInicio,
-        dataFim
+        startDate,
+        endDate
       }
     }).then(response => {
       setLoading(false);
       setAtendimentos(response.data);
     });
-  }, [dataInicio, dataFim]);
+  }, [startDate, endDate]);
 
   return (
     <div className={classes.root}>
@@ -103,8 +103,8 @@ export default function Intellilogs() {
           <Grid container spacing={3}>
             <Grid item xs={12} >
               <Paper className={classes.dataPickers}>
-                <DatePicker value={dataInicio} handleChangeDate={setDataInicio} id={'data_inicio'} label={'Data inicial'} />
-                <DatePicker value={dataFim} handleChangeDate={setDataFim} id={'data_fim'} label={'Data final'} />
+                <DatePicker value={startDate} handleChangeDate={setstartDate} id={'data_inicio'} label={'Data inicial'} />
+                <DatePicker value={endDate} handleChangeDate={setendDate} id={'data_fim'} label={'Data final'} />
               </Paper>
             </Grid>
             <Grid item xs={12}>
