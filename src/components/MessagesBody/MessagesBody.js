@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LoaderDots } from '@thumbtack/thumbprint-react';
 import generateWatsonResponseFromAction from '../../utils/generateWatsonResponseFromAction';
 import avatar from '../../assets/images/avatar_face.png';
-import {useTransition} from 'react-spring';
-import * as S from './styles';
+import { useTransition } from 'react-spring';
+import { BodyContainer, LoaderContainer, StyledLabel, UserMessageContainer, UserText, WatsonMessageContainer, WatsonText } from './styles';
 
 const MessagesBody = ({ loading, ismobile }) => {
   const dispatch = useDispatch();
@@ -19,11 +19,11 @@ const MessagesBody = ({ loading, ismobile }) => {
   });
 
   const animatedResponse = (i, child) => {
-    return transitions.map(({ props: style, key }) => 
-      key === i && child({style, key})
+    return transitions.map(({ props: style, key }) =>
+      key === i && child({ style, key })
     );
   };
-  
+
   const scrollToBottom = () => {
     bottomScrollRef.current.scrollTop = bottomScrollRef.current.scrollHeight;
   };
@@ -36,32 +36,32 @@ const MessagesBody = ({ loading, ismobile }) => {
       const first = i === 0;
       if (e.userText) {
         return (
-          <S.UserMessageContainer key={i} first={first}>
-            {animatedResponse(i, props => <S.UserText latest={latest ? 1 : 0} {...props}>{e.userText.input.text}</S.UserText>)}
-          </S.UserMessageContainer>
+          <UserMessageContainer key={i} first={first}>
+            {animatedResponse(i, props => <UserText latest={latest ? 1 : 0} {...props}>{e.userText.input.text}</UserText>)}
+          </UserMessageContainer>
         );
       } else {
         const outputs = e.watsonResponse.output.generic;
-        
+
         return outputs?.map((output, ind) => {
           const isImage = output.response_type && output.response_type !== 'text';
           // since watson doesn't recognize \n on html text, changes all to <br>
           const text = isImage ? _generateImageFromOutput(output) : output?.text?.replace(/\n/g, '<br>');
           return (
-            <S.WatsonMessageContainer key={i+''+ind} first={first} ismobile={ismobile ? 1 : 0}>
-              {ismobile && <img src={avatar} style={{height: 32, width: 32, position: 'absolute', left: 0, top: 0}} alt="" />}
+            <WatsonMessageContainer key={i + '' + ind} first={first} ismobile={ismobile ? 1 : 0}>
+              {ismobile && <img src={avatar} style={{ height: 32, width: 32, position: 'absolute', left: 0, top: 0 }} alt="" />}
               {
                 animatedResponse(i, props =>
                   latest
                     ? generateWatsonResponseFromAction(e.watsonResponse, dispatch, ismobile, props, i, _linkToEmailFromText(text), ind)
-                    : <S.WatsonText
+                    : <WatsonText
                       dangerouslySetInnerHTML={{ __html: _linkToEmailFromText(text) }}
                       ismobile={ismobile ? 1 : 0}
                       {...props}
                     />
                 )
               }
-            </S.WatsonMessageContainer>
+            </WatsonMessageContainer>
           );
         });
       }
@@ -69,16 +69,16 @@ const MessagesBody = ({ loading, ismobile }) => {
   };
 
   return (
-    <S.StyledLabel htmlFor="userInput" ref={bottomScrollRef}>
-      <S.BodyContainer >
+    <StyledLabel htmlFor="userInput" ref={bottomScrollRef}>
+      <BodyContainer >
         {generateConversation()}
         {loading && (
-          <S.LoaderContainer>
+          <LoaderContainer>
             <LoaderDots size="small" theme="muted" />
-          </S.LoaderContainer>
+          </LoaderContainer>
         )}
-      </S.BodyContainer>
-    </S.StyledLabel>
+      </BodyContainer>
+    </StyledLabel>
   );
 };
 MessagesBody.propTypes = {

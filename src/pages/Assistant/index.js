@@ -11,7 +11,7 @@ import Header from '../../components/ChatHeader/ChatHeader';
 import Modal from '../../components/Modal/Modal';
 import RatingModal from '../../components/RatingModal/RatingModal';
 import { animated } from 'react-spring';
-import * as S from './styles';
+import { AppContainer, Avatar, ChatContainer} from './styles';
 
 const App = () => {
   const isChatOpen = useSelector(state => state.container.open);
@@ -98,8 +98,8 @@ const App = () => {
   const _closeChat = () => setAnimate(false);
 
   return (
-    <S.AppContainer className="App" id="app" isOpen={isChatOpen}>
-      <S.Avatar
+    <AppContainer className="App" id="app" isOpen={isChatOpen}>
+      <Avatar
         src={avatarImg}
         alt={'Chat Bot Avatar'}
         onClick={handleAvatarClick}
@@ -107,17 +107,17 @@ const App = () => {
         isopen={isChatOpen ? 1 : 0}
         style={avatarHero}
       />
-      <S.ChatContainer style={chatGrow} ismobile={isMobile ? 1 : 0} chatsize={chatSize}>
+      <ChatContainer style={chatGrow} ismobile={isMobile ? 1 : 0} chatsize={chatSize}>
         <Header ismobile={isMobile} handleHeaderClick={handleAvatarClick} />
         <MessagesBody loading={loading} ismobile={isMobile} />
         <UserEntry loading={loading} />
         {hasRatingModal && <animated.div style={fadeIn}><RatingModal isMobile={isMobile} closeChat={_closeChat} /></animated.div>}
-      </S.ChatContainer>
+      </ChatContainer>
       <Modal
         open={isModal}
         onClose={onCloseModal}
       />
-    </S.AppContainer>
+    </AppContainer>
   );
 };
 

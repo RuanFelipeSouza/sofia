@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as S from './styles';
+import { Input, InputContainer, MaskedInput, SendStyled} from './styles';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMessage, sendSocketMessage } from '../../store/actions/message';
@@ -29,10 +29,10 @@ const UserEntry = () => {
 
   return (
     <label htmlFor="userInput">
-      <S.InputContainer>
+      <InputContainer>
         {
           mask ? (
-            <S.MaskedInput
+            <MaskedInput
               mask={mask}
               disabled={!isEnabled}
               value={inputText}
@@ -45,7 +45,7 @@ const UserEntry = () => {
               id="userInput"
             />
           ) : (
-            <S.Input
+            <Input
               rowsMax={3}
               wrap={'hard'}
               cols={40}
@@ -59,8 +59,8 @@ const UserEntry = () => {
             />
           )
         }
-        <S.SendStyled onClick={onSendMessage} disabled={!isEnabled} />
-      </S.InputContainer>
+        <SendStyled onClick={onSendMessage} disabled={!isEnabled} />
+      </InputContainer>
     </label>
   );
 };

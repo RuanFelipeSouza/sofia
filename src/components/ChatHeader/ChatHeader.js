@@ -1,13 +1,13 @@
 import React from 'react';
-import * as S from './styles';
+import {HeaderContainer, HeaderData, CloseIcon} from './styles';
 import { HEADER_TITLE } from '../../constants';
 
 const ChatHeader = (props) => {
   return (
-    <S.HeaderContainer onClick={props.handleHeaderClick} ismobile={props.ismobile}>
-      <S.HeaderData ismobile={props.ismobile}>{HEADER_TITLE}</S.HeaderData>
-      <S.CloseIcon />
-    </S.HeaderContainer>
+    <HeaderContainer onClick={props.handleHeaderClick} ismobile={props.ismobile}>
+      <HeaderData ismobile={props.ismobile}>{HEADER_TITLE}</HeaderData>
+      <CloseIcon />
+    </HeaderContainer>
   );
 };
 ChatHeader.propTypes = {

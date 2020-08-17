@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import MaterialTable from 'material-table';
 import AttachFileRoundedIcon from '@material-ui/icons/AttachFileRounded';
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
-import * as S from './styles.js';
+import { StyledTableContainer } from './styles.js';
 
 const PaginatedTable = (props) => {
   const { rows } = props;
@@ -56,7 +56,7 @@ const PaginatedTable = (props) => {
   });
 
   return (
-    <S.StyledTableContainer component={Paper}>
+    <StyledTableContainer component={Paper}>
       <MaterialTable
         columns={keys}
         data={rows}
@@ -94,7 +94,7 @@ const PaginatedTable = (props) => {
           Filter: React.forwardRef((props, ref) => <SearchRoundedIcon fontSize='inherit' style={{ fontSize: 14 }} ref={ref} />)
         }}
       />
-    </S.StyledTableContainer>
+    </StyledTableContainer>
   );
 };
 PaginatedTable.propTypes = {
