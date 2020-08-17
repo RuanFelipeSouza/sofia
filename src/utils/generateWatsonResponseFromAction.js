@@ -148,12 +148,12 @@ const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
       <ButtonContainer
         ismobile={ismobile ? 1 : 0}
         style={{ transform: props.style.transform }}>
-        {labels.map((e, i) => (
+        {labels.map((element, index) => (
           <StyledButton
-            onClick={() => dispatch(sendMessage(e))}
-            key={i}
-            latest={i === length}>
-            {e}
+            onClick={() => dispatch(sendMessage(element))}
+            key={index}
+            latest={index === length}>
+            {element}
           </StyledButton>
         ))}
       </ButtonContainer>
@@ -183,13 +183,13 @@ const _handleGenerateSelect = (
         <HiddenMenuItem value='' disabled key={-1} hidden>
           Selecione uma opção
         </HiddenMenuItem>
-        {selectContent.map((e, i) => (
-          <MenuItem value={e.value} key={i}>
+        {selectContent.map((element, index) => (
+          <MenuItem value={element.value} key={index}>
             <div>
-              {e.text}
+              {element.text}
               <br />
               <SelectSubtitle>
-                {selectSubtitles && selectSubtitles[i]}
+                {selectSubtitles && selectSubtitles[index]}
               </SelectSubtitle>
             </div>
           </MenuItem>

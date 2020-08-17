@@ -31,29 +31,29 @@ const MessagesBody = ({ loading, ismobile }) => {
   useEffect(scrollToBottom, [conversationStack]);
 
   const generateConversation = () => {
-    return conversationStack.map((e, i, a) => {
-      const latest = i === a.length - 1 || i === a.length - 2;
-      const first = i === 0;
-      if (e.userText) {
+    return conversationStack.map((element, index, array) => {
+      const latest = index === array.length - 1 || index === array.length - 2;
+      const first = index === 0;
+      if (element.userText) {
         return (
-          <UserMessageContainer key={i} first={first}>
-            {animatedResponse(i, props => <UserText latest={latest ? 1 : 0} {...props}>{e.userText.input.text}</UserText>)}
+          <UserMessageContainer key={index} first={first}>
+            {animatedResponse(index, props => <UserText latest={latest ? 1 : 0} {...props}>{element.userText.input.text}</UserText>)}
           </UserMessageContainer>
         );
       } else {
-        const outputs = e.watsonResponse.output.generic;
+        const outputs = element.watsonResponse.output.generic;
 
         return outputs?.map((output, ind) => {
           const isImage = output.response_type && output.response_type !== 'text';
           // since watson doesn't recognize \n on html text, changes all to <br>
           const text = isImage ? _generateImageFromOutput(output) : output?.text?.replace(/\n/g, '<br>');
           return (
-            <WatsonMessageContainer key={i + '' + ind} first={first} ismobile={ismobile ? 1 : 0}>
+            <WatsonMessageContainer key={index + '' + ind} first={first} ismobile={ismobile ? 1 : 0}>
               {ismobile && <img src={avatar} style={{ height: 32, width: 32, position: 'absolute', left: 0, top: 0 }} alt="" />}
               {
-                animatedResponse(i, props =>
+                animatedResponse(index, props =>
                   latest
-                    ? generateWatsonResponseFromAction(e.watsonResponse, dispatch, ismobile, props, i, _linkToEmailFromText(text), ind)
+                    ? generateWatsonResponseFromAction(element.watsonResponse, dispatch, ismobile, props, index, _linkToEmailFromText(text), ind)
                     : <WatsonText
                       dangerouslySetInnerHTML={{ __html: _linkToEmailFromText(text) }}
                       ismobile={ismobile ? 1 : 0}
