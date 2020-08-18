@@ -6,7 +6,6 @@ import { func, bool, array, number } from 'prop-types';
 import api from './../services/Intelliboard';
 
 export default function Table(props) {
-  console.log(props.atendimentos);
 
   const columns = [
     { title: 'ID', field: '_id' },

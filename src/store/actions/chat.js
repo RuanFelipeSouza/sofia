@@ -1,6 +1,6 @@
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
-import uuidv4 from 'uuid/v4';
+import { uuid } from 'uuidv4';
 
 import * as types from './types';
 import * as Socketio from './../../services/Socketio';
@@ -22,7 +22,7 @@ export const sendWhatsappMessage = (number, messageText, room) => {
 
   return async (dispatch) => {
     try {
-      const tempId = uuidv4();
+      const tempId = uuid();
       const message = buildMessage(TWILIO_NUMBER, messageText, room, null, tempId);
       dispatch(action(SEND_WHATSAPP_MESSAGE_REQUEST, message));
       const messageId = await Twillio.sendMessage(number, messageText);
@@ -44,8 +44,8 @@ export const messageReceived = (messageText, room, origin = 'client', messageId)
 export const userJoined = (room, user, socketId, recipientId, messages = [], isWhatsapp = false, sector) => {
   return (dispatch, getState) => {
     const { chat } = getState();
-    const token = localStorage.getItem('Authorization');
-    const { email, isSupervisor } = jwtDecode(token.replace('Bearer ', ''));
+    const token = localStorage.getItem('token');
+    const { email, isSupervisor } = jwtDecode(token);
 
     if (email === recipientId || isSupervisor) {
       if (!chat.conversations.find(item => item.room === room)) {

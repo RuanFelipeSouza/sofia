@@ -5,6 +5,7 @@ import IntelliLogs from './pages/IntelliLogs';
 import Conversation from './pages/IntelliLogs/Conversation';
 import IntelliChat from './pages/IntelliChat';
 import Dashboard from './pages/Dashboard';
+import Assistant from './pages/Assistant';
 import Login from './pages/Login';
 
 export default function Routes() {
@@ -12,6 +13,7 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Login} />
+        <Route exact path="/iframe" component={Assistant} />
         <ProtectedRoute path="/intellilogs" component={IntelliLogs} />
         <ProtectedRoute path="/conversation/:id" component={Conversation} />
         <ProtectedRoute path="/intellichat" component={IntelliChat} />

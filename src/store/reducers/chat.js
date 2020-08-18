@@ -58,14 +58,13 @@ const storeMessage = (state, action) => {
   const { text, date, room } = action.payload;
   const { room: currentRoom, messages: currentMessages } = state.currentConversation;
   const conversationToUpdate = state.conversations.find(item => item.room === room);
-
   return {
     ...state,
     conversations: [
       {
         ...conversationToUpdate,
         unread: state.currentConversation.room !== conversationToUpdate.room ? conversationToUpdate.unread + 1 : conversationToUpdate.unread,
-        lastMessageText: text,
+        lastMessageText: text, 
         lastMessageDate: date,
         messages: [...conversationToUpdate.messages, action.payload]
       },
