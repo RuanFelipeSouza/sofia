@@ -1,6 +1,6 @@
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
-import uuid from 'uuid';
+import { uuid } from 'uuidv4';
 
 import * as types from './types';
 import * as Socketio from './../../services/Socketio';
@@ -22,7 +22,7 @@ export const sendWhatsappMessage = (number, messageText, room) => {
 
   return async (dispatch) => {
     try {
-      const tempId = uuid.v4();
+      const tempId = uuid();
       const message = buildMessage(TWILIO_NUMBER, messageText, room, null, tempId);
       dispatch(action(SEND_WHATSAPP_MESSAGE_REQUEST, message));
       const messageId = await Twillio.sendMessage(number, messageText);
