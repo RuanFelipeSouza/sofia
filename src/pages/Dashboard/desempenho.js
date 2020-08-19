@@ -78,7 +78,6 @@ function GenericBarChart(props) {
 }
 
 const renderPieLabel = (entry) => {
-  console.log(entry);
   return (
     <text textAnchor={entry.textAnchor} x={entry.x} y={entry.y} fill={entry.fill}>
       {entry.value} ({(entry.percent * 100).toFixed(2)}%)
@@ -109,7 +108,6 @@ export default function Sugestoes({ surveys, connections, users }) {
       grouped.push({ name: key ? 'Respondidas' : 'Não Respondidas', Quantidade: value.length });
     });
     setGroupedSurveys(grouped);
-    console.log('survey', grouped);
 
     grouped = [];
     groupBy(connections, (e) => e.status).forEach((value, key) => {
