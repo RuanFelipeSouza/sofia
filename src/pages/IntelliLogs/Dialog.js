@@ -88,20 +88,17 @@ function formatMessage(msg) {
 const createMessage = (props, classes) => (
   <>
     <p>
-      <b>{props.from}</b>
+      <b>{props.from}</b> {props.to ? ` para ${props.to}` : ''}
       <br />
       {props.media && (
         <>
           {' '}
-          <img className={classes.innerImage} src={props.media} alt={''} />{' '}
-          <br />{' '}
+          <img className={classes.innerImage} src={props.media} alt={''} /> <br />{' '}
         </>
       )}
       {formatMessage(props.text)}
     </p>
-    <h5 className={classes.messageDatetime}>
-      {moment(props.date).format('DD/MM/YYYY HH:mm')}
-    </h5>
+    <h5 className={classes.messageDatetime}>{moment(props.date).format('DD/MM/YYYY HH:mm')}</h5>
   </>
 );
 
@@ -118,30 +115,20 @@ export default function Dialog(props) {
             return (
               <div key={row._id} className={classes.assistantLine}>
                 <Avatar className={classes.purpleAvatar}>A</Avatar>
-                <Paper className={classes.assistantMessage}>
-                  {createMessage(row, classes)}
-                </Paper>
+                <Paper className={classes.assistantMessage}>{createMessage(row, classes)}</Paper>
               </div>
             );
           if (row.from === conversa.teacherName)
             return (
               <div key={row._id} className={classes.teacherLine}>
-                <Avatar className={classes.greenAvatar}>
-                  {row.from?.charAt()}
-                </Avatar>
-                <Paper className={classes.teacherMessage}>
-                  {createMessage(row, classes)}
-                </Paper>
+                <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
+                <Paper className={classes.teacherMessage}>{createMessage(row, classes)}</Paper>
               </div>
             );
           return (
             <div key={row._id} className={classes.studentLine}>
-              <Avatar className={classes.orangeAvatar}>
-                {row.from?.charAt()}
-              </Avatar>
-              <Paper className={classes.studentMessage}>
-                {createMessage(row, classes)}
-              </Paper>
+              <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
+              <Paper className={classes.studentMessage}>{createMessage(row, classes)}</Paper>
             </div>
           );
         })}
