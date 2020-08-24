@@ -3,7 +3,6 @@ import { WatsonText } from '../components/MessagesBody/styles';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import styled from 'styled-components';
-import { sendMessage } from '../store/actions/message';
 import { COLORS } from '../constants';
 import { animated } from 'react-spring';
 import PaginatedTable from '../components/PaginatedTable/PaginatedTable';
@@ -58,15 +57,15 @@ const HiddenMenuItem = styled(MenuItem)`
 `;
 
 const generateWatsonResponseFromAction = (
-  watsonResponse,
-  dispatch,
+  context,
+  EventFunction,
   ismobile,
   props,
   key,
   text,
   ind
 ) => {
-  if (!watsonResponse?.context?.action || !text.includes('<action>')) {
+  if (!context?.action || !text.includes('<action>')) {
     return (
       <WatsonText
         latest={1}
@@ -81,26 +80,26 @@ const generateWatsonResponseFromAction = (
   const [textBeforeAction, textAfterAction] = text?.split('<action>');
 
   let response;
-  switch (watsonResponse?.context?.action) {
+  switch (context?.action) {
     case 'generateButtons':
       response = _handleGenerateButtons(
-        watsonResponse?.context?.buttonLabels,
-        dispatch,
+        context?.buttonLabels,
+        EventFunction,
         ismobile,
         props
       );
       break;
     case 'generateSelect':
       response = _handleGenerateSelect(
-        watsonResponse?.context?.selectContent,
-        dispatch,
+        context?.selectContent,
+        EventFunction,
         ismobile,
-        watsonResponse?.context?.selectSubtitles
+        context?.selectSubtitles
       );
       break;
     case 'generateTable':
       response = _handleGenerateTable(
-        watsonResponse?.context?.tableContent,
+        context?.tableContent,
         props
       );
       break;
@@ -139,7 +138,7 @@ generateWatsonResponseFromAction.propTypes = {
 };
 export default generateWatsonResponseFromAction;
 
-const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
+const _handleGenerateButtons = (buttonLabels, EventFunction, ismobile, props) => {
   const labels = buttonLabels.split(',');
   const length = labels.length - 1;
 
@@ -150,7 +149,7 @@ const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
         style={{ transform: props.style.transform }}>
         {labels.map((element, index) => (
           <StyledButton
-            onClick={() => dispatch(sendMessage(element))}
+            onClick={() => EventFunction(element)}
             key={index}
             latest={index === length}>
             {element}
@@ -167,7 +166,7 @@ const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
 
 const _handleGenerateSelect = (
   selectContent,
-  dispatch,
+  EventFunction,
   isMobile,
   selectSubtitles
 ) => {
@@ -179,7 +178,7 @@ const _handleGenerateSelect = (
         value=''
         displayEmpty
         ismobile={isMobile ? 1 : 0}
-        onChange={(e) => dispatch(sendMessage(e.target.value))}>
+        onChange={(e) => EventFunction(e.target.value)}>
         <HiddenMenuItem value='' disabled key={-1} hidden>
           Selecione uma opção
         </HiddenMenuItem>
