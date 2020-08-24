@@ -1,17 +1,15 @@
 import React, { useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LoaderDots } from '@thumbtack/thumbprint-react';
 import generateWatsonResponseFromAction from '../../utils/generateWatsonResponseFromAction';
 import avatar from '../../assets/images/avatar_face.png';
 import { useTransition } from 'react-spring';
 import { BodyContainer, LoaderContainer, StyledLabel, UserMessageContainer, UserText, WatsonMessageContainer, WatsonText } from './styles';
 
-const MessagesBody = ({ loading, ismobile }) => {
+const MessagesBody = (props) => {
+  const { loading, ismobile, conversationStack } = props;
   const dispatch = useDispatch();
   const bottomScrollRef = useRef(null);
-  const conversationStack = useSelector(
-    state => state.message.conversationStack
-  );
 
   const transitions = useTransition(conversationStack, (_, i) => i, {
     from: item => item.watsonResponse ? { transform: 'translateX(-10px)' } : { transform: 'translateX(10px)' },
@@ -83,7 +81,8 @@ const MessagesBody = ({ loading, ismobile }) => {
 };
 MessagesBody.propTypes = {
   loading: Boolean,
-  ismobile: Boolean
+  ismobile: Boolean,
+  conversationStack: Array,
 };
 export default MessagesBody;
 
