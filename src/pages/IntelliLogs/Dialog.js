@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple, green } from '@material-ui/core/colors';
 import * as moment from 'moment';
 import * as parse from 'html-react-parser';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   conversation: {
@@ -17,39 +18,23 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',
   },
-  assistantMessage: {
+  userLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  message: {
     marginTop: '1.5%',
     marginBottom: '1.5%',
+    padding: '0 3%',
+    maxWidth: '60%',
+    minWidth: '25%',
+  },
+  teacherColor: {
     backgroundColor: '#DBF6C6',
-    padding: '0 3%',
-    maxWidth: '60%',
-    minWidth: '25%',
   },
-  teacherLine: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  teacherMessage: {
-    marginTop: '1.5%',
-    marginBottom: '1.5%',
+  studentColor: {
     backgroundColor: '#FFFFFA',
-    padding: '0 3%',
-    maxWidth: '60%',
-    minWidth: '25%',
-  },
-  studentLine: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  studentMessage: {
-    marginTop: '1.5%',
-    marginBottom: '1.5%',
-    backgroundColor: '#FFFFEF',
-    padding: '0 3%',
-    maxWidth: '60%',
-    minWidth: '25%',
   },
   orangeAvatar: {
     margin: '1.5% 2%',
@@ -88,7 +73,13 @@ function formatMessage(msg) {
 const createMessage = (props, classes) => (
   <>
     <p>
-      <b>{props.from}</b> {props.to ? ` para ${props.to}` : ''}
+      <b>{props.from}</b>{' '}
+      {props.to && (
+        <>
+          {' '}
+          para <b>{props.to}</b>
+        </>
+      )}
       <br />
       {props.media && (
         <>
@@ -115,20 +106,31 @@ export default function Dialog(props) {
             return (
               <div key={row._id} className={classes.assistantLine}>
                 <Avatar className={classes.purpleAvatar}>A</Avatar>
-                <Paper className={classes.assistantMessage}>{createMessage(row, classes)}</Paper>
+                <Paper
+                  className={clsx(
+                    classes.message,
+                    row.to === conversa.teacherName ? classes.teacherColor : classes.studentColor
+                  )}
+                >
+                  {createMessage(row, classes)}
+                </Paper>
               </div>
             );
           if (row.from === conversa.teacherName)
             return (
-              <div key={row._id} className={classes.teacherLine}>
+              <div key={row._id} className={classes.userLine}>
                 <Avatar className={classes.greenAvatar}>{row.from?.charAt()}</Avatar>
-                <Paper className={classes.teacherMessage}>{createMessage(row, classes)}</Paper>
+                <Paper className={clsx(classes.message, classes.teacherColor)}>
+                  {createMessage(row, classes)}
+                </Paper>
               </div>
             );
           return (
-            <div key={row._id} className={classes.studentLine}>
+            <div key={row._id} className={classes.userLine}>
               <Avatar className={classes.orangeAvatar}>{row.from?.charAt()}</Avatar>
-              <Paper className={classes.studentMessage}>{createMessage(row, classes)}</Paper>
+              <Paper className={clsx(classes.message, classes.studentColor)}>
+                {createMessage(row, classes)}
+              </Paper>
             </div>
           );
         })}
