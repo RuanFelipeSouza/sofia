@@ -36,12 +36,12 @@ const App = () => {
   const dispatch = useDispatch();
 
   const fadeIn = useSpring({
-    opacity: hasRatingModal ? 1 : 0,
+    opacity: hasRatingModal,
     config: { duration: 150 },
   });
 
   const chatGrow = useSpring({
-    transform: `scale(${animate ? 1 : 0})`,
+    transform: `scale(${animate})`,
     config: { duration: 300 },
     onFrame: ({ transform }) => {
       if (
@@ -109,22 +109,19 @@ const App = () => {
   };
 
   const _closeChat = () => setAnimate(false);
-  /**
-   * redux()
-   */
   return (
-    <AppContainer className="App" id="app" isOpen={!isChatOpen}>
+    <AppContainer className="App" id="app" isOpen={isChatOpen}>
       <Avatar
         src={avatarImg}
         alt={'Chat Bot Avatar'}
         onClick={handleAvatarClick}
-        ismobile={isMobile ? 1 : 0}
-        isopen={isChatOpen ? 1 : 0}
+        ismobile={isMobile}
+        isopen={isChatOpen}
         style={avatarHero}
       />
       <ChatContainer
         style={chatGrow}
-        ismobile={isMobile ? 1 : 0}
+        ismobile={isMobile}
         chatsize={chatSize}
       >
         <Header ismobile={isMobile} handleHeaderClick={handleAvatarClick} />
