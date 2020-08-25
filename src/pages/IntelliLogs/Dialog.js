@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import * as moment from 'moment';
 import * as parse from 'html-react-parser';
+import { WatsonText, BodyContainer, StyledLabel, UserMessageContainer } from '../../components/MessagesBody/styles';
 
 const useStyles = makeStyles((theme) => ({
   conversation: {
@@ -77,11 +78,13 @@ function formatMessage(msg) {
 
 const createMessage = (props, classes) =>
   <>
-    <p>
-      <b>{props.from}</b><br />
-      {props.media && (<> <img className={classes.innerImage} src={props.media} alt={''} /> <br /> </>)}
-      {formatMessage(props.text)}
-    </p>
+
+    <UserMessageContainer className={classes.assistantMessage} >
+      <WatsonText
+        dangerouslySetInnerHTML={{ __html: formatMessage(props.text) }}
+        {...props}
+      />
+    </UserMessageContainer>
   </>;
 
 createMessage.propTypes = {
@@ -96,25 +99,25 @@ export default function Dialog(props) {
   const { dialog } = props;
 
   return (
-    <Paper className={classes.conversation}>
-      {dialog.messages && dialog.messages?.map((row) => {
-        if (row.from === 'Assistente')
-          return <div key={row._id} className={classes.assistantLine}>
-            <Avatar className={classes.assistantAvatar}>A</Avatar>
-            <Paper className={classes.assistantMessage}>
+    <StyledLabel htmlFor="userInput">
+      <BodyContainer>
+        <Paper className={classes.conversation}>
+          {dialog.messages && dialog.messages?.map((row) => {
+            if (row.from === 'Assistente')
+              return <div key={row._id} className={classes.assistantLine}>
+                <Avatar className={classes.assistantAvatar}>A</Avatar>
+                {createMessage(row, classes)}
+                <h5 className={classes.assistantMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
+              </div>;
+            return <div key={row._id} className={classes.userLine}>
+              <Avatar className={classes.userAvatar}>{row.from?.charAt()}</Avatar>
               {createMessage(row, classes)}
-              <h5 className={classes.assistantMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
-            </Paper>
-          </div>;
-        return <div key={row._id} className={classes.userLine}>
-          <Avatar className={classes.userAvatar}>{row.from?.charAt()}</Avatar>
-          <Paper className={classes.userMessage}>
-            {createMessage(row, classes)}
-            <h5 className={classes.userMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
-          </Paper>
-        </div>;
-      })}
-    </Paper>
+              <h5 className={classes.userMessageDatetime}>{moment(row.date).format('DD/MM/YYYY HH:mm')}</h5>
+            </div>;
+          })}
+        </Paper>
+      </BodyContainer>
+    </StyledLabel>
   );
 }
 
