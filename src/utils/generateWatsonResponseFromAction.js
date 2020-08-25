@@ -58,7 +58,7 @@ const HiddenMenuItem = styled(MenuItem)`
 
 const generateWatsonResponseFromAction = (
   context,
-  EventFunction,
+  eventFunction,
   ismobile,
   props,
   key,
@@ -69,8 +69,8 @@ const generateWatsonResponseFromAction = (
     return (
       <WatsonText
         latest={1}
-        hidebar={ind !== 0 ? 1 : 0}
-        ismobile={ismobile ? 1 : 0}
+        hidebar={ind !== 0}
+        ismobile={ismobile}
         dangerouslySetInnerHTML={{ __html: text }}
         {...props}
       />
@@ -84,7 +84,7 @@ const generateWatsonResponseFromAction = (
     case 'generateButtons':
       response = _handleGenerateButtons(
         context?.buttonLabels,
-        EventFunction,
+        eventFunction,
         ismobile,
         props
       );
@@ -92,7 +92,7 @@ const generateWatsonResponseFromAction = (
     case 'generateSelect':
       response = _handleGenerateSelect(
         context?.selectContent,
-        EventFunction,
+        eventFunction,
         ismobile,
         context?.selectSubtitles
       );
@@ -114,7 +114,7 @@ const generateWatsonResponseFromAction = (
       <WatsonText
         dangerouslySetInnerHTML={{ __html: textBeforeAction }}
         latest={1}
-        ismobile={ismobile ? 1 : 0}
+        ismobile={ismobile}
         key='firstMessage'
         {...props}
         style={{ ...props.style, ...textStyle }}
@@ -124,7 +124,7 @@ const generateWatsonResponseFromAction = (
         <WatsonText
           dangerouslySetInnerHTML={{ __html: textAfterAction }}
           latest={1}
-          ismobile={ismobile ? 1 : 0}
+          ismobile={ismobile}
           hidebar={1}
           {...props}
           key='secondMessage'
@@ -138,18 +138,18 @@ generateWatsonResponseFromAction.propTypes = {
 };
 export default generateWatsonResponseFromAction;
 
-const _handleGenerateButtons = (buttonLabels, EventFunction, ismobile, props) => {
+const _handleGenerateButtons = (buttonLabels, eventFunction, ismobile, props) => {
   const labels = buttonLabels.split(',');
   const length = labels.length - 1;
 
   return {
     action: (
       <ButtonContainer
-        ismobile={ismobile ? 1 : 0}
+        ismobile={ismobile}
         style={{ transform: props.style.transform }}>
         {labels.map((element, index) => (
           <StyledButton
-            onClick={() => EventFunction(element)}
+            onClick={() => eventFunction(element)}
             key={index}
             latest={index === length}>
             {element}
@@ -166,7 +166,7 @@ const _handleGenerateButtons = (buttonLabels, EventFunction, ismobile, props) =>
 
 const _handleGenerateSelect = (
   selectContent,
-  EventFunction,
+  eventFunction,
   isMobile,
   selectSubtitles
 ) => {
@@ -177,8 +177,8 @@ const _handleGenerateSelect = (
         id='demo-simple-select'
         value=''
         displayEmpty
-        ismobile={isMobile ? 1 : 0}
-        onChange={(e) => EventFunction(e.target.value)}>
+        ismobile={isMobile}
+        onChange={(e) => eventFunction(e.target.value)}>
         <HiddenMenuItem value='' disabled key={-1} hidden>
           Selecione uma opção
         </HiddenMenuItem>
