@@ -4,7 +4,7 @@ const INITIAL_STATE = {
   loading: false,
   conversationStack: [],
   actualContext: {
-    isBotOn: true
+    isBotOn: true,
   },
 };
 
@@ -12,7 +12,7 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case TYPES.ASSISTANT_SEND_MESSAGE:
       return sendMessage(state, action);
-    case TYPES.SEND_MESSAGE: 
+    case TYPES.SEND_MESSAGE:
       return sendMessage(state, action);
     case TYPES.STORE_MESSAGE:
       return storeMessage(state, action);
@@ -24,26 +24,37 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 const sendMessage = (state, action) => {
+  const message = {
+    text: action.payload.input.text,
+    from: 'Usuário',
+  };
   return {
     ...state,
-    conversationStack: state.conversationStack.concat({ userText: action.payload }),
-    loading: true
+    conversationStack: state.conversationStack.concat(message),
+    loading: true,
   };
 };
 
 const storeMessage = (state, action) => {
+  const message = {
+    context: action.payload.context,
+    from: 'Assistente',
+    outputs: action.payload.output.generic, // array with {response_type and text} because watson can has more than one output
+  };
   return {
     ...state,
-    conversationStack: state.conversationStack.concat({ watsonResponse: action.payload }),
+    conversationStack: state.conversationStack.concat(message),
     actualContext: action.payload.context,
-    loading: false
+    loading: false,
   };
 };
 
 const setInitialMessage = (state, action) => {
   return {
     ...state,
-    conversationStack: state.conversationStack.concat({ watsonResponse: action.payload }),
+    conversationStack: state.conversationStack.concat({
+      watsonResponse: action.payload,
+    }),
     actualContext: action.payload.context || {},
   };
 };
