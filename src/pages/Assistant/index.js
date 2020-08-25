@@ -9,7 +9,7 @@ import {
   showRatingModal,
   closeRatingModal,
 } from './../../store/actions/container';
-import { setInitialMessage, sendMessage } from './../../store/actions/message';
+import { setInitialMessage } from './../../store/actions/message';
 import { OPEN_SIZE, CLOSED_SIZE } from '../../constants';
 import { useSpring } from 'react-spring';
 import UserEntry from '../../components/UserEntry/UserEntry';
@@ -36,12 +36,12 @@ const App = () => {
   const dispatch = useDispatch();
 
   const fadeIn = useSpring({
-    opacity: hasRatingModal,
+    opacity: hasRatingModal ? 1 : 0,
     config: { duration: 150 },
   });
 
   const chatGrow = useSpring({
-    transform: `scale(${animate})`,
+    transform: `scale(${animate ? 1 : 0})`,
     config: { duration: 300 },
     onFrame: ({ transform }) => {
       if (
@@ -72,9 +72,7 @@ const App = () => {
   const onCloseModal = () => {
     dispatch(closeModal({ fullscreen: isMobile }));
   };
-  const onElementTrigger = (msg)=>{
-    dispatch(sendMessage(msg));
-  };
+
   useEffect(() => {
     window.addEventListener('message', (e) => {
       if (e.data.m === 'r') {
@@ -131,7 +129,6 @@ const App = () => {
           loading={loading}
           ismobile={isMobile}
           conversationStack={conversationStack}
-          eventFunction={onElementTrigger}
         />
         <UserEntry loading={loading} />
         {hasRatingModal && (
