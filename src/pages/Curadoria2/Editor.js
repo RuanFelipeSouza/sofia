@@ -20,6 +20,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import api from '../../services/api';
+import { v4 as uuid } from 'uuid';
 import { mapBotToProject } from '../../utils/convertProjectToBot';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -80,7 +81,7 @@ export default function Editor2(props) {
       //insere uma posição vazia no final do vetor de inputs, com id aleatório temporário
       response.data[0].inputTextArray.push({
         inputText: '',
-        id: Math.random().toString(16),
+        id: uuid(),
       });
       console.log(response.data[0]);
 
