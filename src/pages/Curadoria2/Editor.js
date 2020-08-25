@@ -74,7 +74,7 @@ export default function Editor2(props) {
   const [alteredFields, setAlteredFields] = useState([]);
 
   useEffect(() => {
-    if (!!props.id.expectedNode === false) return;
+    if (!props.id || !!props.id.expectedNode === false) return;
     console.log(props);
 
     setLoading(true);
