@@ -18,22 +18,23 @@ const groupBy = (list, keyGetter) => {
   return map;
 };
 
-export default function Chart({ atendimentos }) {
+export default function Chart(props) {
+  let data = props.data;
   const theme = useTheme();
-  atendimentos && atendimentos.forEach(function (element) {
+  data && data.forEach(function (element) {
     element.createdAt = moment(element.createdAt, ['YYYY-MM-DD', 'DD/MM/YYYY']).format('DD/MM/YYYY');
   });
-  atendimentos = groupBy(atendimentos, e => e.createdAt);
+  data = groupBy(data, e => e.createdAt);
 
-  let atendimentosPorDia = [];
-  atendimentos.forEach(function (element, key) {
-    atendimentosPorDia.push({ Data: key, Atendimentos: element.length });
+  let dataPerDay = [];
+  data.forEach(function (element, key) {
+    dataPerDay.push({ Data: key, [props.xIndex]: element.length });
   });
   return (
     <BarChart
       width={700}
       height={350}
-      data={atendimentosPorDia}
+      data={dataPerDay}
       margin={{
         top: 15, right: 20, left: 20, bottom: 5,
       }}
@@ -44,12 +45,13 @@ export default function Chart({ atendimentos }) {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="Atendimentos" fill={theme.palette.secondary.main} />
+      <Bar dataKey={props.xIndex} fill={theme.palette.secondary.main} />
       {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
     </BarChart>
   );
 }
 
 Chart.propTypes = {
-  atendimentos: array
+  data: array,
+  xIndex: String,
 };

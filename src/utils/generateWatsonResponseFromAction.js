@@ -3,7 +3,6 @@ import { WatsonText } from '../components/MessagesBody/styles';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import styled from 'styled-components';
-import { sendMessage } from '../store/actions/message';
 import { COLORS } from '../constants';
 import { animated } from 'react-spring';
 import PaginatedTable from '../components/PaginatedTable/PaginatedTable';
@@ -58,20 +57,20 @@ const HiddenMenuItem = styled(MenuItem)`
 `;
 
 const generateWatsonResponseFromAction = (
-  watsonResponse,
-  dispatch,
+  context,
+  eventFunction,
   ismobile,
   props,
   key,
   text,
   ind
 ) => {
-  if (!watsonResponse?.context?.action || !text.includes('<action>')) {
+  if (!context?.action || !text.includes('<action>')) {
     return (
       <WatsonText
         latest={1}
-        hidebar={ind !== 0 ? 1 : 0}
-        ismobile={ismobile ? 1 : 0}
+        hidebar={ind !== 0}
+        ismobile={ismobile}
         dangerouslySetInnerHTML={{ __html: text }}
         {...props}
       />
@@ -81,26 +80,26 @@ const generateWatsonResponseFromAction = (
   const [textBeforeAction, textAfterAction] = text?.split('<action>');
 
   let response;
-  switch (watsonResponse?.context?.action) {
+  switch (context?.action) {
     case 'generateButtons':
       response = _handleGenerateButtons(
-        watsonResponse?.context?.buttonLabels,
-        dispatch,
+        context?.buttonLabels,
+        eventFunction,
         ismobile,
         props
       );
       break;
     case 'generateSelect':
       response = _handleGenerateSelect(
-        watsonResponse?.context?.selectContent,
-        dispatch,
+        context?.selectContent,
+        eventFunction,
         ismobile,
-        watsonResponse?.context?.selectSubtitles
+        context?.selectSubtitles
       );
       break;
     case 'generateTable':
       response = _handleGenerateTable(
-        watsonResponse?.context?.tableContent,
+        context?.tableContent,
         props
       );
       break;
@@ -115,7 +114,7 @@ const generateWatsonResponseFromAction = (
       <WatsonText
         dangerouslySetInnerHTML={{ __html: textBeforeAction }}
         latest={1}
-        ismobile={ismobile ? 1 : 0}
+        ismobile={ismobile}
         key='firstMessage'
         {...props}
         style={{ ...props.style, ...textStyle }}
@@ -125,7 +124,7 @@ const generateWatsonResponseFromAction = (
         <WatsonText
           dangerouslySetInnerHTML={{ __html: textAfterAction }}
           latest={1}
-          ismobile={ismobile ? 1 : 0}
+          ismobile={ismobile}
           hidebar={1}
           {...props}
           key='secondMessage'
@@ -139,18 +138,18 @@ generateWatsonResponseFromAction.propTypes = {
 };
 export default generateWatsonResponseFromAction;
 
-const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
+const _handleGenerateButtons = (buttonLabels, eventFunction, ismobile, props) => {
   const labels = buttonLabels.split(',');
   const length = labels.length - 1;
 
   return {
     action: (
       <ButtonContainer
-        ismobile={ismobile ? 1 : 0}
+        ismobile={ismobile}
         style={{ transform: props.style.transform }}>
         {labels.map((element, index) => (
           <StyledButton
-            onClick={() => dispatch(sendMessage(element))}
+            onClick={() => eventFunction(element)}
             key={index}
             latest={index === length}>
             {element}
@@ -167,7 +166,7 @@ const _handleGenerateButtons = (buttonLabels, dispatch, ismobile, props) => {
 
 const _handleGenerateSelect = (
   selectContent,
-  dispatch,
+  eventFunction,
   isMobile,
   selectSubtitles
 ) => {
@@ -178,8 +177,8 @@ const _handleGenerateSelect = (
         id='demo-simple-select'
         value=''
         displayEmpty
-        ismobile={isMobile ? 1 : 0}
-        onChange={(e) => dispatch(sendMessage(e.target.value))}>
+        ismobile={isMobile}
+        onChange={(e) => eventFunction(e.target.value)}>
         <HiddenMenuItem value='' disabled key={-1} hidden>
           Selecione uma opção
         </HiddenMenuItem>
