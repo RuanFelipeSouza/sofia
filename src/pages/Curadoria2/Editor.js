@@ -151,11 +151,11 @@ export default function Editor2(props) {
     data._id = _id ? _id : props.id;
     data.bot = props.bot;
     props.setCuradorias((prevState) => {
-      if (!!props.id !== false) {
+      if (!props.id || !!props.id.expectedNode === false) {
         const index = prevState.findIndex(
           (e) =>
-            e.id.project === editorState.id.project &&
-            e.id.expectedNode === editorState.id.expectedNode
+            e._id.project === editorState._id.project &&
+            e._id.expectedNode === editorState._id.expectedNode
         );
         prevState[index] = data;
         return prevState;
