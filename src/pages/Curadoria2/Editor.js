@@ -74,7 +74,8 @@ export default function Editor2(props) {
   const [alteredFields, setAlteredFields] = useState([]);
 
   useEffect(() => {
-    if (!!props.id === false) return;
+    if (!!props.id.expectedNode === false) return;
+    console.log(props);
 
     setLoading(true);
     api.get(`/curadoria2/${props.id.project}/${props.id.expectedNode}`).then((response) => {
@@ -92,7 +93,6 @@ export default function Editor2(props) {
 
   const handleChange = (event) => {
     const { name, value, checked, id } = event.target;
-    console.log(event.target);
     setEditorState((oldState) => {
       if (name === 'inputText') {
         const index = oldState.inputTextArray.findIndex((input) => input.id === id);

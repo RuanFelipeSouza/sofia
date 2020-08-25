@@ -11,25 +11,21 @@ import Box from '@material-ui/core/Box';
 import Copyright from '../../components/Copyright';
 import Table from './Table';
 
-import api from '../../services/api'
+import api from '../../services/api';
 import localStorageStateHook from '../../utils/useLocalStorageState';
-import {convertProjectToBotNumber} from '../../utils/convertProjectToBot';
+import { convertProjectToBotNumber } from '../../utils/convertProjectToBot';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
@@ -50,8 +46,8 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    display: 'flex'
-  }
+    display: 'flex',
+  },
 }));
 
 export default function FullWidthTabs() {
@@ -61,20 +57,33 @@ export default function FullWidthTabs() {
   const [page, setPage] = useLocalStorageState(keys.CURADORIA_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(keys.CURADORIA_TAMANHO_PAGINA, 5, useState);
   const [loading, setLoading] = useState(true);
-  const [filterBot1, setFilterBot1] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_1, {}, useState);
-  const [filterBot2, setFilterBot2] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_2, {}, useState);
-  const [filterBot3, setFilterBot3] = useLocalStorageState(keys.CURADORIA_FILTER_BOT_3, {}, useState);
+  const [filterBot1, setFilterBot1] = useLocalStorageState(
+    keys.CURADORIA_FILTER_BOT_1,
+    {},
+    useState
+  );
+  const [filterBot2, setFilterBot2] = useLocalStorageState(
+    keys.CURADORIA_FILTER_BOT_2,
+    {},
+    useState
+  );
+  const [filterBot3, setFilterBot3] = useLocalStorageState(
+    keys.CURADORIA_FILTER_BOT_3,
+    {},
+    useState
+  );
 
   useEffect(() => {
-    api.get('/curadoria2/tested-messages').then(result => {
+    api.get('/curadoria2/tested-messages').then((result) => {
       result.data = convertProjectToBotNumber(result.data);
-      const data = result.data.map((e => {
+      console.log(result.data);
+      const data = result.data.map((e) => {
         return {
           ...e,
           respostas: e.outputText,
-          perguntas: e.inputText
-        }
-      }))
+          perguntas: e.inputText,
+        };
+      });
       setCuradorias(data);
       setLoading(false);
     });
@@ -95,18 +104,18 @@ export default function FullWidthTabs() {
     <div className={classes.root}>
       <Sidebar />
       <CssBaseline />
-      <main >
-        <AppBar position="static" color="default">
+      <main>
+        <AppBar position='static' color='default'>
           <Tabs
             value={value}
             onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            aria-label="full width tabs example"
+            indicatorColor='primary'
+            textColor='primary'
+            aria-label='full width tabs example'
           >
-            <Tab label="BOT 1" {...a11yProps(0)} />
-            <Tab label="BOT 2" {...a11yProps(1)} />
-            <Tab label="BOT 3" {...a11yProps(2)} />
+            <Tab label='BOT 1' {...a11yProps(0)} />
+            <Tab label='BOT 2' {...a11yProps(1)} />
+            <Tab label='BOT 3' {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <SwipeableViews
