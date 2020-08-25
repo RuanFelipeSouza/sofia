@@ -137,11 +137,11 @@ export default function Editor2(props) {
       }
     }
     editorState.bot = props.bot;
-    if (!!props.id === false) editorState.project = mapBotToProject[editorState.bot];
+    if (!props.id || !props.id.expectedNode) editorState.project = mapBotToProject[editorState.bot];
     const {
       data: { _id },
     } =
-      !!props.id === false
+      !props.id || !props.id.expectedNode
         ? await api.post('/curadoria2', editorState)
         : await api.put('/curadoria2', {
             newData: editorState,
@@ -151,11 +151,11 @@ export default function Editor2(props) {
     data._id = _id ? _id : props.id;
     data.bot = props.bot;
     props.setCuradorias((prevState) => {
-      if (!!props.id !== false) {
+      if (props.id || props.id.expectedNode) {
         const index = prevState.findIndex(
           (e) =>
-            e.id.project === editorState.id.project &&
-            e.id.expectedNode === editorState.id.expectedNode
+            e._id.project === editorState._id.project &&
+            e._id.expectedNode === editorState._id.expectedNode
         );
         prevState[index] = data;
         return prevState;
