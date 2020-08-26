@@ -3,7 +3,15 @@ import { LoaderDots } from '@thumbtack/thumbprint-react';
 import generateWatsonResponseFromAction from '../../utils/generateWatsonResponseFromAction';
 import avatar from '../../assets/images/avatar_face.png';
 import { useTransition } from 'react-spring';
-import { BodyContainer, LoaderContainer, StyledLabel, UserMessageContainer, UserText, WatsonMessageContainer, WatsonText } from './styles';
+import {
+  BodyContainer,
+  LoaderContainer,
+  StyledLabel,
+  UserMessageContainer,
+  UserText,
+  WatsonMessageContainer,
+  WatsonText,
+} from './styles';
 
 const MessagesBody = (props) => {
   const { loading, ismobile, conversationStack, eventFunction } = props;
@@ -15,8 +23,9 @@ const MessagesBody = (props) => {
   });
 
   const animatedResponse = (i, child) => {
-    return transitions.map(({ props: style, key }) =>
-      key === i && child({ style, key })
+    if (props.animatedResponse === false) return child();
+    return transitions.map(
+      ({ props: style, key }) => key === i && child({ style, key })
     );
   };
 
@@ -32,28 +41,62 @@ const MessagesBody = (props) => {
       if (element.from === 'Usuário') {
         return (
           <UserMessageContainer key={index} first={first}>
-            {animatedResponse(index, props => <UserText latest={latest} {...props}>{element.text}</UserText>)}
+            {animatedResponse(index, (props) => (
+              <UserText latest={latest} {...props}>
+                {element.text}
+              </UserText>
+            ))}
           </UserMessageContainer>
         );
-      } else { // nowadays we have only assistant and user message to render
+      } else {
+        // nowadays we have only assistant and user message to render
         return element.outputs?.map((output, ind) => {
-          const isImage = output.response_type && output.response_type !== 'text';
+          const isImage =
+            output.response_type && output.response_type !== 'text';
           // since watson doesn't recognize \n on html text, changes all to <br>
-          const text = isImage ? _generateImageFromOutput(output) : output?.text?.replace(/\n/g, '<br>');
+          const text = isImage
+            ? _generateImageFromOutput(output)
+            : output?.text?.replace(/\n/g, '<br>');
           return (
-            <WatsonMessageContainer key={index + '' + ind} first={first} ismobile={ismobile}>
-              {ismobile && <img src={avatar} style={{ height: 32, width: 32, position: 'absolute', left: 0, top: 0 }} alt="" />}
-              {
-                animatedResponse(index, props =>
-                  latest
-                    ? generateWatsonResponseFromAction(element.context, eventFunction, ismobile, props, index, _linkToEmailFromText(text), ind)
-                    : <WatsonText
-                      dangerouslySetInnerHTML={{ __html: _linkToEmailFromText(text) }}
-                      ismobile={ismobile}
-                      {...props}
-                    />
+            <WatsonMessageContainer
+              key={index + '' + ind}
+              first={first}
+              ismobile={ismobile}
+            >
+              {ismobile && (
+                <img
+                  src={avatar}
+                  style={{
+                    height: 32,
+                    width: 32,
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                  }}
+                  alt=""
+                />
+              )}
+              {animatedResponse(index, (props) =>
+                latest ? (
+                  generateWatsonResponseFromAction(
+                    element.context,
+                    eventFunction,
+                    ismobile,
+                    props,
+                    index,
+                    _linkToEmailFromText(text),
+                    ind
+                  )
+                ) : (
+                  <WatsonText
+                    dangerouslySetInnerHTML={{
+                      __html: _linkToEmailFromText(text),
+                    }}
+                    ismobile={ismobile}
+                    {...props}
+                  />
                 )
-              }
+              )}
             </WatsonMessageContainer>
           );
         });
@@ -63,7 +106,7 @@ const MessagesBody = (props) => {
 
   return (
     <StyledLabel htmlFor="userInput" ref={bottomScrollRef}>
-      <BodyContainer >
+      <BodyContainer backgroundColor={props.backgroundColor}>
         {generateConversation()}
         {loading && (
           <LoaderContainer>
@@ -79,6 +122,8 @@ MessagesBody.propTypes = {
   ismobile: Boolean,
   conversationStack: Array,
   eventFunction: Function,
+  animatedResponse: Boolean,
+  backgroundColor: String,
 };
 export default MessagesBody;
 
