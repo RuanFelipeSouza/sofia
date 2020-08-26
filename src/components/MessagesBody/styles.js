@@ -15,11 +15,11 @@ export const StyledLabel = styled.label`
 `;
 
 export const BodyContainer = styled.div`
-  background-color: ${COLORS.background};
+  background-color: ${props=> props.backgroundColor || COLORS.background};
   width: 100%;
   flex: 1 1 auto;
   overflow-y: auto;
-  background: ${COLORS.background};
+  background: ${props=> props.backgroundColor || COLORS.background};
 `;
 
 export const UserText = styled(animated.p)`
