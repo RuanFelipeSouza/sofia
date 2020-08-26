@@ -50,11 +50,14 @@ const storeMessage = (state, action) => {
 };
 
 const setInitialMessage = (state, action) => {
+  const message = {
+    context: action.payload.context,
+    from: 'Assistente',
+    outputs: action.payload.output.generic, // array with {response_type and text} because watson can has more than one output
+  };
   return {
     ...state,
-    conversationStack: state.conversationStack.concat({
-      watsonResponse: action.payload,
-    }),
+    conversationStack: state.conversationStack.concat(message),
     actualContext: action.payload.context || {},
   };
 };
