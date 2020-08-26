@@ -32,4 +32,4 @@ export const DEFAULT_INPUT_PLACEHOLDER = 'Faça uma pergunta...';
 export const HEADER_TITLE = 'Chatbot Starter';
 
 // INTELLIBOARD
-export const INTELLIBOARD_URL = 'http://localhost:3005/';
+export const INTELLIBOARD_URL = 'http://localhost:3000/';

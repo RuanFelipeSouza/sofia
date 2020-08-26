@@ -14,7 +14,8 @@ import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import * as moment from 'moment';
 
 import api from './../../services/Intelliboard';
-import Dialog from './Dialog';
+import MessagesBody from '../../components/MessagesBody/MessagesBody';
+import { BodyContainer } from '../../components/MessagesBody/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,31 +37,44 @@ const useStyles = makeStyles((theme) => ({
   backLink: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
     display: 'table',
     margin: '-5px auto',
     width: '40%',
-    padding: '0 10px'
+    padding: '0 10px',
   },
   main: {
-    width: '100%'
+    width: '100%',
   },
   infos: {
-    margin: '0 2%'
-  }
+    margin: '0 2%',
+  },
+  conversation: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '0 5%',
+  },
 }));
 
 export default function Conversation(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [dialog, setDialog] = useState({});
+  const [dialog, setDialog] = useState([]);
+  const [createdAt, setCreatedAt] = useState();
   const { id } = props.match.params;
-
+  const animatedResponse = false;
   useEffect(() => {
-    api.get(`/conversation/${id}`).then(response => {
-      setDialog(response.data);
+    api.get(`/conversation/${id}`).then((response) => {
+      setDialog(
+        response.data.messages.map((e) =>
+          e.from === 'Assistente'
+            ? { ...e, outputs: [{ response_type: 'text', text: e.text }] }
+            : e
+        )
+      );
+      setCreatedAt(response.data.createdAt);
     });
   }, [id]);
 
@@ -72,28 +86,47 @@ export default function Conversation(props) {
         <img className={classes.logo} src={Logo} alt={''} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={2}>
-            <Grid item xs={12} >
+            <Grid item xs={12}>
               <Paper className={classes.form}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} >
-                    <Link to='' className="backLink" onClick={() => { history.goBack(); }} >
+                  <Grid item xs={12}>
+                    <Link
+                      to=""
+                      className="backLink"
+                      onClick={() => {
+                        history.goBack();
+                      }}
+                    >
                       <ArrowLeftIcon size={16} />
                       Voltar
                     </Link>
                   </Grid>
-                  <Grid item xs={9} >
+                  <Grid item xs={9}>
                     <div className={classes.infos}>
-                      <p><b>Data:</b> {moment(dialog.createdAt).format('DD/MM/YYYY HH:mm')}</p>
+                      <p>
+                        <b>Data:</b>
+                        {moment(createdAt).format('DD/MM/YYYY HH:mm')}
+                      </p>
                     </div>
                   </Grid>
-                  <Grid item xs={3} >
-
-                  </Grid>
+                  <Grid item xs={3}></Grid>
                 </Grid>
               </Paper>
             </Grid>
-            <Grid item xs={12} >
-              <Dialog dialog={dialog} />
+            <Grid item xs={12}>
+              <BodyContainer backgroundColor='none'>
+                <Paper className={classes.conversation}>
+                  {
+                    <MessagesBody
+                      loading={false}
+                      ismobile={false}
+                      conversationStack={dialog}
+                      animatedResponse={animatedResponse}
+                      backgroundColor='none'
+                    ></MessagesBody>
+                  }
+                </Paper>
+              </BodyContainer>
             </Grid>
           </Grid>
           <Box pt={4}>
@@ -106,5 +139,5 @@ export default function Conversation(props) {
 }
 
 Conversation.propTypes = {
-  match: object
+  match: object,
 };
