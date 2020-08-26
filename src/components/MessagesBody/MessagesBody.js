@@ -18,10 +18,7 @@ const MessagesBody = (props) => {
   const bottomScrollRef = useRef(null);
 
   const transitions = useTransition(conversationStack, (_, i) => i, {
-    from: (item) =>
-      item.watsonResponse
-        ? { transform: 'translateX(-10px)' }
-        : { transform: 'translateX(10px)' },
+    from: item => item.from === 'Usuário' ? { transform: 'translateX(10px)' }: { transform: 'translateX(-10px)' },
     enter: { transform: 'translateX(0px)' },
   });
 
