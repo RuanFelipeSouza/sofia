@@ -21,10 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as moment from 'moment';
 
@@ -32,7 +29,7 @@ import api from './../../services/api';
 import Dialog from './Dialog';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction='up' ref={ref} {...props} />;
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -94,6 +91,7 @@ export default function Conversation(props) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
+  const statusToNotShowCancelButton = ['cancelada', 'realizado', 'agendado'];
   console.log(conversa);
 
   useEffect(() => {
@@ -124,18 +122,18 @@ export default function Conversation(props) {
       });
   };
 
-  const handleDelete = async e => {
+  const handleDelete = async (e) => {
     setOpenDeleteDialog(false);
     api
       .put('/updateConnection', {
-        id
+        id,
       })
       .then((response) => {
         setConversa(response.data);
         setLoadingUpdate(false);
         setOpenModal(false);
       });
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -179,9 +177,7 @@ export default function Conversation(props) {
                       <p>
                         <b>Data marcada:</b>{' '}
                         {conversa['class']?.date &&
-                          moment(conversa['class']?.date).format(
-                            'DD/MM/YYYY HH:mm'
-                          )}
+                          moment(conversa['class']?.date).format('DD/MM/YYYY HH:mm')}
                       </p>
                     </div>
                     <div>
@@ -221,42 +217,43 @@ export default function Conversation(props) {
                             </MuiPickersUtilsProvider>
                             <br />
                             <br />
-                            <Button
-                              variant='contained'
-                              onClick={handleUpdateConnection}
-                            >
-                              {loadingUpdate ? (
-                                <CircularProgress size={25} />
-                              ) : (
-                                'Salvar'
-                              )}
+                            <Button variant='contained' onClick={handleUpdateConnection}>
+                              {loadingUpdate ? <CircularProgress size={25} /> : 'Salvar'}
                             </Button>
                           </div>
                         </Fade>
                       </Modal>
-                      {conversa.class && conversa['class'].status !== 'cancelada' && <Button variant="contained" color="secondary" onClick={() => setOpenDeleteDialog(true)} >
-                          Encerrar
-                        </Button>
-                      }
+                      {conversa.class &&
+                        !statusToNotShowCancelButton.includes(conversa['class'].status) && (
+                          <Button
+                            variant='contained'
+                            color='secondary'
+                            onClick={() => setOpenDeleteDialog(true)}
+                          >
+                            Encerrar
+                          </Button>
+                        )}
                       <DialogModal
                         open={openDeleteDialog}
                         TransitionComponent={Transition}
                         keepMounted
                         onClose={() => setOpenDeleteDialog(false)}
-                        aria-labelledby="alert-dialog-slide-title"
-                        aria-describedby="alert-dialog-slide-description"
+                        aria-labelledby='alert-dialog-slide-title'
+                        aria-describedby='alert-dialog-slide-description'
                       >
-                        <DialogTitle id="alert-dialog-slide-title">{"Você confirma o encerramento?"}</DialogTitle>
+                        <DialogTitle id='alert-dialog-slide-title'>
+                          {'Você confirma o encerramento?'}
+                        </DialogTitle>
                         <DialogContent>
-                          <DialogContentText id="alert-dialog-slide-description">
+                          <DialogContentText id='alert-dialog-slide-description'>
                             Essa ação não pode ser desfeita.
                           </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                          <Button onClick={() => setOpenDeleteDialog(false)} color="primary">
+                          <Button onClick={() => setOpenDeleteDialog(false)} color='primary'>
                             Cancelar
                           </Button>
-                          <Button onClick={handleDelete} color="primary">
+                          <Button onClick={handleDelete} color='primary'>
                             Confirmar
                           </Button>
                         </DialogActions>
