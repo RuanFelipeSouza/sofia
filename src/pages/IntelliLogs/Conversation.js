@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   editButton: {
-    margin: '1% 2%',
+    margin: '1% 1%',
   },
 }));
 
@@ -88,6 +88,7 @@ export default function Conversation(props) {
   const [conversa, setConversa] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingStartConnection, setLoadingStartConnection] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
@@ -129,9 +130,23 @@ export default function Conversation(props) {
         id,
       })
       .then((response) => {
-        setConversa(response.data);
-        setLoadingUpdate(false);
-        setOpenModal(false);
+        window.location.reload(false);
+      });
+  };
+
+  const handleStartConnection = async (e) => {
+    setLoadingStartConnection(true);
+    api
+      .put('/startConnection', {
+        id,
+      })
+      .then((response) => {
+        alert(
+          'A conexão foi iniciada, em instantes a página será atualizada para exibir a atualização.'
+        );
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
       });
   };
 
@@ -229,10 +244,21 @@ export default function Conversation(props) {
                             variant='contained'
                             color='secondary'
                             onClick={() => setOpenDeleteDialog(true)}
+                            className={classes.editButton}
                           >
                             Encerrar
                           </Button>
                         )}
+                      {conversa.class && conversa['class'].status === 'novo' && (
+                        <Button
+                          variant='contained'
+                          onClick={handleStartConnection}
+                          className={classes.editButton}
+                          disabled={loadingStartConnection}
+                        >
+                          Iniciar atendimento
+                        </Button>
+                      )}
                       <DialogModal
                         open={openDeleteDialog}
                         TransitionComponent={Transition}
