@@ -75,7 +75,6 @@ export default function Intellilogs() {
       .post('/createConnection', { boardId: selectedBoard, cardId })
       .then((response) => {
         setCreatingConnection(false);
-        console.log(response);
         history.push(`/conversation/${response.data._id}`);
       })
       .catch((error) => {

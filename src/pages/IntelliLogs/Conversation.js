@@ -142,11 +142,14 @@ export default function Conversation(props) {
       })
       .then((response) => {
         alert(
-          'A conexão foi iniciada, em instantes a página será atualizada para exibir a atualização.'
+          'A conexão foi iniciada, em instantes a página será atualizada para exibir conversa.'
         );
         setTimeout(() => {
           window.location.reload(false);
         }, 3000);
+      })
+      .catch(_ => {
+        alert('Erro ao iniciar a conexão.');
       });
   };
 
