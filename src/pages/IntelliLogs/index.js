@@ -11,6 +11,7 @@ import Table from './../../components/Table';
 import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
+import NewConnection from './NewConnection';
 import * as moment from 'moment';
 
 import api from './../../services/api';
@@ -85,11 +86,7 @@ export default function Intellilogs() {
     useState
   );
   const [atendimentos, setAtendimentos] = useState([]);
-  const [page, setPage] = useLocalStorageState(
-    keys.INTELLILOGS_PAGINA_ATUAL,
-    0,
-    useState
-  );
+  const [page, setPage] = useLocalStorageState(keys.INTELLILOGS_PAGINA_ATUAL, 0, useState);
   const [pageSize, setPageSize] = useLocalStorageState(
     keys.INTELLILOGS_TAMANHO_PAGINA,
     5,
@@ -111,9 +108,7 @@ export default function Intellilogs() {
         .then((response) => {
           setLoading(false);
           response.data.map((atendimento) => {
-            return (atendimento.createdAt = moment(
-              atendimento.createdAt
-            ).format('DD/MM/YYYY'));
+            return (atendimento.createdAt = moment(atendimento.createdAt).format('DD/MM/YYYY'));
           });
           setAtendimentos(response.data);
         });
@@ -155,18 +150,14 @@ export default function Intellilogs() {
                   <b>Conexões agendadas com sucesso: </b>
                   {atendimentos?.length &&
                     (atendimentos.filter(
-                      (a) =>
-                        a.class.status === 'agendado' ||
-                        a.class.status === 'realizado'
+                      (a) => a.class.status === 'agendado' || a.class.status === 'realizado'
                     ).length ||
                       0)}{' '}
                   (
                   {atendimentos?.length &&
                     (
                       (atendimentos?.filter(
-                        (a) =>
-                          a.class.status === 'agendado' ||
-                          a.class.status === 'realizado'
+                        (a) => a.class.status === 'agendado' || a.class.status === 'realizado'
                       ).length /
                         atendimentos.length) *
                       100
@@ -174,13 +165,10 @@ export default function Intellilogs() {
                   %) <br />
                   <br />
                   <b>Não entendimento: </b>
-                  {atendimentos?.length &&
-                    atendimentos.filter((a) => !a.understood).length}{' '}
-                  (
+                  {atendimentos?.length && atendimentos.filter((a) => !a.understood).length} (
                   {atendimentos.length &&
                     (
-                      (atendimentos.filter((a) => !a.understood).length /
-                        atendimentos.length) *
+                      (atendimentos.filter((a) => !a.understood).length / atendimentos.length) *
                       100
                     ).toFixed(2)}
                   %) <br />
@@ -188,9 +176,11 @@ export default function Intellilogs() {
                 </Paper>
               </Paper>
             </Grid>
-            {atendimentos.length > 0 && (
-              <Grid item xs={12}>
-                <Paper className={classes.table}>
+            <Grid item xs={12}>
+              <Paper className={classes.table}>
+                <NewConnection />
+                <br />
+                {atendimentos.length > 0 && (
                   <Table
                     atendimentos={atendimentos}
                     isLoading={isLoading}
@@ -199,9 +189,9 @@ export default function Intellilogs() {
                     pageSize={pageSize}
                     onChangeRowsPerPage={setPageSize}
                   />
-                </Paper>
-              </Grid>
-            )}
+                )}
+              </Paper>
+            </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />

@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   editButton: {
-    margin: '1% 2%',
+    margin: '1% 1%',
   },
 }));
 
@@ -88,6 +88,7 @@ export default function Conversation(props) {
   const [conversa, setConversa] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
+  const [loadingStartConnection, setLoadingStartConnection] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
@@ -129,9 +130,26 @@ export default function Conversation(props) {
         id,
       })
       .then((response) => {
-        setConversa(response.data);
-        setLoadingUpdate(false);
-        setOpenModal(false);
+        window.location.reload(false);
+      });
+  };
+
+  const handleStartConnection = async (e) => {
+    setLoadingStartConnection(true);
+    api
+      .put('/startConnection', {
+        id,
+      })
+      .then((response) => {
+        alert(
+          'A conexão foi iniciada, em instantes a página será atualizada para exibir conversa.'
+        );
+        setTimeout(() => {
+          window.location.reload(false);
+        }, 3000);
+      })
+      .catch(_ => {
+        alert('Erro ao iniciar a conexão.');
       });
   };
 
@@ -166,7 +184,7 @@ export default function Conversation(props) {
                         <b>Professor:</b> {conversa?.teacherName}
                       </p>
                       <p>
-                        <b>Status:</b> {conversa['class']?.status}
+                        <b>Status:</b> {conversa.class?.status}
                       </p>
                       <p>
                         <b>Id do board:</b> {conversa?.board?._id}
@@ -176,8 +194,8 @@ export default function Conversation(props) {
                       </p>
                       <p>
                         <b>Data marcada:</b>{' '}
-                        {conversa['class']?.date &&
-                          moment(conversa['class']?.date).format('DD/MM/YYYY HH:mm')}
+                        {conversa.class?.date &&
+                          moment(conversa.class?.date).format('DD/MM/YYYY HH:mm')}
                       </p>
                     </div>
                     <div>
@@ -224,15 +242,26 @@ export default function Conversation(props) {
                         </Fade>
                       </Modal>
                       {conversa.class &&
-                        !statusToNotShowCancelButton.includes(conversa['class'].status) && (
+                        !statusToNotShowCancelButton.includes(conversa.class.status) && (
                           <Button
                             variant='contained'
                             color='secondary'
                             onClick={() => setOpenDeleteDialog(true)}
+                            className={classes.editButton}
                           >
                             Encerrar
                           </Button>
                         )}
+                      {conversa.class && conversa.class.status === 'novo' && (
+                        <Button
+                          variant='contained'
+                          onClick={handleStartConnection}
+                          className={classes.editButton}
+                          disabled={loadingStartConnection}
+                        >
+                          Iniciar atendimento
+                        </Button>
+                      )}
                       <DialogModal
                         open={openDeleteDialog}
                         TransitionComponent={Transition}
@@ -261,19 +290,19 @@ export default function Conversation(props) {
                     </div>
                   </Grid>
                   <Grid item xs={3}>
-                    {conversa['class']?.studentSurveyId && (
+                    {conversa.class?.studentSurveyId && (
                       <Link
                         className='backLink'
-                        to={`/survey/${conversa['class']?.studentSurveyId}`}
+                        to={`/survey/${conversa.class?.studentSurveyId}`}
                       >
                         Visualizar pesquisa do Aluno
                       </Link>
                     )}
                     <br />
-                    {conversa['class']?.teacherSurveyId && (
+                    {conversa.class?.teacherSurveyId && (
                       <Link
                         className='backLink'
-                        to={`/survey/${conversa['class']?.teacherSurveyId}`}
+                        to={`/survey/${conversa.class?.teacherSurveyId}`}
                       >
                         Visualizar pesquisa do Professor
                       </Link>
