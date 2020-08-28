@@ -184,7 +184,7 @@ export default function Conversation(props) {
                         <b>Professor:</b> {conversa?.teacherName}
                       </p>
                       <p>
-                        <b>Status:</b> {conversa['class']?.status}
+                        <b>Status:</b> {conversa.class?.status}
                       </p>
                       <p>
                         <b>Id do board:</b> {conversa?.board?._id}
@@ -194,8 +194,8 @@ export default function Conversation(props) {
                       </p>
                       <p>
                         <b>Data marcada:</b>{' '}
-                        {conversa['class']?.date &&
-                          moment(conversa['class']?.date).format('DD/MM/YYYY HH:mm')}
+                        {conversa.class?.date &&
+                          moment(conversa.class?.date).format('DD/MM/YYYY HH:mm')}
                       </p>
                     </div>
                     <div>
@@ -242,7 +242,7 @@ export default function Conversation(props) {
                         </Fade>
                       </Modal>
                       {conversa.class &&
-                        !statusToNotShowCancelButton.includes(conversa['class'].status) && (
+                        !statusToNotShowCancelButton.includes(conversa.class.status) && (
                           <Button
                             variant='contained'
                             color='secondary'
@@ -252,7 +252,7 @@ export default function Conversation(props) {
                             Encerrar
                           </Button>
                         )}
-                      {conversa.class && conversa['class'].status === 'novo' && (
+                      {conversa.class && conversa.class.status === 'novo' && (
                         <Button
                           variant='contained'
                           onClick={handleStartConnection}
@@ -290,19 +290,19 @@ export default function Conversation(props) {
                     </div>
                   </Grid>
                   <Grid item xs={3}>
-                    {conversa['class']?.studentSurveyId && (
+                    {conversa.class?.studentSurveyId && (
                       <Link
                         className='backLink'
-                        to={`/survey/${conversa['class']?.studentSurveyId}`}
+                        to={`/survey/${conversa.class?.studentSurveyId}`}
                       >
                         Visualizar pesquisa do Aluno
                       </Link>
                     )}
                     <br />
-                    {conversa['class']?.teacherSurveyId && (
+                    {conversa.class?.teacherSurveyId && (
                       <Link
                         className='backLink'
-                        to={`/survey/${conversa['class']?.teacherSurveyId}`}
+                        to={`/survey/${conversa.class?.teacherSurveyId}`}
                       >
                         Visualizar pesquisa do Professor
                       </Link>
