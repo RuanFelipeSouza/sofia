@@ -49,7 +49,7 @@ export default function Header(props) {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('Authorization');
+    localStorage.removeItem('Authorization');
     api.defaults.headers.common = {
       Authorization: null
     };
