@@ -60,7 +60,6 @@ export default function Intellilogs() {
       .get('/board')
       .then((response) => {
         setBoards(response.data);
-        setSelectedBoard(response?.data[0]?._id);
         setOpenNewConnectionModal(true);
       })
       .catch((error) => {
@@ -70,6 +69,7 @@ export default function Intellilogs() {
 
   function handleCreateConnection() {
     if (cardId === '') return alert('Preencha o ID do card');
+    if (selectedBoard === '') return alert('Escolha um dos boards listados');
     setCreatingConnection(true);
     api
       .post('/createConnection', { boardId: selectedBoard, cardId })
@@ -124,7 +124,7 @@ export default function Intellilogs() {
                 >
                   {boards.map((board) => {
                     return (
-                      <option key={board._id} value={board._id}>
+                      <option key={board._id} value={board._id} disabled={!board.active}>
                         {board._id}
                       </option>
                     );
