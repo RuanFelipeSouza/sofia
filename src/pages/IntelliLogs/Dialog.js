@@ -99,7 +99,7 @@ export default function Dialog(props) {
   return (
     <Paper className={classes.conversation}>
       {conversa.messages && conversa.messages?.map((row) => {
-        if(row.from === 'Robo') 
+        if(row.from === 'Robo' || row.from === 'Assistente') 
           return <div key={row._id} className={classes.assistantLine}>
           <Avatar className={classes.purpleAvatar}>A</Avatar>
           <Paper className={classes.assistantMessage}>
