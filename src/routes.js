@@ -7,6 +7,7 @@ import IntelliChat from './pages/IntelliChat';
 import Dashboard from './pages/Dashboard';
 import Assistant from './pages/Assistant';
 import Login from './pages/Login';
+import Settings from './pages/Settings';
 
 export default function Routes() {
   return (
@@ -18,6 +19,7 @@ export default function Routes() {
         <ProtectedRoute path="/conversation/:id" component={Conversation} />
         <ProtectedRoute path="/intellichat" component={IntelliChat} />
         <ProtectedRoute path="/dashboard" component={Dashboard} />
+        <ProtectedRoute path="/settings" component={Settings} />
         <ProtectedRoute path="*" component={() => '404 NOT FOUND'} />
       </Switch>
     </BrowserRouter>

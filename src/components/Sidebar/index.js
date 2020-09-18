@@ -46,6 +46,11 @@ const _menuOptions = [
     iconName: 'assessment_rounded',
     path: '/dashboard',
   },
+  {
+    label: 'Configurações',
+    iconName: 'settings',
+    path: '/settings',
+  },
 ];
 
 export default function Sidebar() {
