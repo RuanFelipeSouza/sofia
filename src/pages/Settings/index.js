@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Copyright from '../../components/Copyright';
 import Sidebar from '../../components/Sidebar';
+import Colorpicker from '../../components/Colorpicker';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -31,7 +32,13 @@ const useStyles = makeStyles((theme) => ({
   form: {
     display: 'flex',
     padding: '0 15%',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
+  },
+  colorPickers: {
+    display: 'flex',
+    padding: '0 15%',
+    margin: '0 15%',
+    justifyContent: 'space-between'
   },
   main: {
     width: '100%',
@@ -49,6 +56,7 @@ export default function Settings() {
   const [alertType, setAlertType] = useState('');
   const [alertText, setAlertText] = useState('');
   const [configs, setConfigs] = useState({});
+  console.log(configs);
 
   useEffect(() => {
     setLoading(true);
@@ -65,18 +73,19 @@ export default function Settings() {
     setConfigs(oldState => {
       return {
         ...oldState,
-        [name]: value.trim()
+        [name]: value && value.trim()
       };
     });
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
+
     setSaving(true);
     try {
       await api.put('/settings', configs);
       setAlertType('success');
-      setAlertText('Alteração realizada');
+      setAlertText('Alteração realizada, atualize a página para ver as alterações nas cores');
     }catch(e) {
       console.log(e);
       setAlertType('error');
@@ -89,7 +98,7 @@ export default function Settings() {
       setShowAlert(false);
       setAlertType('');
       setAlertText('');
-    }, 3000);
+    }, 4000);
   };
 
   return (
@@ -105,7 +114,7 @@ export default function Settings() {
                   <Grid container spacing={2}>
                     {!loading && <Grid item xs={12}>
                       <Grid container spacing={3}>
-                        <Grid item xs={12} className={classes.form} >
+                        <Grid item xs={12} className={classes.form}>
                           <TextField id="botName" label="Nome do Assistente" variant="outlined" value={configs.botName} name="botName" onChange={handleChange} className={classes.formFields} />
                         </Grid>
                         <Grid item xs={12} className={classes.form} >
@@ -128,6 +137,34 @@ export default function Settings() {
                         </Grid>
                         <Grid item xs={12} className={classes.form} >
                           <TextField id="twilioAuthToken" label="Twilio Auth Token" variant="outlined" value={configs.twilioAuthToken}  name="twilioAuthToken" onChange={handleChange} className={classes.formFields} />
+                        </Grid>
+                        <Grid item xs={12} className={classes.colorPickers} >
+                          <div>
+                            Cor primária
+                            <Colorpicker
+                              color={configs.primaryColor}
+                              name='primaryColor'
+                              handleChange={(color, name) => handleChange({
+                                target: {
+                                  name,
+                                  value: color.hex
+                                }
+                              })}
+                            />
+                          </div>
+                          <div>
+                            Cor secundária
+                            <Colorpicker
+                              color={configs.secondaryColor}
+                              name='secondaryColor'
+                              handleChange={(color, name) => handleChange({
+                                target: {
+                                  name,
+                                  value: color.hex
+                                }
+                              })}
+                            />
+                          </div>
                         </Grid>
                       </Grid>
                     </Grid>}
