@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import { ThemeProvider } from '@material-ui/styles';
-import theme from './theme';
+import CustomTheme from './CustomTheme';
 
 import store, { history } from './store';
 import Routes from './routes';
@@ -13,9 +12,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <ThemeProvider theme={theme}>
+        <CustomTheme>
           <Routes />
-        </ThemeProvider>
+        </CustomTheme>
       </ConnectedRouter>
     </Provider>
   </React.StrictMode>,
