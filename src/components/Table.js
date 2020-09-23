@@ -15,6 +15,7 @@ export default function Table(props) {
         exportAllData: true,
         pageSize: props.pageSize,
         initialPage: props.initialPage,
+        paging: !!props.pageSize,
       }}
       onChangePage={(page) => props.onChangePage(page)}
       onChangeRowsPerPage={(pageSize) => {

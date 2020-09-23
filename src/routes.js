@@ -7,6 +7,8 @@ import IntelliChat from './pages/IntelliChat';
 import Dashboard from './pages/Dashboard';
 import Assistant from './pages/Assistant';
 import Login from './pages/Login';
+import UploadCampaign from './pages/Campaign/UploadCampaign';
+import ListCampaign from './pages/Campaign/ListCampaign';
 
 export default function Routes() {
   return (
@@ -14,6 +16,8 @@ export default function Routes() {
       <Switch>
         <Route exact path="/" component={Login} />
         <Route exact path="/iframe" component={Assistant} />
+        <Route exact path="/campanha/upload" component={UploadCampaign} />
+        <Route exact path="/campanha/list" component={ListCampaign} />
         <ProtectedRoute path="/intellilogs" component={IntelliLogs} />
         <ProtectedRoute path="/conversation/:id" component={Conversation} />
         <ProtectedRoute path="/intellichat" component={IntelliChat} />
