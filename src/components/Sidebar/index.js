@@ -46,6 +46,11 @@ const _menuOptions = [
     iconName: 'assessment_rounded',
     path: '/dashboard',
   },
+  {
+    label: 'Campanha',
+    iconName: 'eventnote_outlined',
+    path: '/campanha/upload',
+  },
 ];
 
 export default function Sidebar() {

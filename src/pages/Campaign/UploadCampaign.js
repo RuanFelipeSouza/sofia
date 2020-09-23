@@ -3,8 +3,9 @@ import { CssBaseline, makeStyles, Button } from '@material-ui/core';
 import { ExcelRenderer } from 'react-excel-renderer';
 import { Upload, Col, Row } from 'antd';
 import Table from '../../components/Table';
-import localStorageStateHook from '../../utils/useLocalStorageState';
 import Sidebar from '../../components/Sidebar';
+import { saveCampaign, sendCampaign } from '../../services/Intelliboard';
+import { useHistory } from 'react-router';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -33,23 +34,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-export default function Campaing(props) {
+export default function UploadCampaign() {
   const classes = useStyles();
-  const { keys, useLocalStorageState } = localStorageStateHook;
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [uploaded, setUploaded] = useState(false);
-  const [page, setPage] = useLocalStorageState(
-    keys.CAMPAIGN_PAGINA_ATUAL,
-    0,
-    useState
-  );
-  const [pageSize, setPageSize] = useLocalStorageState(
-    keys.CAMPAIGN_TAMANHO_PAGINA,
-    5,
-    useState
-  );
+  const history = useHistory();
   function checkFile(file) {
     if (!file) {
       return;
@@ -63,10 +53,21 @@ export default function Campaing(props) {
     }
     return;
   }
+  async function sendFile() {
+    try {
+      const { _id: id } = await saveCampaign(rows);
+      // in the next version, i will render this page to list campaigns
+      // and in list of campaigns create buttons to send campaign
+      await sendCampaign(id);
+      history.push('/intellilogs');
+    } catch (e) {
+      console.log(e);
+      setErrorMessage('Erro ao inserir campanha', e);
+    }
+  }
 
   function fileHandler(file) {
     const errorMessage = checkFile(file);
-    console.log(errorMessage);
     if (errorMessage) return setErrorMessage(errorMessage);
     ExcelRenderer(file, (err, resp) => {
       if (err) {
@@ -74,12 +75,10 @@ export default function Campaing(props) {
       } else {
         const columns = resp?.rows && resp.rows[0];
         const newRows = resp.rows.slice(1).map((row) => {
-          if (row && row !== 'undefined') {
-            return row.reduce((acul, curr, index) => {
-              acul[columns[index]] = curr;
-              return acul;
-            }, {});
-          }
+          return row.reduce((acul, curr, index) => {
+            acul[columns[index]] = curr;
+            return acul;
+          }, {});
         });
         if (newRows.length === 0) {
           setErrorMessage('No data found in file!');
@@ -90,9 +89,9 @@ export default function Campaing(props) {
               return { title: e, field: e };
             })
           );
+          console.log(newRows);
           setRows(newRows);
           setErrorMessage(null);
-          setUploaded(true);
         }
       }
     });
@@ -149,22 +148,15 @@ export default function Campaing(props) {
                 size="large"
                 type="secondary"
                 style={{ marginBottom: 16, marginLeft: 10 }}
+                onClick={sendFile}
               >
                 Submit Data
               </Button>
             )}
           </div>
           <div className={classes.tableDiv}>
-            onChange
-            <Table
-              title="Campanha Teste"
-              data={rows.slice(0, 3)}
-              columns={columns}
-              initialPage={page}
-              onChangePage={setPage}
-              pageSize={pageSize}
-              onChangeRowsPerPage={setPageSize}
-            />
+            <p>{errorMessage}</p>
+            <Table title="" data={rows.slice(0, 4)} columns={columns} />
           </div>
         </Row>
       </main>
