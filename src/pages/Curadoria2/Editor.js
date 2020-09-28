@@ -70,7 +70,12 @@ export default function Editor2(props) {
   const [loading, setLoading] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [editorState, setEditorState] = useState({});
+  const [editorState, setEditorState] = useState({
+    inputTextArray: [{
+      inputText: '',
+      id: uuid()
+    }]
+  });
   const [alteredFields, setAlteredFields] = useState([]);
 
   useEffect(() => {
@@ -137,7 +142,7 @@ export default function Editor2(props) {
       }
     }
     editorState.bot = props.bot;
-    if (!props.id || !props.id.expectedNode) editorState.project = mapBotToProject[editorState.bot];
+    if (!props.id || !props.id.expectedNode) editorState.project = mapBotToProject(editorState.bot);
     const {
       data: { _id },
     } =
@@ -151,7 +156,7 @@ export default function Editor2(props) {
     data._id = _id ? _id : props.id;
     data.bot = props.bot;
     props.setCuradorias((prevState) => {
-      if (props.id || props.id.expectedNode) {
+      if (props.id && props.id.expectedNode) {
         const index = prevState.findIndex(
           (e) =>
             e._id.project === editorState._id.project &&
