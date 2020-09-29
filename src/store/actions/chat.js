@@ -13,7 +13,8 @@ import { TWILIO_NUMBER, TWILLIO_BASE_URL } from '../../env';
 
 export const sendMessage = (messageText, room) => {
   const message = buildMessage(TWILIO_NUMBER, messageText, room);
-  Socketio.emitMessage(messageText, room);
+  message.tempId = uuid(); // probably in the future, we need to create it on function buildMessage
+  Socketio.emitMessage(messageText, room, message.tempId);
   return types.action(types.SEND_MESSAGE, message);
 };
 
@@ -85,9 +86,9 @@ export const botStateChanged = (room, botState) => {
   };
 };
 
-export const messageStatusChanged = (number, messageId, status) => {
+export const messageStatusChanged = (number, messageId, status, id) => {
   return (dispatch) => {
-    dispatch(types.action(types.MESSAGE_STATUS_CHANGED, { number, messageId, status }));
+    dispatch(types.action(types.MESSAGE_STATUS_CHANGED, { number, messageId, status, id }));
   };
 };
 

@@ -8,7 +8,12 @@ import ChatDialog from './components/ChatDialog';
 import ChatInput from './components/ChatInput';
 import ChatHeader from './components/ChatHeader';
 import { ChatWrapper } from './components/elements';
-import { sendMessage, sendWhatsappMessage, closeChat, disableBotAndSendMessage } from '../../store/actions/chat';
+import {
+  sendMessage,
+  sendWhatsappMessage,
+  closeChat,
+  disableBotAndSendMessage,
+} from '../../store/actions/chat';
 // import { showDialog, hideDialog, toggleSidebar } from '../../store/actions/layout';
 
 class ChatConversation extends Component {
@@ -41,11 +46,28 @@ class ChatConversation extends Component {
   }
 
   formatNumber(number) {
-    return number ? number.replace(/(\D*)(\d{2})*(\d{2})(\d{1})*(\d{4})(\d{4})/, '($3) $4 $5-$6') : '';
+    return number
+      ? number.replace(
+        /(\D*)(\d{2})*(\d{2})(\d{1})*(\d{4})(\d{4})/,
+        '($3) $4 $5-$6'
+      )
+      : '';
   }
 
   render() {
-    const { messages, clientMessages, room, name, number, cpf, userDisconnected, closeChat, chatSelectCount, isWhatsapp, isBotOn } = this.props;
+    const {
+      messages,
+      clientMessages,
+      room,
+      name,
+      number,
+      cpf,
+      userDisconnected,
+      closeChat,
+      chatSelectCount,
+      isWhatsapp,
+      isBotOn,
+    } = this.props;
     // const userInfo = {
     //   name,
     //   number: this.formatNumber(number),
@@ -75,7 +97,7 @@ class ChatConversation extends Component {
           userNumber={number}
         />
         <ChatInput
-          sendMessage={(message) => isWhatsapp ? this.handleSendWhatsappMessage(number, message, isBotOn) : this.handleSendMessage(message)}
+          sendMessage={(message) => this.handleSendMessage(message)}
           chatSelectCount={chatSelectCount}
           isDisabled={userDisconnected || isSupervisor}
         />
@@ -101,11 +123,20 @@ ChatConversation.propTypes = {
   hideDialog: func.isRequired,
   disableBotAndSendMessage: func.isRequired,
   isBotOn: bool,
-  toggleSidebar: func.isRequired
+  toggleSidebar: func.isRequired,
 };
 
-const mapStateToProps = state => {
-  const { messages, room, name, number, cpf, userDisconnected, isWhatsapp, isBotOn } = state.chat.currentConversation;
+const mapStateToProps = (state) => {
+  const {
+    messages,
+    room,
+    name,
+    number,
+    cpf,
+    userDisconnected,
+    isWhatsapp,
+    isBotOn,
+  } = state.chat.currentConversation;
   const { clientMessages, chatSelectCount } = state.chat;
 
   return {
@@ -118,18 +149,20 @@ const mapStateToProps = state => {
     clientMessages,
     chatSelectCount,
     isWhatsapp,
-    isBotOn
+    isBotOn,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     sendMessage: (msg, room) => dispatch(sendMessage(msg, room)),
-    sendWhatsappMessage: (number, message, room) => dispatch(sendWhatsappMessage(number, message, room)),
+    sendWhatsappMessage: (number, message, room) =>
+      dispatch(sendWhatsappMessage(number, message, room)),
     closeChat: (room, number) => dispatch(closeChat(room, number)),
     // showDialog: (title, message, actions) => dispatch(showDialog(title, message, actions)),
     // hideDialog: () => dispatch(hideDialog()),
-    disableBotAndSendMessage: (room, number, message) => dispatch(disableBotAndSendMessage(room, number, message)),
+    disableBotAndSendMessage: (room, number, message) =>
+      dispatch(disableBotAndSendMessage(room, number, message)),
     // toggleSidebar: (userInfo) => dispatch(toggleSidebar(userInfo)),
   };
 };
