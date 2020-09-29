@@ -117,11 +117,14 @@ export default function Intellilogs() {
                 <InputLabel htmlFor='uncontrolled-native'>Board</InputLabel>
                 <NativeSelect
                   inputProps={{
-                    name: 'client',
+                    name: 'board',
                   }}
                   onChange={(e) => setSelectedBoard(e.target.value)}
                   defaultValue={selectedBoard}
                 >
+                  <option value={''}>
+                    {'Selecione'}
+                  </option>
                   {boards.map((board) => {
                     return (
                       <option key={board._id} value={board._id} disabled={!board.active}>
