@@ -5,8 +5,31 @@ import { ArrowForwardOutlined } from '@material-ui/icons';
 import api from './../services/api'
 import TableIndicador from './TableIndicador';
 import moment from 'moment';
+import Paper from '@material-ui/core/Paper';
+
+function _renderRating({rating}) {
+  switch(rating) {
+    case 10:
+      return <Paper style={{backgroundColor: 'green', color: 'white', textAlign: 'center'}}>
+        Promotor
+      </Paper>
+    case 8:
+      return <Paper style={{backgroundColor: 'yellow', textAlign: 'center'}}>
+        Neutro
+      </Paper>
+    case 6:
+      return <Paper style={{backgroundColor: 'red', color: 'white', textAlign: 'center'}}>
+        Detrator
+      </Paper>
+    default:
+      return <Paper style={{textAlign: 'center'}}>
+        Não definido
+      </Paper>
+  }
+}
 
 export default function Table(props) {
+  console.log(props.atendimentos.filter(e=>e.rating));
   const _sortCreatedAt = (a, b) => {
     return moment(a.createdAt, 'DD/MM/YYYY').isAfter(moment(b.createdAt, 'DD/MM/YYYY')) ? 1 : -1;
   };
@@ -14,10 +37,18 @@ export default function Table(props) {
   const columns = [
     { title: 'ID', field: '_id', editable: 'never' },
     { title: 'Data', field: 'createdAt', editable: 'never', customSort: _sortCreatedAt },
+    { 
+      title: 'Avaliação', 
+      field: 'rating', 
+      editable: 'never', 
+      render: _renderRating,
+      lookup: { 10: 'Promotor', 8: 'Neutro', 6: 'Detrator' },
+    },
     {
       title: 'Indicador',
       field: 'misunderstoodMessages.length',
       editable: 'never',
+      filtering: false,
       render: ({ misunderstoodMessages }) => <TableIndicador messages={misunderstoodMessages} />
     },
     { title: 'Visualizado', field: 'viewed', type: 'boolean', editable: 'onUpdate' },
@@ -32,7 +63,8 @@ export default function Table(props) {
         > 
           Visualizar conversa <ArrowForwardOutlined size={16} />
         </Link>, 
-      export: false 
+      export: false,
+      filtering: false
     }
   ]
 
@@ -47,7 +79,8 @@ export default function Table(props) {
         pageSizeOptions: [5, 20, 50, 100],
         exportAllData: true,
         pageSize: props.pageSize,
-        initialPage: props.initialPage
+        initialPage: props.initialPage,
+        filtering: true
       }}
       onChangePage={page => props.onChangePage(page)}
       onChangeRowsPerPage={pageSize => {
