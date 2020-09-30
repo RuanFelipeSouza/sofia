@@ -12,8 +12,8 @@ import { showSnackbar } from './layout';
 import { TWILIO_NUMBER, TWILLIO_BASE_URL } from '../../env';
 
 export const sendMessage = (messageText, room) => {
-  const message = buildMessage(TWILIO_NUMBER, messageText, room);
-  Socketio.emitMessage(messageText, room);
+  const message = buildMessage(TWILIO_NUMBER, messageText, room, null, uuid());
+  Socketio.emitMessage(messageText, room, message.id);
   return types.action(types.SEND_MESSAGE, message);
 };
 
@@ -85,9 +85,9 @@ export const botStateChanged = (room, botState) => {
   };
 };
 
-export const messageStatusChanged = (number, messageId, status) => {
+export const messageStatusChanged = (number, messageId, status, id) => {
   return (dispatch) => {
-    dispatch(types.action(types.MESSAGE_STATUS_CHANGED, { number, messageId, status }));
+    dispatch(types.action(types.MESSAGE_STATUS_CHANGED, { number, messageId, status, id }));
   };
 };
 
@@ -170,14 +170,14 @@ export const fetchOngoingConversations = () => {
   };
 };
 
-const buildMessage = (origin, text, room, messageId = null, tempId = null) => {
+const buildMessage = (origin, text, room, messageId = null, id = null) => {
   return {
     origin: (origin === TWILIO_NUMBER || origin === 'Assistente') ? 'agent' : 'user',
     text,
     date: moment().format('HH:mm'),
     room,
-    status: messageId || tempId ? 'waiting' : '',
+    status: messageId || id ? 'waiting' : '',
     messageId,
-    tempId
+    id
   };
 };

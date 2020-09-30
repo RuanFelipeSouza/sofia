@@ -3,8 +3,13 @@ import io from 'socket.io-client';
 import { INTELLIBOARD_BACKEND_URL } from '../env';
 import store from './../store';
 import {
-  messageReceived, userJoined, userDisconnected, removeChats,
-  disconnectUserByRoom, botStateChanged, messageStatusChanged
+  messageReceived,
+  userJoined,
+  userDisconnected,
+  removeChats,
+  disconnectUserByRoom,
+  botStateChanged,
+  messageStatusChanged,
 } from './../store/actions/chat';
 
 let socket;
@@ -21,13 +26,37 @@ export const connect = (room, user) => {
       store.dispatch(messageReceived(message, room, origin));
     });
 
-    socket.on('whatsappMessageReceived', ({ message, room, origin, messageId }) => {
-      store.dispatch(messageReceived(message, room, origin, messageId));
-    });
+    socket.on(
+      'whatsappMessageReceived',
+      ({ message, room, origin, messageId }) => {
+        store.dispatch(messageReceived(message, room, origin, messageId));
+      }
+    );
 
-    socket.on('userJoined', ({ room, user, socketId, recipientId, conversation, isWhatsapp, sector }) => {
-      store.dispatch(userJoined(room, user, socketId, recipientId, conversation, isWhatsapp, sector));
-    });
+    socket.on(
+      'userJoined',
+      ({
+        room,
+        user,
+        socketId,
+        recipientId,
+        conversation,
+        isWhatsapp,
+        sector,
+      }) => {
+        store.dispatch(
+          userJoined(
+            room,
+            user,
+            socketId,
+            recipientId,
+            conversation,
+            isWhatsapp,
+            sector
+          )
+        );
+      }
+    );
 
     socket.on('userDisconnected', (socketId) => {
       store.dispatch(userDisconnected(socketId));
@@ -45,14 +74,17 @@ export const connect = (room, user) => {
       store.dispatch(botStateChanged(room, botState));
     });
 
-    socket.on('messageStatusChanged', ({ number, messageId, messageStatus }) => {
-      store.dispatch(messageStatusChanged(number, messageId, messageStatus));
-    });
+    socket.on(
+      'messageStatusChanged',
+      ({ number, messageId, messageStatus, id }) => {
+        store.dispatch(messageStatusChanged(number, messageId, messageStatus, id));
+      }
+    );
   }
 };
 
-export const emitMessage = (message, room) => {
-  socket.emit('sendMessage', { message, room, origin: 'Assistente' });
+export const emitMessage = (message, room, id) => {
+  socket.emit('sendMessage', { message, id, room, origin: 'Assistente' });
 };
 
 export const joinAgent = (room) => {
