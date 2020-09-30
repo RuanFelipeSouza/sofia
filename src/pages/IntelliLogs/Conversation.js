@@ -92,7 +92,7 @@ export default function Conversation(props) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedDate, handleDateChange] = useState(new Date());
   const { id } = props.match.params;
-  const statusToNotShowCancelButton = ['cancelada', 'realizado', 'agendado'];
+  const statusToNotShowCancelButton = ['cancelada', 'realizado'];
   console.log(conversa);
 
   useEffect(() => {
