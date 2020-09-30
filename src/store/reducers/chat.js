@@ -89,7 +89,7 @@ const storeMessage = (state, action) => {
 };
 
 const updateMessageId = (state, action) => {
-  const { room, messageId, tempId } = action.payload;
+  const { room, messageId, id } = action.payload;
 
   return {
     ...state,
@@ -98,7 +98,7 @@ const updateMessageId = (state, action) => {
         return {
           ...item,
           messages: item.messages.map((message) => {
-            if (message.tempId === tempId) {
+            if (message.id === id) {
               return {
                 ...message,
                 messageId,
@@ -113,7 +113,7 @@ const updateMessageId = (state, action) => {
     currentConversation: {
       ...state.currentConversation,
       messages: state.currentConversation.messages.map((message) => {
-        if (message.tempId === tempId) {
+        if (message.id === id) {
           return {
             ...message,
             messageId,
@@ -319,7 +319,7 @@ const changeMessageStatus = (state, action) => {
         return {
           ...item,
           messages: item.messages.map((message) => {
-            if (message.MessageSid === messageId || message.tempId === id) {
+            if (message.MessageSid === messageId || message.id === id) {
               return {
                 ...message,
                 status,
@@ -334,7 +334,7 @@ const changeMessageStatus = (state, action) => {
     currentConversation: {
       ...state.currentConversation,
       messages: state.currentConversation.messages.map((message) => {
-        if (message.MessageSid === messageId || message.tempId === id) {
+        if (message.MessageSid === messageId || message.id === id) {
           return {
             ...message,
             status,
