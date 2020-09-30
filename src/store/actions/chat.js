@@ -12,8 +12,7 @@ import { showSnackbar } from './layout';
 import { TWILIO_NUMBER, TWILLIO_BASE_URL } from '../../env';
 
 export const sendMessage = (messageText, room) => {
-  const message = buildMessage(TWILIO_NUMBER, messageText, room);
-  message.tempId = uuid(); // probably in the future, we need to create it on function buildMessage
+  const message = buildMessage(TWILIO_NUMBER, messageText, room, uuid());
   Socketio.emitMessage(messageText, room, message.tempId);
   return types.action(types.SEND_MESSAGE, message);
 };
