@@ -4,7 +4,7 @@ import * as constants from '../env';
 
 const endpoints = {
   TWILLIO_SEND_MESSAGE_ENPOINT: '/enviaMensagem',
-  TWILLIO_CHANGE_BOT_STATE: '/trocaStatusUsuario',
+  TWILLIO_CHANGE_BOT_STATE: '/conversation/changeStatus',
   TWILLIO_END_SERVICE: '/encerrarAtendimento',
   TWILLIO_FETCH_BOT_STATE: 'fetchBotState'
 };
@@ -12,7 +12,13 @@ const endpoints = {
 const API = axios.create({
   baseURL: constants.TWILLIO_BASE_URL
 });
-
+API.interceptors.request.use(async (config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 export const sendMessage = async (number, input) => {
   const body = {
     number: `${number}`,
@@ -24,12 +30,11 @@ export const sendMessage = async (number, input) => {
   return promiseBuilder(endpoints.TWILLIO_SEND_MESSAGE_ENPOINT, body);
 };
 
-export const changeBotState = async (number, status) => {
+export const changeBotState = async (room, status) => {
   const body = {
-    number: `${number}`,
+    room,
     status
   };
-
   return promiseBuilder(endpoints.TWILLIO_CHANGE_BOT_STATE, body);
 };
 

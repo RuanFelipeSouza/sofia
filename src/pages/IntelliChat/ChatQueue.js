@@ -92,6 +92,7 @@ class ChatQueue extends Component {
             dateString={lastMessageDate}
             unread={unread}
             statusColor={userDisconnected || !isBotOn ? 'crimson' : '	lime'}
+            isBotOn={isBotOn}
             onClick={() => selectChat(room)}
             className='chatItem'
           />

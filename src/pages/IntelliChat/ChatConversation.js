@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { arrayOf, string, func, object, bool, number } from 'prop-types';
 import { connect } from 'react-redux';
 import jwtDecode from 'jwt-decode';
@@ -14,36 +14,70 @@ import {
   closeChat,
   disableBotAndSendMessage,
 } from '../../store/actions/chat';
-// import { showDialog, hideDialog, toggleSidebar } from '../../store/actions/layout';
+import { showDialog, hideDialog } from '../../store/actions/layout';
+import AlertDialog from '../../components/Alert';
 
 class ChatConversation extends Component {
-  handleSendMessage(message) {
-    const { sendMessage, room } = this.props;
-    sendMessage(message, room);
+  constructor(props) {
+    super(props);
+    this.state = {
+      alert: {
+        visible: false,
+        title: '',
+        dialog: '',
+        actions: [],
+      },
+    };
   }
 
-  // TODO Mostrar alert ao enviar mensagem quando o bot está ligado
-  // handleSendWhatsappMessage(number, message, isBotOn) {
-  //   const { sendWhatsappMessage, showDialog, hideDialog, room, disableBotAndSendMessage } = this.props;
-
-  //   if (isBotOn) {
-  //     const title = 'Atenção!';
-  //     const dialogMessage = 'Você está tentando enviar mensagem para um usuário que está com atendimento automático habilitado. O que deseja fazer?';
-  //     const actions = [
-  //       { label: 'Não enviar a mensagem', onClick: () => hideDialog() },
-  //       { label: 'Desabilitar o robô e enviar a mensagem', onClick: () => disableBotAndSendMessage(room, number, message) }
-  //     ];
-  //     showDialog(title, dialogMessage, actions);
-  //   } else {
-  //     sendWhatsappMessage(number, message, room);
-  //   }
+  // handleSendMessage(message) {
+  //   const { sendMessage, room } = this.props;
+  //   sendMessage(message, room);
   // }
 
-  handleSendWhatsappMessage(number, message) {
-    const { sendWhatsappMessage, room } = this.props;
-
-    sendWhatsappMessage(number, message, room);
+  // TODO Mostrar alert ao enviar mensagem quando o bot está ligado
+  hideAlert() {
+    this.setState({ alert: {} });
   }
+  handleSendMessage(message, isBotOn) {
+    const {
+      sendMessage,
+      showDialog,
+      room,
+      disableBotAndSendMessage,
+    } = this.props;
+    if (isBotOn) {
+      const title = 'Atenção!';
+      const dialogMessage =
+        'Você está tentando enviar mensagem para um usuário que está com atendimento automático habilitado. O que deseja fazer?';
+      const actions = [
+        { label: 'Não enviar a mensagem', onClick: () => this.hideAlert() },
+        {
+          label: 'Desabilitar o robô e enviar a mensagem',
+          onClick: () => {
+            disableBotAndSendMessage(room, number, message);
+            this.hideAlert();
+          },
+        },
+      ];
+      const alertProperties = {
+        visible: true,
+        title: title,
+        dialog: dialogMessage,
+        actions: actions,
+      };
+      this.setState({ alert: alertProperties });
+      showDialog(title, dialogMessage, actions);
+    } else {
+      sendMessage(message, room);
+    }
+  }
+
+  // handleSendWhatsappMessage(number, message) {
+  //   const { sendWhatsappMessage, room }  this.props;
+
+  //   sendWhatsappMessage(number, message, room);
+  // }
 
   formatNumber(number) {
     return number
@@ -68,6 +102,7 @@ class ChatConversation extends Component {
       isWhatsapp,
       isBotOn,
     } = this.props;
+
     // const userInfo = {
     //   name,
     //   number: this.formatNumber(number),
@@ -79,15 +114,23 @@ class ChatConversation extends Component {
 
     const token = localStorage.getItem('token');
     const { isSupervisor } = jwtDecode(token);
-
     return (
       <ChatWrapper>
         <ChatHeader
           title={name}
           subtitle={isWhatsapp ? this.formatNumber(number) : cpf}
           closeChat={() => closeChat(room, number)}
+          isBotOn={isBotOn}
           // onClick={() => toggleSidebar(userInfo)}
         />
+        {this.state.alert.visible && (
+          <AlertDialog
+            visible={this.state.alert.visible}
+            title={this.state.alert.title}
+            dialogMessage={this.state.alert.dialog}
+            actions={this.state.alert.actions}
+          />
+        )}
         <ChatDialog
           messages={room ? messages : clientMessages}
           userDisconnected={userDisconnected}
@@ -97,7 +140,7 @@ class ChatConversation extends Component {
           userNumber={number}
         />
         <ChatInput
-          sendMessage={(message) => this.handleSendMessage(message)}
+          sendMessage={(message) => this.handleSendMessage(message, isBotOn)}
           chatSelectCount={chatSelectCount}
           isDisabled={userDisconnected || isSupervisor}
         />
@@ -159,8 +202,9 @@ const mapDispatchToProps = (dispatch) => {
     sendWhatsappMessage: (number, message, room) =>
       dispatch(sendWhatsappMessage(number, message, room)),
     closeChat: (room, number) => dispatch(closeChat(room, number)),
-    // showDialog: (title, message, actions) => dispatch(showDialog(title, message, actions)),
-    // hideDialog: () => dispatch(hideDialog()),
+    showDialog: (title, message, actions) =>
+      dispatch(showDialog(title, message, actions)),
+    hideDialog: () => dispatch(hideDialog()),
     disableBotAndSendMessage: (room, number, message) =>
       dispatch(disableBotAndSendMessage(room, number, message)),
     // toggleSidebar: (userInfo) => dispatch(toggleSidebar(userInfo)),
