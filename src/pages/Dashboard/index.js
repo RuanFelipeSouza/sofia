@@ -8,14 +8,13 @@ import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { FavoriteBorder, Assignment, BarChart } from '@material-ui/icons';
+import { FavoriteBorder, BarChart } from '@material-ui/icons';
 import AccountTreeRoundedIcon from '@material-ui/icons/AccountTreeRounded';
 import SwipeableViews from 'react-swipeable-views';
 import localStorageStateHook from './../../utils/useLocalStorageState';
 import api from './../../services/api';
 import Desempenho from './desempenho';
 import NPS from './nps';
-import Sugestoes from './sugestoes';
 import DatePicker from './../../components/Datepicker';
 import Select from './../../components/Select';
 import Grid from '@material-ui/core/Grid';
@@ -88,7 +87,7 @@ export default function Intellilogs() {
   const [project, setProject] = useLocalStorageState(keys.INTELLILOGS_PROJETO, 'Login', useState);
   const [nodeCount, setNodeCount] = useState({});
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setTabValue(newValue);
   };
 
@@ -138,7 +137,6 @@ export default function Intellilogs() {
             // aria-label="full width tabs example"
           >
             <Tab label="Central de desempenho" icon={<BarChart />} {...a11yProps(3)} />
-            <Tab label="Central de sugestões" icon={<Assignment />} {...a11yProps(2)} />
             <Tab label="Central NPS" icon={<FavoriteBorder />} {...a11yProps(1)} />
             <Tab label="Nós Watson" icon={<AccountTreeRoundedIcon />} {...a11yProps(0)} />
           </Tabs>
@@ -169,7 +167,6 @@ export default function Intellilogs() {
           style={{width: '100%'}}
         >
           <Desempenho atendimentos={atendimentos} misunderstoodMessages={misunderstoodMessages} />
-          <Sugestoes atendimentos={atendimentos} />
           <NPS atendimentos={atendimentos} />
           <Nodes nodeCount={nodeCount} />
         </SwipeableViews>
