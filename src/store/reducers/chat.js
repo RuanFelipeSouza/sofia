@@ -352,7 +352,7 @@ const fetchOngoingConversations = (state, action) => {
   const { conversations: fetchedConversations } = action.payload;
 
   const conversations = fetchedConversations.map(
-    ({ _id, messages, user, sector }, index) => {
+    ({ _id, messages, user, sector, isBotOn }, index) => {
       const lastMessageIndex = messages.length - 1;
       const messagesList = messages.map(({ _id, from, date, ...rest }) => {
         return {
@@ -371,7 +371,7 @@ const fetchOngoingConversations = (state, action) => {
         unread: 0,
         userDisconnected: false,
         isWhatsapp: !!user?.userNumber,
-        isBotOn: true, // TODO busca status do bot
+        isBotOn,
         messages: messagesList,
         lastMessageText: messages[lastMessageIndex].text,
         lastMessageDate: moment(messages[lastMessageIndex].date).format(

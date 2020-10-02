@@ -93,11 +93,10 @@ export const messageStatusChanged = (number, messageId, status, id) => {
 
 export const changeBotState = (room, number, botState) => {
   const { action, CHANGE_BOT_STATE_REQUEST, CHANGE_BOT_STATE_SUCCESS, CHANGE_BOT_STATE_FAILURE } = types;
-
   return async (dispatch) => {
     try {
       dispatch(action(CHANGE_BOT_STATE_REQUEST, {}));
-      await Twillio.changeBotState(number, botState);
+      await Twillio.changeBotState(room, botState);
       return dispatch(action(CHANGE_BOT_STATE_SUCCESS, { room, botState }));
     } catch (e) {
       const errorMessage = `Não foi possível ${botState ? 'ligar' : 'desligar'} o robô`;
@@ -144,7 +143,7 @@ export const disableBotAndSendMessage = (room, number, message) => {
     try {
       await dispatch(changeBotState(room, number, false));
       if (getState().chat.botStateRequest.success) {
-        dispatch(sendWhatsappMessage(number, message, room));
+        dispatch(sendMessage(message, room));
       }
     } catch (e) {
       console.log(e);

@@ -27,7 +27,7 @@ const Container = styled.div`
   box-sizing: border-box;
   flex-direction: column;
   display: flex;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   z-index: 5;
 `;
 
@@ -42,7 +42,7 @@ const CustomPaper = styled(Paper)`
 const Background = styled.div`
   position: absolute;
   height: 150px;
-  background-color: ${props => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor};
   top: 0;
   left: 240px;
   width: calc(100% - 240px);
@@ -61,14 +61,10 @@ class Chat extends Component {
     const { isChatSelected } = this.props;
 
     if (isChatSelected) {
-      return (
-        <ChatConversation {...this.props} />
-      );
+      return <ChatConversation {...this.props} />;
     }
 
-    return <EmptyChat
-      text='Selecione um chat ao lado para ver a conversa'
-    />;
+    return <EmptyChat text="Selecione um chat ao lado para ver a conversa" />;
   }
 
   render() {
@@ -94,18 +90,18 @@ class Chat extends Component {
 Chat.propTypes = {
   isChatSelected: bool.isRequired,
   fetchOngoingConversations: func.isRequired,
-  theme: object.isRequired
+  theme: object.isRequired,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    isChatSelected: !!state.chat.currentConversation.room
+    isChatSelected: !!state.chat.currentConversation.room,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchOngoingConversations: () => dispatch(fetchOngoingConversations())
+    fetchOngoingConversations: () => dispatch(fetchOngoingConversations()),
   };
 };
 
