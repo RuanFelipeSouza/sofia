@@ -84,7 +84,7 @@ export const connect = (room, user) => {
 };
 
 export const emitMessage = (message, room, id) => {
-  socket.emit('sendMessage', { message, id, room, origin: 'Assistente' });
+  socket.emit('sendMessage', { message, id, room, origin: 'Usuário' });
 };
 
 export const joinAgent = (room) => {

@@ -13,6 +13,7 @@ import {
   sendWhatsappMessage,
   closeChat,
   disableBotAndSendMessage,
+  changeBotState
 } from '../../store/actions/chat';
 import { showDialog, hideDialog } from '../../store/actions/layout';
 import AlertDialog from '../../components/Alert';
@@ -98,6 +99,7 @@ class ChatConversation extends Component {
       cpf,
       userDisconnected,
       closeChat,
+      changeBotState,
       chatSelectCount,
       isWhatsapp,
       isBotOn,
@@ -121,6 +123,7 @@ class ChatConversation extends Component {
           subtitle={isWhatsapp ? this.formatNumber(number) : cpf}
           closeChat={() => closeChat(room, number)}
           isBotOn={isBotOn}
+          changeBotState={()=>changeBotState(room, number, !isBotOn)}
           // onClick={() => toggleSidebar(userInfo)}
         />
         {this.state.alert.visible && (
@@ -165,6 +168,7 @@ ChatConversation.propTypes = {
   showDialog: func.isRequired,
   hideDialog: func.isRequired,
   disableBotAndSendMessage: func.isRequired,
+  changeBotState: func.isRequired,
   isBotOn: bool,
   toggleSidebar: func.isRequired,
 };
@@ -198,6 +202,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    changeBotState: (room, number, botState) =>
+      dispatch(changeBotState(room, number, botState)),
     sendMessage: (msg, room) => dispatch(sendMessage(msg, room)),
     sendWhatsappMessage: (number, message, room) =>
       dispatch(sendWhatsappMessage(number, message, room)),

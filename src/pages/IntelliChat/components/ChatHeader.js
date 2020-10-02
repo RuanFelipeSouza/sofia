@@ -16,7 +16,14 @@ import ToggleOffRounded from '@material-ui/icons/ToggleOffRounded';
 import IconButton from '@material-ui/core/IconButton';
 import ToggleOnRounded from '@material-ui/icons/ToggleOnRounded';
 
-const ChatHeader = ({ title, subtitle, onClick, closeChat, isBotOn, statusColor }) => {
+const ChatHeader = ({
+  title,
+  subtitle,
+  onClick,
+  closeChat,
+  isBotOn,
+  changeBotState,
+}) => {
   const theme = useTheme();
   return (
     <ChatHeaderWrapper
@@ -28,7 +35,7 @@ const ChatHeader = ({ title, subtitle, onClick, closeChat, isBotOn, statusColor 
         <ChatHeaderSubtitle>{subtitle}</ChatHeaderSubtitle>
       </Column>
       <Row>
-        <IconButton>
+        <IconButton onClick={changeBotState}>
           {isBotOn ? (
             <ToggleOffRounded style={{ color: 'white' }} />
           ) : (
@@ -54,8 +61,8 @@ ChatHeader.propTypes = {
   subtitle: string,
   onClick: func.isRequired,
   closeChat: func.isRequired,
-  isBotOn: string, 
-  statusColor: string
+  changeBotState: func.isRequired,
+  isBotOn: string,
 };
 
 export default ChatHeader;

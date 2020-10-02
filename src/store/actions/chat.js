@@ -93,7 +93,6 @@ export const messageStatusChanged = (number, messageId, status, id) => {
 
 export const changeBotState = (room, number, botState) => {
   const { action, CHANGE_BOT_STATE_REQUEST, CHANGE_BOT_STATE_SUCCESS, CHANGE_BOT_STATE_FAILURE } = types;
-
   return async (dispatch) => {
     try {
       dispatch(action(CHANGE_BOT_STATE_REQUEST, {}));
