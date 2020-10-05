@@ -74,7 +74,6 @@ export default function Conversation(props) {
   const history = useHistory();
   const [conversa, setConversa] = useState({});
   const { id } = props.match.params;
-  console.log(conversa);
 
   useEffect(() => {
     api.get(`/conversation/${id}`).then(response => {
