@@ -10,6 +10,7 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import Switch from '@material-ui/core/Switch';
 import * as moment from 'moment';
 
 import api from './../../services/api'
@@ -73,12 +74,26 @@ export default function Conversation(props) {
   const history = useHistory();
   const [conversa, setConversa] = useState({});
   const { id } = props.match.params;
+  console.log(conversa);
 
   useEffect(() => {
     api.get(`/conversation/${id}`).then(response => {
       setConversa(response.data);
     })
   }, [id]);
+
+  const handleChangeIgnoreRating = (e) => {
+    api.post('/conversation/rate', {
+      conversationId: id,
+      ignoreRating: !e.target.checked
+    })
+    setConversa(previsousState => {
+      return {
+        ...previsousState,
+        ignoreRating: !e.target.checked
+      }
+    })
+  }
 
   return (
     <div className={classes.root}>
@@ -106,6 +121,12 @@ export default function Conversation(props) {
                     {(conversa.rating || conversa.observation) && <Paper className={classes.rating}>
                       <p><b>Avaliação:</b> {_mapRatingToNPS(conversa.rating)}</p>
                       <p><b>Observação:</b> {conversa.observation}</p>
+                      Considerar avaliação: <Switch
+                        checked={!conversa.ignoreRating}
+                        onChange={handleChangeIgnoreRating}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                      />
                     </Paper>}
                   </Grid>
                 </Grid>
