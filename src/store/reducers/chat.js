@@ -69,7 +69,7 @@ const storeMessage = (state, action) => {
       {
         ...conversationToUpdate,
         unread:
-          state.currentConversation.room !== conversationToUpdate.room
+          state.currentConversation?.room !== conversationToUpdate.room
             ? conversationToUpdate.unread + 1
             : conversationToUpdate.unread,
         lastMessageText: text,
@@ -207,7 +207,7 @@ const userJoined = (state, action) => {
         }),
         isWhatsapp,
         //TODO: maybe isBotOn will begin turned off
-        isBotOn: true,
+        isBotOn: false,
         category: sector,
       },
       ...state.conversations,
