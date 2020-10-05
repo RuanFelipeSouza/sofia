@@ -193,13 +193,16 @@ export default function NPS({ atendimentos }) {
   const [messages, setMessages] = useState([]);
   console.log(atendimentos);
 
-  const nonRatedPercentage = React.useMemo(() => {
+  const nonRated = React.useMemo(() => {
     const nonRatedAmount = atendimentos?.filter(e => e.rating === undefined)?.length;
-    return (nonRatedAmount / atendimentos.length * 100).toFixed(2);
+    return {
+      amount: nonRatedAmount,
+      percentage: (nonRatedAmount / atendimentos.length * 100).toFixed(2)
+    };
   }, [atendimentos]);
 
   useEffect(() => {
-    const ratedAtendimentos = atendimentos.filter(e => e.rating);
+    const ratedAtendimentos = atendimentos.filter(e => (e.rating === 6 && !e.ignoreRating) || [10, 8].includes(e.rating));
     setNPS([
       {
         name: 'Promotor',
@@ -381,7 +384,7 @@ export default function NPS({ atendimentos }) {
                           <text>Pesquisas Não Respondidas</text>
                         </Paper>
                         <Paper className={classes.notaNPSValue}>
-                          <text>{nonRatedPercentage}%</text>
+                          <text>{nonRated.amount} ({nonRated.percentage}%)</text>
                         </Paper>
                       </Grid>
                       <Grid item style={{ height: '40%' }} xs={12}>
