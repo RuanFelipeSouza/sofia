@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import MaterialTable from 'material-table';
+import { ArrowForwardOutlined } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 import {
   PieChart,
   Pie,
@@ -122,18 +125,84 @@ const corDetrator = '#E5423A';
 
 const COLORS = [corPromotor, corNeutro, corDetrator];
 
+function Table(props) {
+  const columns = [
+    { 
+      title: 'Sugestão', 
+      field: 'observation'
+    },
+    { 
+      title: 'Data', 
+      field: 'createdAt',
+      width: 200
+    },
+    { 
+      title: 'Conversa', 
+      field: '_id',
+      render: props2 => 
+        <Link 
+          id={props2._id} 
+          to={`/conversation/${props2._id}`}
+        > 
+          Visualizar conversa <ArrowForwardOutlined size={16} />
+        </Link>, 
+      export: false,
+      filtering: false,
+      width: 200
+    },
+  ]
+
+  return (
+    <MaterialTable
+      title='Pesquisas'
+      columns={columns}
+      data={props.messages}
+      isLoading={props.isLoading}
+      options={{
+        pageSizeOptions: [5, 20]
+      }}
+      localization={{
+          pagination: {
+              labelDisplayedRows: '{from}-{to} de {count}'
+          },
+          header: {
+              actions: 'Ações'
+          },
+          body: {
+              emptyDataSourceMessage: 'Nenhum registro a ser exibido',
+              filterRow: {
+                  filterTooltip: 'Filtro'
+              },
+          },
+          toolbar: {
+              exportTitle: 'Exportar',
+              exportAriaLabel: 'Exportar',
+              exportName: 'Exportar como CSV',
+              searchTooltip: 'Buscar',
+              searchPlaceholder: 'Buscar'
+          }
+      }}
+    />
+  );
+}
+
 export default function NPS({ atendimentos }) {
   const classes = useStyles();
   const [NPS, setNPS] = useState([]);
   const [pesquisasPorDia, setPesquisasPorDia] = useState([]);
+  const [messages, setMessages] = useState([]);
+  console.log(atendimentos);
 
-  const nonRatedPercentage = React.useMemo(() => {
+  const nonRated = React.useMemo(() => {
     const nonRatedAmount = atendimentos?.filter(e => e.rating === undefined)?.length;
-    return (nonRatedAmount / atendimentos.length * 100).toFixed(2);
+    return {
+      amount: nonRatedAmount,
+      percentage: (nonRatedAmount / atendimentos.length * 100).toFixed(2)
+    };
   }, [atendimentos]);
 
   useEffect(() => {
-    const ratedAtendimentos = atendimentos.filter(e => e.rating);
+    const ratedAtendimentos = atendimentos.filter(e => (e.rating === 6 && !e.ignoreRating) || [10, 8].includes(e.rating));
     setNPS([
       {
         name: 'Promotor',
@@ -160,6 +229,8 @@ export default function NPS({ atendimentos }) {
       }
     );
     setPesquisasPorDia(grouped);
+    
+    setMessages(atendimentos.filter(e => e.observation));
   }, [atendimentos]);
 
   const renderPieLabel = (entry) => {
@@ -313,7 +384,7 @@ export default function NPS({ atendimentos }) {
                           <text>Pesquisas Não Respondidas</text>
                         </Paper>
                         <Paper className={classes.notaNPSValue}>
-                          <text>{nonRatedPercentage}%</text>
+                          <text>{nonRated.amount} ({nonRated.percentage}%)</text>
                         </Paper>
                       </Grid>
                       <Grid item style={{ height: '40%' }} xs={12}>
@@ -331,7 +402,9 @@ export default function NPS({ atendimentos }) {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={12}></Grid>
+        <Grid item xs={12}>
+          <Table messages={messages} />
+        </Grid>
       </Grid>
     </Container>
   );

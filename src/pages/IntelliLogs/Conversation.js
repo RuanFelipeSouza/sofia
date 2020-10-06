@@ -10,6 +10,7 @@ import Logo from './../../assets/logointellilogs.png';
 import Copyright from './../../components/Copyright';
 import Sidebar from './../../components/Sidebar';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import Switch from '@material-ui/core/Switch';
 import * as moment from 'moment';
 
 import api from './../../services/api'
@@ -48,8 +49,25 @@ const useStyles = makeStyles((theme) => ({
   },
   infos: {
     margin: '0 2%'
+  },
+  rating: {
+    padding: '2%',
+    margin: '2%'
   }
 }));
+
+function _mapRatingToNPS(rating) {
+  switch(rating) {
+    case 10:
+      return 'Promotor';
+    case 8:
+      return 'Neutro';
+    case 6:
+      return 'Detrator';
+    default:
+      return 'Não avaliado';
+  }
+}
 
 export default function Conversation(props) {
   const classes = useStyles();
@@ -62,6 +80,19 @@ export default function Conversation(props) {
       setConversa(response.data);
     })
   }, [id]);
+
+  const handleChangeIgnoreRating = (e) => {
+    api.post('/conversation/rate', {
+      conversationId: id,
+      ignoreRating: !e.target.checked
+    })
+    setConversa(previsousState => {
+      return {
+        ...previsousState,
+        ignoreRating: !e.target.checked
+      }
+    })
+  }
 
   return (
     <div className={classes.root}>
@@ -80,13 +111,22 @@ export default function Conversation(props) {
                       Voltar
                     </Link>
                   </Grid>
-                  <Grid item xs={9} >
+                  <Grid item xs={7} >
                     <div className={classes.infos}>
                       <p><b>Data:</b> {moment(conversa.createdAt).format("DD/MM/YYYY HH:mm")}</p>
                     </div>
                   </Grid>
-                  <Grid item xs={3} >
-                    
+                  <Grid item xs={5} >
+                    {(conversa.rating || conversa.observation) && <Paper className={classes.rating}>
+                      <p><b>Avaliação:</b> {_mapRatingToNPS(conversa.rating)}</p>
+                      <p><b>Observação:</b> {conversa.observation}</p>
+                      Considerar avaliação: <Switch
+                        checked={!conversa.ignoreRating}
+                        onChange={handleChangeIgnoreRating}
+                        color="primary"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                      />
+                    </Paper>}
                   </Grid>
                 </Grid>
               </Paper>

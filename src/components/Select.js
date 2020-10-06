@@ -29,6 +29,7 @@ export default function NativeSelects(props) {
           onChange={handleChange}
           value={props.value}
         >
+          <option value={"Todos"}>Todos</option>
           <option value={"Login"}>Login</option>
           <option value={"Fornecedor"}>Fornecedor</option>
           <option value={"Cliente"}>Cliente</option>
