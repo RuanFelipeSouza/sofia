@@ -26,7 +26,7 @@ export default (state = INITIAL_STATE, action) => {
 const sendMessage = (state, action) => {
   const message = {
     text: action.payload.input?.text || action.payload.text,
-    from: 'Usuário',
+    origin: 'Assistente', // its incorrect we need to create other state
   };
   return {
     ...state,

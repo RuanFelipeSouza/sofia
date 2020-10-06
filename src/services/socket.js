@@ -27,7 +27,7 @@ const connect = (room) => {
 };
 
 const sendMessage = (room, message) => {
-  socket.emit('sendMessage', { room, message, origin: 'Usuário' });
+  socket.emit('sendMessage', { room, message, origin: 'Assistente' });
 };
 
 export default {
