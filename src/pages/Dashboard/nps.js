@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import MaterialTable from 'material-table';
 import { ArrowForwardOutlined } from '@material-ui/icons';
+import Switch from '@material-ui/core/Switch';
 import { Link } from 'react-router-dom';
 import {
   PieChart,
@@ -75,7 +76,6 @@ const useStyles = makeStyles((theme) => ({
   },
   npsSumary: {
     padding: '5%',
-    height: '100%',
     margin: '15px 0 0 3%',
   },
   npsValue: {
@@ -191,7 +191,7 @@ export default function NPS({ atendimentos }) {
   const [NPS, setNPS] = useState([]);
   const [pesquisasPorDia, setPesquisasPorDia] = useState([]);
   const [messages, setMessages] = useState([]);
-  console.log(atendimentos);
+  const [showIgnoredRates, setShowIgnoredRates] = useState(false);
 
   const nonRated = React.useMemo(() => {
     const nonRatedAmount = atendimentos?.filter(e => e.rating === undefined)?.length;
@@ -202,7 +202,7 @@ export default function NPS({ atendimentos }) {
   }, [atendimentos]);
 
   useEffect(() => {
-    const ratedAtendimentos = atendimentos.filter(e => (e.rating === 6 && !e.ignoreRating) || [10, 8].includes(e.rating));
+    const ratedAtendimentos = atendimentos.filter(e => showIgnoredRates ? [10, 8, 6].includes(e.rating) : (e.rating === 6 && !e.ignoreRating) || [10, 8].includes(e.rating));
     setNPS([
       {
         name: 'Promotor',
@@ -231,7 +231,7 @@ export default function NPS({ atendimentos }) {
     setPesquisasPorDia(grouped);
     
     setMessages(atendimentos.filter(e => e.observation));
-  }, [atendimentos]);
+  }, [atendimentos, showIgnoredRates]);
 
   const renderPieLabel = (entry) => {
     return (
@@ -252,6 +252,12 @@ export default function NPS({ atendimentos }) {
           <Paper className={classes.form}>
             <Grid container spacing={2}>
               <Grid item xs={4}>
+                <Switch
+                  checked={showIgnoredRates}
+                  onChange={(e) => setShowIgnoredRates(e.target.checked)}
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                /> Mostrar avaliações ignoradas
                 <Paper className={classes.npsSumary}>
                   {NPS.length && (
                     <>
